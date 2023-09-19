@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="IQ.Views.BranchViews.Pages.Sales.SalesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IQ.Views.BranchViews.Pages.Sales"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d">
+
+    <StackPanel
+        Orientation="Vertical">
+        <TextBlock Text="BRANCH SALES"
+           TextWrapping="NoWrap"
+           VerticalAlignment="Center"
+           HorizontalAlignment="Center"
+           Margin="0,10,0,0"
+           Foreground="#020066"
+           FontFamily="{StaticResource Righteous}"/>
+        <Rectangle 
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"/>
+        <Grid
+            Margin="0,10,0,0"
+            RowSpacing="14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button 
+                Grid.Row="0"
+                Grid.Column="0"
+                Content="Add"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Width="120"
+                Margin="14,0,14,0"
+                HorizontalAlignment="Left"/>
+            <AutoSuggestBox
+                x:Name="BranchSalesAutoSuggestBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                QueryIcon="Zoom"
+                Margin="0,0,14,0"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"/>
+            <DatePicker
+                Grid.Row="0"
+                Grid.Column="2"
+                x:Name="BranchSalesDatePicker"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                HorizontalAlignment="Right"
+                Margin="0,0,14,0">
+            </DatePicker>
+        </Grid>
+        <Rectangle 
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"/>
+        <controls:DataGrid x:Name="BranchActivityDataGrid"
+               Margin="0,10,0,0"
+               FontFamily="{StaticResource SplineSans}">
+        </controls:DataGrid>
+    </StackPanel>
+</Page>

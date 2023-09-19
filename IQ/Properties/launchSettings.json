@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IQ (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "IQ (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

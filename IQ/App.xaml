@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application
+    x:Class="IQ.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IQ">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- Other merged dictionaries here -->
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Other app resources here -->
+            <FontFamily x:Key="Museo">/Assets/Fonts/MuseoModerno Extra Bold.ttf/#MuseoModerno</FontFamily>
+            <FontFamily x:Key="Righteous">/Assets/Fonts/Righteous Regular.ttf/#Righteous</FontFamily>
+            <FontFamily x:Key="SplineSans">/Assets/Fonts/SplineSans-Regular.ttf/#Spline Sans</FontFamily>
+            <SolidColorBrush x:Key="TextControlHeaderForeground" Color="#020066" />
+            <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#8080bc" />
+            <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="#020066" />
+            <SolidColorBrush x:Key="NavigationViewItemForegroundSelected"  Color="#020066" />
+            <SolidColorBrush x:Key="NavigationViewItemForeground"  Color="#020066" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemForegroundPointerOver"  Color="#020066" />
+            <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver"  Color="#020066" />
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
