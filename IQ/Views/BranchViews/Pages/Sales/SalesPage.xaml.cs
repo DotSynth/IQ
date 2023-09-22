@@ -28,25 +28,6 @@ namespace IQ.Views.BranchViews.Pages.Sales
         {
             this.InitializeComponent();
             BranchSalesDatePicker.SelectedDate = DateTime.Today;
-            this.BranchSalesDatePicker.LayoutUpdated += DatePickerControl_LayoutUpdated;
-        }
-
-        private void DatePickerControl_LayoutUpdated(object? sender, object e)
-        {
-            Windows.UI.Color Color = CommunityToolkit.WinUI.Helpers.ColorHelper.ToColor("#020066");
-            if (VisualTreeHelper
-                .GetOpenPopupsForXamlRoot(this.BranchSalesDatePicker.XamlRoot)
-                .FirstOrDefault() is Popup popup &&
-                popup.Child.FindDescendant<Grid>(x => x.Name is "HighlightRect") is Grid highlightRect &&
-                popup.Child.FindDescendants().OfType<LoopingSelector>() is IEnumerable<LoopingSelector> loopingSelectors)
-            {
-                highlightRect.Background = new SolidColorBrush(Color);
-
-                foreach (LoopingSelector loopingSelector in loopingSelectors)
-                {
-                   
-                }
-            }
         }
     }
 }
