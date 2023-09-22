@@ -3,6 +3,7 @@ using IQ.Helpers.FileOperations;
 using IQ.Views;
 using IQ.Views.AdminViews;
 using IQ.Views.BranchViews;
+using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -35,18 +36,38 @@ namespace IQ
                     {
                         if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
                         {
-                            m_window = new AdminWindow();
+                            if (DatabaseExtensions.TriggerDbMassAction_Admin())
+                            {
+                                m_window = new AdminWindow();
 
-                            // Create a Frame to act as the navigation context and navigate to the first page
-                            Frame rootFrame = new Frame();
-                            m_window.Activate();
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
+                            }
+                        }
+                        else if(DatabaseExtensions.GetCurrentUserRole() == "Branch")
+                        {
+                            if (DatabaseExtensions.TriggerDbMassAction_Branch())
+                            {
+                                m_window = new BranchWindow();
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
+                            }
+                            else
+                            {
+                                Exit();
+                            }
                         }
                         else
                         {
-                            m_window = new BranchWindow();
-                            // Create a Frame to act as the navigation context and navigate to the first page
-                            Frame rootFrame = new Frame();
-                            m_window.Activate();
+                            if (DatabaseExtensions.TriggerDbMassAction_Warehouse())
+                            {
+                                m_window = new WarehouseWindow();
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
+                            }
                         }
                     }
                 }
