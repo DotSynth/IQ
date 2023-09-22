@@ -26,6 +26,7 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
         public CommitHistoryPage()
         {
             this.InitializeComponent();
+            BranchCommitHistoryDatePicker.SelectedDate = DateTime.Today;
         }
     }
 }

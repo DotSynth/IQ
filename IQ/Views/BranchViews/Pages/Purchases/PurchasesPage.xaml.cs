@@ -26,6 +26,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases
         public PurchasesPage()
         {
             this.InitializeComponent();
+            BranchPurchasesDatePicker.SelectedDate = DateTime.Today;
         }
     }
 }

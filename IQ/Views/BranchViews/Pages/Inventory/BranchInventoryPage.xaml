@@ -5,12 +5,11 @@
     xmlns:local="using:IQ.Views.BranchViews.Pages.Inventory"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    mc:Ignorable="d">
 
     <StackPanel
     Orientation="Vertical">
-        <TextBlock Text="BRANCH SALES"
+        <TextBlock Text="BRANCH INVENTORY"
        TextWrapping="NoWrap"
        VerticalAlignment="Center"
        HorizontalAlignment="Center"
@@ -43,7 +42,7 @@
             Margin="14,0,14,0"
             HorizontalAlignment="Left"/>
             <AutoSuggestBox
-            x:Name="BranchSalesAutoSuggestBox"
+            x:Name="BranchInventoryAutoSuggestBox"
             Grid.Row="1"
             Grid.Column="1"
             QueryIcon="Zoom"
@@ -53,7 +52,7 @@
             <DatePicker
             Grid.Row="0"
             Grid.Column="2"
-            x:Name="BranchSalesDatePicker"
+            x:Name="BranchInventoryDatePicker"
             Foreground="#020066"
             FontFamily="{StaticResource Righteous}"
             HorizontalAlignment="Right"
@@ -65,7 +64,7 @@
         HorizontalAlignment="Stretch"
         Fill="#E2E2E2"
         Margin="0,10,0,0"/>
-        <controls:DataGrid x:Name="BranchActivityDataGrid"
+        <controls:DataGrid x:Name="BranchInventoryDataGrid"
            Margin="0,10,0,0"
            FontFamily="{StaticResource SplineSans}">
         </controls:DataGrid>

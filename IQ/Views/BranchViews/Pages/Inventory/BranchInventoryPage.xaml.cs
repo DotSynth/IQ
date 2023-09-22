@@ -26,6 +26,7 @@ namespace IQ.Views.BranchViews.Pages.Inventory
         public BranchInventoryPage()
         {
             this.InitializeComponent();
+            BranchInventoryDatePicker.SelectedDate = DateTime.Today;
         }
     }
 }

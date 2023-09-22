@@ -26,6 +26,7 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
         public TransferOutwardsPage()
         {
             this.InitializeComponent();
+            BranchTransferOutwardsDatePicker.SelectedDate = DateTime.Today;
         }
     }
 }

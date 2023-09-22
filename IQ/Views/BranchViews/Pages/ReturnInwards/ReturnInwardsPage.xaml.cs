@@ -26,6 +26,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
         public ReturnInwardsPage()
         {
             this.InitializeComponent();
+            BranchReturnInwardsDatePicker.SelectedDate = DateTime.Today;
         }
     }
 }
