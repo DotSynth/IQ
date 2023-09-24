@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.WinUI.UI;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -24,10 +25,13 @@ namespace IQ.Views.BranchViews.Pages.Sales
     /// </summary>
     public sealed partial class SalesPage : Page
     {
+        public BranchSalesViewModel ViewModel { get; } = new BranchSalesViewModel();
+
         public SalesPage()
         {
             this.InitializeComponent();
             BranchSalesDatePicker.SelectedDate = DateTime.Today;
+            DataContext = ViewModel;
         }
     }
 }

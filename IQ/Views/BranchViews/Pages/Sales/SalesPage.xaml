@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
     <StackPanel
         Orientation="Vertical">
@@ -66,8 +67,11 @@
             Fill="#E2E2E2"
             Margin="0,10,0,0"/>
         <controls:DataGrid x:Name="BranchSalesDataGrid"
-               Margin="0,10,0,0"
-               FontFamily="{StaticResource SplineSans}">
+                           ColumnWidth="*"
+                           Margin="0,10,0,0"
+                           FontFamily="{StaticResource SplineSans}"
+                           ItemsSource="{x:Bind ViewModel.BranchSales}" 
+                           AutoGenerateColumns="True">
         </controls:DataGrid>
     </StackPanel>
 </Page>

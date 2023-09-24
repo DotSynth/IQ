@@ -205,13 +205,13 @@
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                         Icon="SwitchApps"
-                        x:Name="CommitHistory"
+                        x:Name="CommitHistoryPage"
                         Foreground="#020066"
                         ToolTipService.ToolTip="Commit History"/>
                     <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                         Icon="Library"
-                        x:Name="BranchInventory"
+                        x:Name="BranchInventoryPage"
                         Foreground="#020066"
                         ToolTipService.ToolTip="Branch Inventory"/>
             </NavigationView.MenuItems>

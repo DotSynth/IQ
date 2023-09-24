@@ -78,12 +78,12 @@ namespace IQ.Views
 
         private void Login(object sender, RoutedEventArgs e)
         {
-            var DataServer = ServerString.Text;
-            var Port = PortString.Text;
-            var Database = DatabaseString.Text;
-            var Username = UsernameString.Text;
-            var Password = passworBoxString.Password;
-            var ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};";
+            DataServer = ServerString.Text;
+            Port = PortString.Text;
+            Database = DatabaseString.Text;
+            Username = UsernameString.Text;
+            Password = passworBoxString.Password;
+            ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};";
             Datastore = [DataServer, Port, Database, Username, Password, ConnectionString];
             Structures.IQXFile file = StructureTools.UserDataStoreToIQX(Datastore);
             byte[] UserLogin = StructureTools.IQXFileToBytes(file);
