@@ -41,9 +41,9 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchSales WHERE DATE(Date) = '@Date';", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchSales WHERE DATE(Date) = @time;", connection))
                 {
-                    cmd.Parameters.AddWithValue("Date", SalesPage.DateFilter);
+                    cmd.Parameters.AddWithValue("time", SalesPage.DateFilter!);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

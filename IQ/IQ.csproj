@@ -30,11 +30,13 @@
     <None Remove="Views\BranchViews\Pages\PurchasesPage.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnOutwardsPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
@@ -86,7 +88,6 @@
     <Folder Include="Views\BranchViews\Pages\Purchases\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\ReturnInwards\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\ReturnOutwards\SubPages\" />
-    <Folder Include="Views\BranchViews\Pages\Sales\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\TransferInwards\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\TransferOutwards\SubPages\" />
   </ItemGroup>
@@ -94,6 +95,11 @@
     <Resource Include="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <Resource Include="Assets\Fonts\Righteous Regular.ttf" />
     <Resource Include="Assets\Fonts\SplineSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\BranchViews\Pages\CommitHistoryPage.xaml">

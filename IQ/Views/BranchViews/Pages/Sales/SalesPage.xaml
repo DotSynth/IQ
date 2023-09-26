@@ -5,7 +5,7 @@
     xmlns:local="using:IQ.Views.BranchViews.Pages.Sales"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" xmlns:x1="using:System" xmlns:x2="using:ABI.System"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" xmlns:overlay="using:IQ.Views.BranchViews.Pages.Sales.SubPages"
     mc:Ignorable="d"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
@@ -18,6 +18,17 @@
            Margin="0,10,0,0"
            Foreground="#020066"
            FontFamily="{StaticResource Righteous}"/>
+        
+        <!-- Popup for overlay content -->
+        <Popup x:Name="AddSaleOverlay" IsOpen="False" >
+            <Popup.Resources>
+                <Storyboard x:Name="AnimateSalePopup">
+                    <PopInThemeAnimation  Storyboard.TargetName="StandardPopup" FromHorizontalOffset="500"/>
+                </Storyboard>
+            </Popup.Resources>
+            <overlay:AddSaleOverlay />
+        </Popup>
+
         <Rectangle 
             Height="1"
             HorizontalAlignment="Stretch"
@@ -35,6 +46,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button 
+                x:Name="SalesAddButton"
                 Grid.Row="0"
                 Grid.Column="0"
                 Content="Add"
@@ -42,7 +54,9 @@
                 FontFamily="{StaticResource Righteous}"
                 Width="120"
                 Margin="14,0,14,0"
-                HorizontalAlignment="Left"/>
+                HorizontalAlignment="Left"
+                Click="SalesAddButton_Click">
+            </Button>
             <AutoSuggestBox
                 x:Name="BranchSalesAutoSuggestBox"
                 Grid.Row="1"

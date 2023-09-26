@@ -65,7 +65,7 @@ namespace IQ.Helpers.DatabaseOperations
             string queryUserStatus = "SELECT usesuper FROM pg_user WHERE usename = @username";
             using var queryUserStatusCommand = new NpgsqlCommand(queryUserStatus, con);
             queryUserStatusCommand.Parameters.AddWithValue("username", userRole);
-            bool isSuperUser = (bool)queryUserStatusCommand.ExecuteScalar();
+            bool isSuperUser = (bool)queryUserStatusCommand.ExecuteScalar()!;
             return isSuperUser;
         }
 
