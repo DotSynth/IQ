@@ -12,10 +12,9 @@ namespace IQ.Helpers.DataTableOperations.Classes
         public string? ModelID { get; set; }
         public string? BrandID { get; set; }
         public int? QuantitySold { get; set; }
-        public float? SellingPrice { get; set; }
+        public Double? SellingPrice { get; set; }
         public string? SoldTo { get; set; }
         public string? CustomerContactInfo { get; set; }
-        public DateTime SoldOn { get; set; }
     }
 
 }

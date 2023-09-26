@@ -23,6 +23,7 @@
             <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver"  Color="#020066" />
             <FontFamily x:Key="ContentControlThemeFontFamily">/Assets/Fonts/Righteous Regular.ttf/#Righteous</FontFamily>
             <SolidColorBrush x:Key="ContentControlThemeHighlightRect"  Color="#020066" />
+            <SolidColorBrush x:Key="HeaderedContentControlThemeForeground"  Color="#020066" />
 
         </ResourceDictionary>
     </Application.Resources>

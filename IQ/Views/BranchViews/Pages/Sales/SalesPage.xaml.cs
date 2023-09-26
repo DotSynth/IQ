@@ -26,12 +26,18 @@ namespace IQ.Views.BranchViews.Pages.Sales
     public sealed partial class SalesPage : Page
     {
         public BranchSalesViewModel ViewModel { get; } = new BranchSalesViewModel();
+        public static DateTime DateFilter = DateTime.Today;
 
         public SalesPage()
         {
             this.InitializeComponent();
-            BranchSalesDatePicker.SelectedDate = DateTime.Today;
+            BranchSalesDatePicker.SelectedDate = DateFilter;
             DataContext = ViewModel;
+        }
+
+        private void BranchSalesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+        {
+
         }
     }
 }
