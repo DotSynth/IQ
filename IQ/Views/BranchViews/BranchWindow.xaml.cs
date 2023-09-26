@@ -35,8 +35,6 @@ namespace IQ.Views.BranchViews
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(BranchTitleBar);
-            ApplicationView.PreferredLaunchViewSize = new Size(1200, 840);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
 
         private void BranchViewItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

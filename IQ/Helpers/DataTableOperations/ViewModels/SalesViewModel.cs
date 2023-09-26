@@ -54,7 +54,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                                 ModelID = reader.GetString(1),
                                 BrandID = reader.GetString(2),
                                 QuantitySold = reader.GetInt32(3),
-                                SellingPrice = reader.GetDouble(4),
+                                SellingPrice = reader.GetDecimal(4),
                                 SoldTo = reader.GetString(5),
                                 CustomerContactInfo = reader.GetString(6),
                             };

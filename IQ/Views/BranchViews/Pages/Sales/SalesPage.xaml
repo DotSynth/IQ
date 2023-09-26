@@ -5,7 +5,10 @@
     xmlns:local="using:IQ.Views.BranchViews.Pages.Sales"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" xmlns:overlay="using:IQ.Views.BranchViews.Pages.Sales.SubPages"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" 
+    xmlns:overlay="using:IQ.Views.BranchViews.Pages.Sales.SubPages"
+    xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    x:Name="SalesPageTitle"
     mc:Ignorable="d"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
@@ -20,13 +23,8 @@
            FontFamily="{StaticResource Righteous}"/>
         
         <!-- Popup for overlay content -->
-        <Popup x:Name="AddSaleOverlay" IsOpen="False" >
-            <Popup.Resources>
-                <Storyboard x:Name="AnimateSalePopup">
-                    <PopInThemeAnimation  Storyboard.TargetName="StandardPopup" FromHorizontalOffset="500"/>
-                </Storyboard>
-            </Popup.Resources>
-            <overlay:AddSaleOverlay />
+        <Popup x:Name="SaleOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True">
+            <overlay:AddSaleOverlay/>
         </Popup>
 
         <Rectangle 

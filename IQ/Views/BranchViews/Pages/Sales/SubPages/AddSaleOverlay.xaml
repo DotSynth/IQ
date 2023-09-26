@@ -5,17 +5,126 @@
     xmlns:local="using:IQ.Views.BranchViews.Pages.Sales.SubPages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     mc:Ignorable="d"
     Width="400"
-    Height="500"
+    Height="720"
     Padding="20"
     Margin="8">
+    
+    <Page.Resources>
+        <animations:FadeInThemeAnimation x:Key="MyFadeInAnimation" Duration="0:0:3.5" />
+    </Page.Resources>
 
     <Grid
         Background="White"
         CornerRadius="7"
         BorderBrush="#f1f2f5"
         BorderThickness="2">
+        
+        <StackPanel
+            Orientation="Vertical">
+            <TextBlock
+                FontFamily="{StaticResource Righteous}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="10,10,0,0"
+                Foreground="#020066">
+                Add Sale
+            </TextBlock>
+            
+            <Rectangle 
+                Height="1"
+                HorizontalAlignment="Stretch"
+                Fill="#E2E2E2"
+                Margin="0,10,0,0"/>
+
+            <TextBox
+                x:Name="InvoiceTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Invoice Number:"
+                PlaceholderText="XXXXXX"/>
+
+            <AutoSuggestBox
+                x:Name="ModelIDAutoSuggestBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Model Number:"
+                PlaceholderText="XX-XXX-XXXX"/>
+
+            <AutoSuggestBox
+                x:Name="BrandIDAutoSuggestBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Brand Name:"
+                PlaceholderText="E.g SAMSUNG"/>
+
+            <TextBox
+                x:Name="QuantitySoldTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Quantity Sold:"
+                PlaceholderText="E.g 3"/>
+
+            <TextBox
+                x:Name="SellingPriceTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Selling Price:"
+                PlaceholderText="XXXXXX.XX"/>
+
+            <TextBox
+                x:Name="SoldToTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Customer Name:"
+                PlaceholderText="E.g ANITA JOHN"/>
+
+            <TextBox
+                x:Name="CustomerInfoTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Customer Info:"
+                PlaceholderText="PHONE, ADDRESS, ETC"/>
+
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Margin="10,10,10,10">
+
+                <Button
+                    x:Name="CancelAddSaleButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="40"
+                    Width="100"
+                    FontFamily="{StaticResource Righteous}"
+                    Foreground="#020066"
+                    Click="CancelAddSaleButton_Click">Cancel</Button>
+
+                <Button
+                    x:Name="AddSaleButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="40"
+                    Width="100"
+                    Margin="10,0,0,0"
+                    FontFamily="{StaticResource Righteous}"
+                    Foreground="#020066"
+                    Click="AddSaleButton_Click">Add</Button>
+
+            </StackPanel>
+
+        </StackPanel>
 
     </Grid>
 </Page>

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.WinUI.UI;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
+using IQ.Views.BranchViews.Pages.Sales.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -82,8 +83,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
 
         private void SalesAddButton_Click(object sender, RoutedEventArgs e)
         {
-            // Open the popup (show the overlay)
-            AnimateSalePopup.Begin();
+            SaleOverlayPopUp.IsOpen = true;
         }
     }
 }

@@ -75,21 +75,21 @@ namespace IQ.Helpers.DatabaseOperations
             try
             {
 
-                string createBranchInventoryTable = "CREATE TABLE IF NOT EXISTS BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, Description VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice FLOAT NOT NULL, TotalWorth FLOAT NOT NULL);";
+                string createBranchInventoryTable = "CREATE TABLE IF NOT EXISTS BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, Description VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
                 using var createBranchInventoryTableCommand = new NpgsqlCommand(createBranchInventoryTable, con);
                 createBranchInventoryTableCommand.ExecuteScalar();
                 string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON BranchInventory(ModelID);";
                 using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
                 createBranchInventoryTableIndexCommand.ExecuteScalar();
 
-                string createSalesTable = "CREATE TABLE IF NOT EXISTS BranchSales (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice FLOAT NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createSalesTable = "CREATE TABLE IF NOT EXISTS BranchSales (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createSalesTableCommand = new NpgsqlCommand(createSalesTable, con);
                 createSalesTableCommand.ExecuteScalar();
                 string createSalesTableIndex = "CREATE INDEX IF NOT EXISTS SalesDate ON BranchSales(Date);";
                 using var createSalesTableIndexCommand = new NpgsqlCommand(createSalesTableIndex, con);
                 createSalesTableIndexCommand.ExecuteScalar();
 
-                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice FLOAT NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
                 createPurchasesTableCommand.ExecuteScalar();
                 string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON BranchPurchases(Date);";
