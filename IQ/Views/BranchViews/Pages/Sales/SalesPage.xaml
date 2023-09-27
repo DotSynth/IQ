@@ -13,7 +13,8 @@
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
     <StackPanel
-        Orientation="Vertical">
+        Orientation="Vertical"
+        Name="SalesPanel">
         <TextBlock Text="BRANCH SALES"
            TextWrapping="NoWrap"
            VerticalAlignment="Center"
@@ -89,5 +90,6 @@
                            GridLinesVisibility="Vertical"
                            AlternatingRowBackground="#f1f2f5">
         </controls:DataGrid>
+        <Frame x:Name="rootFrame"/>
     </StackPanel>
 </Page>

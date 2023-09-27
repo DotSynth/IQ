@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using IQ.Helpers.FileOperations;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -6,13 +7,19 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using IQ.Views.BranchViews.Pages.Sales;
+using Windows.UI;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,19 +31,112 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
     /// </summary>
     public sealed partial class AddSaleOverlay : Page
     {
+        public int? CurrentInvoiceId;
+        public string? CurrentModelID;
+        public string? CurrentBrandID;
+        public int? CurrentQuantitySold;
+        public Decimal? CurrentSellingPrice;
+        public string? CurrentSoldTo;  
+        public string? CurrentCustomerContactInfo;
+
+        // Define an event to notify when visibility changes
+        public event EventHandler? VisibilityChanged;
+
         public AddSaleOverlay()
         {
             this.InitializeComponent();
         }
 
-        private void CancelAddSaleButton_Click(object sender, RoutedEventArgs e)
+        private void AddSaleButton_Click(object sender, RoutedEventArgs e)
         {
+            CurrentInvoiceId = int.Parse(InvoiceTextBox.Text);
+            CurrentModelID = ModelIDAutoSuggestBox.Text;
+            CurrentBrandID = BrandIDAutoSuggestBox.Text;
+            CurrentQuantitySold = int.Parse(QuantitySoldTextBox.Text);
+            CurrentSellingPrice = Decimal.Parse(SellingPriceTextBox.Text);
+            CurrentSoldTo = SoldToTextBox.Text;
+            CurrentCustomerContactInfo = CustomerInfoTextBox.Text;
+
+            // Create a connection string
+            string connString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            try
+            {
+                // Create a connection object
+                using (var conn = new NpgsqlConnection(connString))
+                {
+                    // Open the connection
+                    conn.Open();
+
+                    // Create a command object
+                    using (var cmd = new NpgsqlCommand())
+                    {
+                        // Assign the connection to the command
+                        cmd.Connection = conn;
+
+                        // Write the SQL statement for inserting data
+                        cmd.CommandText = "INSERT INTO BranchSales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
+
+                        // Create parameters and assign values
+                        cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceId);
+                        cmd.Parameters.AddWithValue("modelID", CurrentModelID);
+                        cmd.Parameters.AddWithValue("brandID", CurrentBrandID);
+                        cmd.Parameters.AddWithValue("qtySold", CurrentQuantitySold);
+                        cmd.Parameters.AddWithValue("sellingPrice", CurrentSellingPrice);
+                        cmd.Parameters.AddWithValue("SoldTo", CurrentSoldTo);
+                        cmd.Parameters.AddWithValue("customerInfo", CurrentCustomerContactInfo);
+
+                        // Execute the command and get the number of rows affected
+                        int rows = cmd.ExecuteNonQuery();
+                        _ = ShowCompletionAlertDialogAsync("New Sale Row Inserted Successfully");
+                    }
+
+                    // Close the connection
+                    conn.Close();
+                }
+
+                SalesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
+
+            }
+            catch (Exception ex) 
+            { 
+               string error = ex.Message;
+                _ = ShowCompletionAlertDialogAsync(error);
+            }
+
+            
+        }
+
+        private async Task ShowCompletionAlertDialogAsync(string alert)
+        {
+            // Create a ContentDialog
+            ContentDialog alertDialog = new ContentDialog
+            {
+                // Set the title, content, and close button text
+                Title = "Alert",
+                Content = alert,
+                CloseButtonText = "OK"
+            };
+
+            // Set the foreground to hex color #020066
+            alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
+
+            // Set the XamlRoot property to the same as an element in the app window
+            // For example, if you have a StackPanel named MyPanel in your XAML
+            alertDialog.XamlRoot = OverlayGrid.XamlRoot;
+
+            // Show the ContentDialog and get the result
+            ContentDialogResult result = await alertDialog.ShowAsync();
 
         }
 
-        private void AddSaleButton_Click(object sender, RoutedEventArgs e)
+        // This method sets the visibility and raises the event
+        public void SetVisibility(Visibility visibility)
         {
+            this.Visibility = visibility;
+            VisibilityChanged?.Invoke(this, EventArgs.Empty);
 
+            Debug.WriteLine($"Visibility changed to {visibility}");
         }
     }
 }

@@ -43,14 +43,14 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
 
                 using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchSales WHERE DATE(Date) = @time;", connection))
                 {
-                    cmd.Parameters.AddWithValue("time", SalesPage.DateFilter!);
+                    cmd.Parameters.AddWithValue("time", SalesPage.DateFilter!.Value.DateTime);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             var sale = new BranchSale
                             {
-                                InvoiceId = reader.GetInt32(0),
+                                InvoiceId = reader.GetString(0),
                                 ModelID = reader.GetString(1),
                                 BrandID = reader.GetString(2),
                                 QuantitySold = reader.GetInt32(3),

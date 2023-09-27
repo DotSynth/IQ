@@ -82,49 +82,49 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
                 createBranchInventoryTableIndexCommand.ExecuteScalar();
 
-                string createSalesTable = "CREATE TABLE IF NOT EXISTS BranchSales (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createSalesTable = "CREATE TABLE IF NOT EXISTS BranchSales (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createSalesTableCommand = new NpgsqlCommand(createSalesTable, con);
                 createSalesTableCommand.ExecuteScalar();
                 string createSalesTableIndex = "CREATE INDEX IF NOT EXISTS SalesDate ON BranchSales(Date);";
                 using var createSalesTableIndexCommand = new NpgsqlCommand(createSalesTableIndex, con);
                 createSalesTableIndexCommand.ExecuteScalar();
 
-                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
                 createPurchasesTableCommand.ExecuteScalar();
                 string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON BranchPurchases(Date);";
                 using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
                 createPurchasesTableIndexCommand.ExecuteScalar();
 
-                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferInwards (TransferID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
                 createTransferInwardsTableCommand.ExecuteScalar();
                 string createTransferInwardsTableIndex = "CREATE INDEX IF NOT EXISTS TInsDate ON BranchTransferInwards(Date);";
                 using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
                 createTransferInwardsTableIndexCommand.ExecuteScalar();
 
-                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferOutwards  (TransferID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
                 createTransferOutwardsTableCommand.ExecuteScalar();
                 string createTransferOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS TOutsDate ON BranchTransferOutwards(Date);";
                 using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnInwards (ReturnID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
                 string createReturnInwardsTableIndex = "CREATE INDEX IF NOT EXISTS RInsDate ON BranchReturnInwards(Date);";
                 using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
                 createReturnInwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnOutwards (ReturnID INT UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnOutwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
                 createReturnOutwardsTableCommand.ExecuteScalar();
                 string createReturnOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS ROutsDate ON BranchReturnOutwards(Date);";
                 using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
                 createReturnOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createCommitHistoryTable = "CREATE TABLE IF NOT EXISTS BranchCommitHistory (CommitID INT UNIQUE PRIMARY KEY NOT NULL, CommitDescription VARCHAR(255) NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, ApprovalStatus VARCHAR(255) NOT NULL,   ApprovalDate TIMESTAMP);";
+                string createCommitHistoryTable = "CREATE TABLE IF NOT EXISTS BranchCommitHistory (CommitID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, CommitDescription VARCHAR(255) NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, ApprovalStatus VARCHAR(255) NOT NULL,   ApprovalDate TIMESTAMP);";
                 using var createCommitHistoryTableCommand = new NpgsqlCommand(createCommitHistoryTable, con);
                 createCommitHistoryTableCommand.ExecuteScalar();
                 string createCommitHistoryTableIndex = "CREATE INDEX IF NOT EXISTS CommitDate ON BranchCommitHistory(CommitDate);";

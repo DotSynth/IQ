@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -31,20 +32,48 @@ namespace IQ.Views.BranchViews.Pages.Sales
     {
         public BranchSalesViewModel ViewModel { get; } = new BranchSalesViewModel();
         private List<string> suggestions = new List<string>();
-        public static DateTimeOffset? DateFilter = DateTime.UtcNow;
+        public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
+        // Initialize OverlayInstance
+        public static AddSaleOverlay OverlayInstance = new AddSaleOverlay();
+
 
         public SalesPage()
         {
             this.InitializeComponent();
             _ = LoadSuggestionsAsync();
             BranchSalesDatePicker.SelectedDate = DateFilter;
-            BranchSalesDatePicker.MaxYear = DateTime.UtcNow;
+            BranchSalesDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;
+
+            // Subscribe to the VisibilityChanged event of the popup page
+            OverlayInstance.VisibilityChanged += PopupPageVisibilityChanged!;
+        }
+
+        private void RefreshPage()
+        {
+            // Navigate away to a placeholder page
+            Frame.Navigate(typeof(PLaceHolderPage));
+
+            _ = DelayedExecutionAsync();
+
+            // Navigate back to the original page to refresh it
+            Frame.Navigate(typeof(SalesPage));
         }
 
         private void BranchSalesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
             DateFilter = BranchSalesDatePicker.Date.UtcDateTime;
+            RefreshPage();
+        }
+
+        async Task DelayedExecutionAsync()
+        {
+            // Do something before the delay
+
+            // Delay for 5 seconds (5000 milliseconds)
+            await Task.Delay(50000);
+
+            // Continue with the next line of code after the delay
         }
 
         private async Task LoadSuggestionsAsync()
@@ -58,7 +87,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
 
                     // Query the database to retrieve values from the 'columnName' column
                     using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT InvoiceID FROM BranchSales WHERE DATE(Date) = @time;", connection)) {
-                        command.Parameters.AddWithValue("time", SalesPage.DateFilter!);
+                        command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
@@ -81,9 +110,26 @@ namespace IQ.Views.BranchViews.Pages.Sales
             }
         }
 
-        private void SalesAddButton_Click(object sender, RoutedEventArgs e)
+        private void PopupPageVisibilityChanged(object sender, EventArgs e)
         {
+            Debug.WriteLine("PopupPageVisibilityChanged called");
+            Debug.WriteLine($"PopupPageVisibilityChanged: OverlayInstance.Visibility = {OverlayInstance.Visibility}");
+
+            // Check if the popup page's visibility is collapsed
+            if (OverlayInstance.Visibility == Visibility.Collapsed)
+            {
+                // Trigger the RefreshPage() function
+                RefreshPage();
+            }
+        }
+
+        private void SalesAddButton_Click(object sender, RoutedEventArgs e)
+        { 
+
+            // Show the popup by setting its visibility to Visible
+            OverlayInstance.SetVisibility(Visibility.Visible);
             SaleOverlayPopUp.IsOpen = true;
+
         }
     }
 }

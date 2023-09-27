@@ -8,7 +8,7 @@ namespace IQ.Helpers.DataTableOperations.Classes
 {
     public class BranchSale
     {
-        public int? InvoiceId { get; set; }
+        public string? InvoiceId { get; set; }
         public string? ModelID { get; set; }
         public string? BrandID { get; set; }
         public int? QuantitySold { get; set; }

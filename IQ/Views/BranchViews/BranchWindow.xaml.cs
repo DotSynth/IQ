@@ -52,35 +52,35 @@ namespace IQ.Views.BranchViews
                     switch (itemContent.Name)
                     {
                         case "SalesPage":
-                            contentFrame.Navigate(typeof(SalesPage));
+                            contentFrame.Navigate(typeof(SalesPage), contentFrame);
                             break;
 
                         case "PurchasesPage":
-                            contentFrame.Navigate(typeof(PurchasesPage));
+                            contentFrame.Navigate(typeof(PurchasesPage), contentFrame);
                             break;
 
                         case "TransferInwardsPage":
-                            contentFrame.Navigate(typeof(TransferInwardsPage));
+                            contentFrame.Navigate(typeof(TransferInwardsPage), contentFrame);
                             break;
 
                         case "TransferOutwardsPage":
-                            contentFrame.Navigate(typeof(TransferOutwardsPage));
+                            contentFrame.Navigate(typeof(TransferOutwardsPage), contentFrame);
                             break;
 
                         case "ReturnInwardsPage":
-                            contentFrame.Navigate(typeof(ReturnInwardsPage));
+                            contentFrame.Navigate(typeof(ReturnInwardsPage), contentFrame);
                             break;
 
                         case "ReturnOutwardsPage":
-                            contentFrame.Navigate(typeof(ReturnOutwardsPage));
+                            contentFrame.Navigate(typeof(ReturnOutwardsPage), contentFrame);
                             break;
 
                         case "CommitHistoryPage":
-                            contentFrame.Navigate(typeof(CommitHistoryPage));
+                            contentFrame.Navigate(typeof(CommitHistoryPage), contentFrame);
                             break;
 
                         case "BranchInventoryPage":
-                            contentFrame.Navigate(typeof(BranchInventoryPage));
+                            contentFrame.Navigate(typeof(BranchInventoryPage), contentFrame);
                             break;
                     }
                 }

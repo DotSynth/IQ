@@ -25,8 +25,10 @@
     <None Remove="Assets\Icons\SplashScreen.scale-200.png" />
     <None Remove="Assets\Icons\SplashScreen.scale-400.png" />
     <None Remove="Assets\Images\IqLogoNoBackground.png" />
+    <None Remove="Assets\Images\LoadingAnimation.gif" />
     <None Remove="Views\BranchViews\Pages\CommitHistoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\InventoryPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\PLaceHolderPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PurchasesPage.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnOutwardsPage.xaml" />
@@ -95,6 +97,11 @@
     <Resource Include="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <Resource Include="Assets\Fonts\Righteous Regular.ttf" />
     <Resource Include="Assets\Fonts\SplineSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\PLaceHolderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml">

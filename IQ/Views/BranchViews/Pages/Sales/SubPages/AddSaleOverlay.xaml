@@ -20,7 +20,8 @@
         Background="White"
         CornerRadius="7"
         BorderBrush="#f1f2f5"
-        BorderThickness="2">
+        BorderThickness="2"
+        x:Name="OverlayGrid">
         
         <StackPanel
             Orientation="Vertical">
@@ -100,16 +101,6 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Margin="10,10,10,10">
-
-                <Button
-                    x:Name="CancelAddSaleButton"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Height="40"
-                    Width="100"
-                    FontFamily="{StaticResource Righteous}"
-                    Foreground="#020066"
-                    Click="CancelAddSaleButton_Click">Cancel</Button>
 
                 <Button
                     x:Name="AddSaleButton"
