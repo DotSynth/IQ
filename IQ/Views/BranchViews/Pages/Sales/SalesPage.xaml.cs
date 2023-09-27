@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.WinUI.UI;
+using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using IQ.Views.BranchViews.Pages.Sales.SubPages;
@@ -12,6 +14,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -130,6 +133,61 @@ namespace IQ.Views.BranchViews.Pages.Sales
             OverlayInstance.SetVisibility(Visibility.Visible);
             SaleOverlayPopUp.IsOpen = true;
 
+        }
+
+        private void BranchSalesAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem is string chosenSuggestion)
+            {
+                sender.Text = chosenSuggestion;
+            }
+        }
+
+        private async void BranchSalesAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (!string.IsNullOrWhiteSpace(args.QueryText))
+            {
+                // Perform a database query based on the user's queryText
+                string userQuery = args.QueryText;
+                ObservableCollection<BranchSale> searchResults = await DatabaseExtensions.QueryResultsFromDatabase(userQuery);
+                Debug.WriteLine("PopupPageVisibilityChanged called");
+
+                // Display the searchResults on your SalesPage or in a DataGrid
+                UpdateSalesPageWithResults(searchResults);
+            }
+            else
+            {
+                UpdateSalesPageWithResults(ViewModel.BranchSales);
+            }
+        }
+
+        private void UpdateSalesPageWithResults(ObservableCollection<BranchSale> searchResults)
+        {
+            try
+            {
+                // Assuming that BranchSalesDataGrid is the name of your DataGrid
+                BranchSalesDataGrid.ItemsSource = searchResults;
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+
+        private async void BranchSalesAutoSuggestBox_TextChangedAsync(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                // Query the database for suggestions based on the user's input
+                string userInput = sender.Text;
+                List<string> suggestions = await DatabaseExtensions.QuerySuggestionsFromDatabase(userInput);
+
+                // Set the suggestions for the AutoSuggestBox
+                sender.ItemsSource = suggestions;
+            }
         }
     }
 }
