@@ -23,10 +23,13 @@ namespace IQ.Views.BranchViews.Pages.Purchases
     /// </summary>
     public sealed partial class PurchasesPage : Page
     {
+        internal static object modelID;
+        internal static object brandID;
+        internal static object addOns;
+        internal static object buyingPrice;
+        internal static object quantityBought;
+
         public PurchasesPage()
         {
             this.InitializeComponent();
-            BranchPurchasesDatePicker.SelectedDate = DateTime.Today;
-        }
-    }
-}
+            BranchPurchasesDatePicker.SelectedDa

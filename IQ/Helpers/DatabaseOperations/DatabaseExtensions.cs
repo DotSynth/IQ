@@ -8,6 +8,8 @@ using System.Data;
 using Windows.Networking.Proximity;
 using System.Collections.ObjectModel;
 using IQ.Helpers.DataTableOperations.Classes;
+using IQ.Views.BranchViews.Pages.Purchases;
+using Windows.AI.MachineLearning.Preview;
 
 namespace IQ.Helpers.DatabaseOperations
 {
@@ -75,8 +77,8 @@ namespace IQ.Helpers.DatabaseOperations
             bool isCompleted;
             try
             {
-
-                string createBranchInventoryTable = "CREATE TABLE IF NOT EXISTS BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, Description VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
+                // Create Tables
+                string createBranchInventoryTable = "CREATE TABLE IF NOT EXISTS BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
                 using var createBranchInventoryTableCommand = new NpgsqlCommand(createBranchInventoryTable, con);
                 createBranchInventoryTableCommand.ExecuteScalar();
                 string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON BranchInventory(ModelID);";
@@ -90,7 +92,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createSalesTableIndexCommand = new NpgsqlCommand(createSalesTableIndex, con);
                 createSalesTableIndexCommand.ExecuteScalar();
 
-                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
                 createPurchasesTableCommand.ExecuteScalar();
                 string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON BranchPurchases(Date);";
@@ -131,6 +133,59 @@ namespace IQ.Helpers.DatabaseOperations
                 string createCommitHistoryTableIndex = "CREATE INDEX IF NOT EXISTS CommitDate ON BranchCommitHistory(CommitDate);";
                 using var createCommitHistoryTableIndexCommand = new NpgsqlCommand(createCommitHistoryTableIndex, con);
                 createCommitHistoryTableIndexCommand.ExecuteScalar();
+
+                // Create  Triggers
+                using var InventoryTriggerFunctionCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION update_total_worth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
+                InventoryTriggerFunctionCommand.ExecuteNonQuery();
+
+                // Create the trigger for INSERT operations
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand(@"CREATE TRIGGER update_total_worth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION update_total_worth();", con);
+                InventoryInsertTriggerCommand.ExecuteNonQuery();
+
+                // Create the trigger for UPDATE operations
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand(@"CREATE TRIGGER update_total_worth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION update_total_worth();", con);
+                InventoryUpdateTriggerCommand.ExecuteNonQuery();
+
+                // Sales-Inventory AutoUpdate
+                using var SalesCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION updateInventory_Sales()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                SalesCommand.ExecuteNonQuery();
+
+                // Sales - Inventory AutoUpdate Trigger
+                using var triggerSalesCommand = new NpgsqlCommand(@"CREATE TRIGGER updateInventory_salesTrigger  AFTER INSERT ON BranchSale   FOR EACH ROW  EXECUTE FUNCTION updateInventory_Sales();", con);
+                triggerSalesCommand.ExecuteNonQuery();
+
+
+                // ReturnIn-Inventory AutoUpdate
+                using var ReturnInCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                ReturnInCommand.ExecuteNonQuery();
+
+                // ReturnIn-Inventory AutoUpdate Trigger
+                using var triggerReturnInCommand = new NpgsqlCommand(@"CREATE TRIGGER updateInventory_ReturnInTrigger  AFTER INSERT ON BranchReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
+                triggerReturnInCommand.ExecuteNonQuery();
+
+                // ReturnOut-Inventory AutoUpdate
+                using var ReturnOutCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                ReturnOutCommand.ExecuteNonQuery();
+
+                // ReturnOut-Inventory AutoUpdate Trigger
+                using var triggerReturnOutCommand = new NpgsqlCommand(@"CREATE TRIGGER updateInventory_ReturnOutTrigger  AFTER INSERT ON BranchReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
+                triggerReturnOutCommand.ExecuteNonQuery();
+
+                // TransferOut-Inventory AutoUpdate
+                using var TransferOutCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                TransferOutCommand.ExecuteNonQuery();
+
+                // TransferOut-Inventory AutoUpdate Trigger
+                using var triggerTransferOutCommand = new NpgsqlCommand(@"CREATE TRIGGER updateInventory_TransferOutTrigger  AFTER INSERT ON BranchTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
+                triggerTransferOutCommand.ExecuteNonQuery();
+
+                // Sales-Inventory AutoUpdate
+                // using var SalesCommand = new NpgsqlCommand(@"CREATE OR REPLACE FUNCTION updateInventory()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                // SalesCommand.ExecuteNonQuery();
+
+                // Sales - Inventory AutoUpdate Trigger
+                // using var triggerSalesCommand = new NpgsqlCommand(@"CREATE TRIGGER updateInventory_trigger  AFTER INSERT ON BranchSale   FOR EACH ROW  EXECUTE FUNCTION updateInventory();", con);
+                // triggerSalesCommand.ExecuteNonQuery();
 
                 isCompleted = true;
             }
@@ -188,6 +243,62 @@ namespace IQ.Helpers.DatabaseOperations
             }
 
             return isCompleted;
+        }
+
+        public static bool TriggerDbSubAction_Purchase()
+        {
+            // Check if the model exists in the inventory
+            using var checkModelCommand = new NpgsqlCommand("SELECT COUNT(*) FROM inventory WHERE modelID = @modelID", con);
+            checkModelCommand.Parameters.AddWithValue("modelID", PurchasesPage.modelID);
+
+            int modelCount = Convert.ToInt32(checkModelCommand.ExecuteScalar());
+            bool isCompleted;
+
+            if (modelCount == 0)
+            {
+                // Model does not exist in the inventory, ask the user if they want to add it
+                DialogResult result = MessageBox.Show("Model does not exist in the inventory. Do you want to add it?", "Add to Inventory", MessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Insert the model into the inventory
+                    using var insertModelCommand = new NpgsqlCommand(@"
+                    INSERT INTO BranchInventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
+                    VALUES (@modelID, @brandID, @addOns, @quantityBought, @buyingPrice)", con);
+
+                    insertModelCommand.Parameters.AddWithValue("modelID", PurchasesPage.modelID);
+                    insertModelCommand.Parameters.AddWithValue("brandID", PurchasesPage.brandID);
+                    insertModelCommand.Parameters.AddWithValue("addOns", PurchasesPage.addOns);
+                    insertModelCommand.Parameters.AddWithValue("quantityBought", PurchasesPage.quantityBought);
+                    insertModelCommand.Parameters.AddWithValue("buyingPrice", PurchasesPage.buyingPrice);
+
+                    insertModelCommand.ExecuteNonQuery();
+
+                    isCompleted = true; 
+                    return isCompleted;
+                }
+                else
+                {
+                    isCompleted = false;
+                    return isCompleted;
+                }
+            }
+            else
+            {
+                // Model exists in the inventory, update the quantityInStock
+                using var updateModelCommand = new NpgsqlCommand(@"
+                UPDATE BranchInventory
+                SET QuantityInStock = QuantityInStock + @quantityBought
+                WHERE ModelID = @modelID", con);
+
+                updateModelCommand.Parameters.AddWithValue("modelID", PurchasesPage.modelID);
+                updateModelCommand.Parameters.AddWithValue("quantityBought", PurchasesPage.quantityBought);
+
+                updateModelCommand.ExecuteNonQuery();
+
+                isCompleted = true;
+                return isCompleted;
+            }
         }
 
         public static async Task<List<string>> QuerySuggestionsFromDatabase(string userInput)
