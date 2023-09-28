@@ -66,7 +66,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             Frame.Navigate(typeof(PLaceHolderPage));
 
             // Delay for 5 seconds (5000 milliseconds)
-            await Task.Delay(50000);
+            await Task.Delay(2000);
 
             // Continue with the next line of code after the delay
             // Navigate back to the original page to refresh it

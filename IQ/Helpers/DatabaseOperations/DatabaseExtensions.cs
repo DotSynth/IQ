@@ -136,48 +136,48 @@ namespace IQ.Helpers.DatabaseOperations
                 createCommitHistoryTableIndexCommand.ExecuteScalar();
 
                 // Create  Triggers
-                using var InventoryTriggerFunctionCommand = new NpgsqlCommand("CREATE FUNCTION IF NOT EXISTS updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
+                using var InventoryTriggerFunctionCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
                 InventoryTriggerFunctionCommand.ExecuteNonQuery();
 
                 // Create the trigger for INSERT operations
-                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateTotalWorth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION update_total_worth();", con);
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION update_total_worth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
 
                 // Create the trigger for UPDATE operations
-                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION update_total_worth();", con);
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION update_total_worth();", con);
                 InventoryUpdateTriggerCommand.ExecuteNonQuery();
 
                 // Sales-Inventory AutoUpdate
-                using var SalesCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION IF NOT EXISTS updateInventory_Sales()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var SalesCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_Sales()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 SalesCommand.ExecuteNonQuery();
 
                 // Sales - Inventory AutoUpdate Trigger
-                using var triggerSalesCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateInventory_salesTrigger  AFTER INSERT ON BranchSale   FOR EACH ROW  EXECUTE FUNCTION updateInventory_Sales();", con);
+                using var triggerSalesCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_salesTrigger  AFTER INSERT ON BranchSales   FOR EACH ROW  EXECUTE FUNCTION updateInventory_Sales();", con);
                 triggerSalesCommand.ExecuteNonQuery();
 
 
                 // ReturnIn-Inventory AutoUpdate
-                using var ReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION IF NOT EXISTS updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnInCommand.ExecuteNonQuery();
 
                 // ReturnIn-Inventory AutoUpdate Trigger
-                using var triggerReturnInCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateInventory_ReturnInTrigger  AFTER INSERT ON BranchReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
+                using var triggerReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnInTrigger  AFTER INSERT ON BranchReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
                 triggerReturnInCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate
-                using var ReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE IF NOT EXISTS FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE  FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnOutCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate Trigger
-                using var triggerReturnOutCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateInventory_ReturnOutTrigger  AFTER INSERT ON BranchReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
+                using var triggerReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnOutTrigger  AFTER INSERT ON BranchReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
                 triggerReturnOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate
-                using var TransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE IF NOT EXISTS FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var TransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 TransferOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate Trigger
-                using var triggerTransferOutCommand = new NpgsqlCommand("CREATE TRIGGER IF NOT EXISTS updateInventory_TransferOutTrigger  AFTER INSERT ON BranchTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
+                using var triggerTransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_TransferOutTrigger  AFTER INSERT ON BranchTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
                 triggerTransferOutCommand.ExecuteNonQuery();
 
                 // Sales-Inventory AutoUpdate
