@@ -52,32 +52,27 @@ namespace IQ.Views.BranchViews.Pages.Sales
             OverlayInstance.VisibilityChanged += PopupPageVisibilityChanged!;
         }
 
-        private void RefreshPage()
-        {
-            // Navigate away to a placeholder page
-            Frame.Navigate(typeof(PLaceHolderPage));
-
-            _ = DelayedExecutionAsync();
-
-            // Navigate back to the original page to refresh it
-            Frame.Navigate(typeof(SalesPage));
-        }
 
         private void BranchSalesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
             DateFilter = BranchSalesDatePicker.Date.UtcDateTime;
-            RefreshPage();
+            _ = RefreshPage();
         }
 
-        async Task DelayedExecutionAsync()
+        public async Task RefreshPage()
         {
             // Do something before the delay
+            // Navigate away to a placeholder page
+            Frame.Navigate(typeof(PLaceHolderPage));
 
             // Delay for 5 seconds (5000 milliseconds)
             await Task.Delay(50000);
 
             // Continue with the next line of code after the delay
+            // Navigate back to the original page to refresh it
+            Frame.Navigate(typeof(SalesPage));
         }
+    
 
         private async Task LoadSuggestionsAsync()
         {
@@ -122,7 +117,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             if (OverlayInstance.Visibility == Visibility.Collapsed)
             {
                 // Trigger the RefreshPage() function
-                RefreshPage();
+                _ = RefreshPage();
             }
         }
 
@@ -149,7 +144,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             {
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
-                ObservableCollection<BranchSale> searchResults = await DatabaseExtensions.QueryResultsFromDatabase(userQuery);
+                ObservableCollection<BranchSale> searchResults = await DatabaseExtensions.QuerySalesResultsFromDatabase(userQuery);
                 Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
@@ -183,7 +178,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             {
                 // Query the database for suggestions based on the user's input
                 string userInput = sender.Text;
-                List<string> suggestions = await DatabaseExtensions.QuerySuggestionsFromDatabase(userInput);
+                List<string> suggestions = await DatabaseExtensions.QuerySalesSuggestionsFromDatabase(userInput);
 
                 // Set the suggestions for the AutoSuggestBox
                 sender.ItemsSource = suggestions;

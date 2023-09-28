@@ -32,4 +32,6 @@ namespace IQ.Views.BranchViews.Pages.Purchases
         public PurchasesPage()
         {
             this.InitializeComponent();
-            BranchPurchasesDatePicker.SelectedDa
+        }
+    }
+}

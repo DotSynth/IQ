@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="IQ.Views.BranchViews.Pages.Inventory.SubPages.AddInventoryOverlay"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IQ.Views.BranchViews.Pages.Inventory.SubPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    mc:Ignorable="d"
+    Width="400"
+    Height="720"
+    Padding="20"
+    Margin="8">
+
+    <Page.Resources>
+        <animations:FadeInThemeAnimation x:Key="MyFadeInAnimation" Duration="0:0:3.5" />
+    </Page.Resources>
+
+    <Grid
+        Background="White"
+        CornerRadius="7"
+        BorderBrush="#f1f2f5"
+        BorderThickness="2"
+        x:Name="OverlayGrid">
+
+        <StackPanel
+            Orientation="Vertical">
+            <TextBlock
+                FontFamily="{StaticResource Righteous}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="10,10,0,0"
+                Foreground="#020066">
+                Add Inventory
+            </TextBlock>
+
+            <Rectangle 
+                Height="1"
+                HorizontalAlignment="Stretch"
+                Fill="#E2E2E2"
+                Margin="0,10,0,0"/>
+
+            <TextBox
+                x:Name="ModelIDTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Model Number:"
+                PlaceholderText="X-XXX-XX"/>
+
+            <TextBox
+                x:Name="BrandIDTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Brand Name:"
+                PlaceholderText="E.g SAMSUNG"/>
+
+            <TextBox
+                x:Name="AddOnsTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Product AddOns:"
+                PlaceholderText="E.g WALL BRACKET"/>
+
+            <TextBox
+                x:Name="QuantityInStockTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Quantity In Stock:"
+                PlaceholderText="E.g 3"/>
+
+            <TextBox
+                x:Name="UnitPriceTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="UnitPrice:"
+                PlaceholderText="XXXXX.XX"/>
+
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Margin="10,10,10,10">
+
+                <Button
+                    x:Name="AddInventoryButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="40"
+                    Width="100"
+                    Margin="10,0,0,0"
+                    FontFamily="{StaticResource Righteous}"
+                    Foreground="#020066"
+                    Click="AddInventoryButton_Click">Add</Button>
+
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+</Page>

@@ -33,6 +33,7 @@
     <None Remove="Views\BranchViews\Pages\ReturnInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnOutwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml" />
+    <None Remove="Views\BranchViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
   </ItemGroup>
