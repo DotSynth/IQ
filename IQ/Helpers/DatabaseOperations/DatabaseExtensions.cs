@@ -383,7 +383,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT InvoiceID FROM BranchInventory WHERE ModelID LIKE @userInput";
+                    command.CommandText = "SELECT ModelID FROM BranchInventory WHERE ModelID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -405,5 +405,70 @@ namespace IQ.Helpers.DatabaseOperations
             return suggestions;
         }
 
+        public static async Task<List<string>> QueryBrandIDSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT BrandID FROM BranchInventory WHERE BrandID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        public static async Task<string> QueryBrandNameFromDatabase(string userQuery)
+        {
+            string? searchResult = "";
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT BrandID FROM BranchInventory WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            searchResult = reader.GetString(0);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResult;
+        }
     }
 }

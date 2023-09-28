@@ -56,17 +56,14 @@ namespace IQ.Views.BranchViews.Pages.Sales
         private void BranchSalesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
             DateFilter = BranchSalesDatePicker.Date.UtcDateTime;
-            _ = RefreshPage();
+            RefreshPage();
         }
 
-        public async Task RefreshPage()
+        public void RefreshPage()
         {
             // Do something before the delay
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
-
-            // Delay for 5 seconds (5000 milliseconds)
-            await Task.Delay(2000);
 
             // Continue with the next line of code after the delay
             // Navigate back to the original page to refresh it
@@ -117,7 +114,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             if (OverlayInstance.Visibility == Visibility.Collapsed)
             {
                 // Trigger the RefreshPage() function
-                _ = RefreshPage();
+                RefreshPage();
             }
         }
 

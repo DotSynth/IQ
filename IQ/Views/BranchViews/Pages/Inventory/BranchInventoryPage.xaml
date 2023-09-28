@@ -48,7 +48,8 @@
                 FontFamily="{StaticResource Righteous}"
                 Width="120"
                 Margin="14,0,14,0"
-                HorizontalAlignment="Left"/>
+                HorizontalAlignment="Left"
+                Click="InventoryAddButton_Click"/>
             <AutoSuggestBox
                 x:Name="BranchInventoryAutoSuggestBox"
                 Grid.Row="1"

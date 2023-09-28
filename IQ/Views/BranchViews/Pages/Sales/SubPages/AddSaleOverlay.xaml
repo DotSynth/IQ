@@ -54,7 +54,10 @@
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 Header="Model Number:"
-                PlaceholderText="XX-XXX-XXXX"/>
+                PlaceholderText="XX-XXX-XXXX"
+                SuggestionChosen="ModelIDAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="ModelIDAutoSuggestBox_QuerySubmitted"
+                TextChanged="ModelIDAutoSuggestBox_TextChanged"/>
 
             <AutoSuggestBox
                 x:Name="BrandIDAutoSuggestBox"
@@ -62,7 +65,9 @@
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 Header="Brand Name:"
-                PlaceholderText="E.g SAMSUNG"/>
+                PlaceholderText="E.g SAMSUNG"
+                SuggestionChosen="BrandIDAutoSuggestBox_SuggestionChosen"
+                TextChanged="BrandIDAutoSuggestBox_TextChanged"/>
 
             <TextBox
                 x:Name="QuantitySoldTextBox"

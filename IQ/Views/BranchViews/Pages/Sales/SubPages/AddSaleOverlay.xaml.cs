@@ -20,6 +20,9 @@ using Windows.Foundation.Collections;
 using IQ.Views.BranchViews.Pages.Sales;
 using Windows.UI;
 using System.Diagnostics;
+using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.Classes;
+using System.Collections.ObjectModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -137,6 +140,62 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
 
             Debug.WriteLine($"Visibility changed to {visibility}");
+        }
+
+        private void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem is string chosenSuggestion)
+            {
+                sender.Text = chosenSuggestion;
+            }
+        }
+
+        private async void ModelIDAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                // Query the database for suggestions based on the user's input
+                string userInput = sender.Text;
+                List<string> suggestions = await DatabaseExtensions.QueryInventorySuggestionsFromDatabase(userInput);
+
+                // Set the suggestions for the AutoSuggestBox
+                sender.ItemsSource = suggestions;
+            }
+        }
+
+        private void BrandIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem is string chosenSuggestion)
+            {
+                sender.Text = chosenSuggestion;
+            }
+        }
+
+        private async void BrandIDAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                // Query the database for suggestions based on the user's input
+                string userInput = sender.Text;
+                List<string> suggestions = await DatabaseExtensions.QueryBrandIDSuggestionsFromDatabase(userInput);
+
+                // Set the suggestions for the AutoSuggestBox
+                sender.ItemsSource = suggestions;
+            }
+        }
+
+        private async void ModelIDAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if (!string.IsNullOrWhiteSpace(args.QueryText))
+            {
+                // Perform a database query based on the user's queryText
+                string userQuery = args.QueryText;
+                string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
+                Debug.WriteLine("PopupPageVisibilityChanged called");
+
+                // Display the searchResults on your SalesPage or in a DataGrid
+                BrandIDAutoSuggestBox.Text = searchResult;
+            }
         }
     }
 }
