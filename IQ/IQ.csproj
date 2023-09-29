@@ -30,8 +30,11 @@
     <None Remove="Views\BranchViews\Pages\InventoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PLaceHolderPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PurchasesPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\Purchases\SubPages\AddPurchaseOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnInwardsPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\ReturnInwards\SubPages\AddRInsOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\ReturnOutwardsPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\ReturnOutwards\SubPages\AddROutsOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferInwardsPage.xaml" />
@@ -88,9 +91,6 @@
   <ItemGroup>
     <Folder Include="Views\BranchViews\Pages\CommitHistory\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\Inventory\SubPages\" />
-    <Folder Include="Views\BranchViews\Pages\Purchases\SubPages\" />
-    <Folder Include="Views\BranchViews\Pages\ReturnInwards\SubPages\" />
-    <Folder Include="Views\BranchViews\Pages\ReturnOutwards\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\TransferInwards\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\TransferOutwards\SubPages\" />
   </ItemGroup>
@@ -98,6 +98,21 @@
     <Resource Include="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <Resource Include="Assets\Fonts\Righteous Regular.ttf" />
     <Resource Include="Assets\Fonts\SplineSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\Purchases\SubPages\AddPurchaseOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\ReturnOutwards\SubPages\AddROutsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\ReturnInwards\SubPages\AddRInsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\BranchViews\Pages\PLaceHolderPage.xaml">

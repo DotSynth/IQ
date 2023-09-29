@@ -34,7 +34,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
     /// </summary>
     public sealed partial class AddSaleOverlay : Page
     {
-        public int? CurrentInvoiceId;
+        public string? CurrentInvoiceId;
         public string? CurrentModelID;
         public string? CurrentBrandID;
         public int? CurrentQuantitySold;
@@ -52,7 +52,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
 
         private void AddSaleButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrentInvoiceId = int.Parse(InvoiceTextBox.Text);
+            CurrentInvoiceId = InvoiceTextBox.Text;
             CurrentModelID = ModelIDAutoSuggestBox.Text;
             CurrentBrandID = BrandIDAutoSuggestBox.Text;
             CurrentQuantitySold = int.Parse(QuantitySoldTextBox.Text);
@@ -142,11 +142,21 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
             Debug.WriteLine($"Visibility changed to {visibility}");
         }
 
-        private void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private async Task ModelIDAutoSuggestBox_SuggestionChosenAsync(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             if (args.SelectedItem is string chosenSuggestion)
             {
                 sender.Text = chosenSuggestion;
+                if (!string.IsNullOrWhiteSpace(sender.Text))
+                {
+                    // Perform a database query based on the user's queryText
+                    string userQuery = sender.Text;
+                    string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
+                    Debug.WriteLine("PopupPageVisibilityChanged called");
+
+                    // Display the searchResults on your SalesPage or in a DataGrid
+                    BrandIDAutoSuggestBox.Text = searchResult;
+                }
             }
         }
 
@@ -181,20 +191,6 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
 
                 // Set the suggestions for the AutoSuggestBox
                 sender.ItemsSource = suggestions;
-            }
-        }
-
-        private async void ModelIDAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (!string.IsNullOrWhiteSpace(args.QueryText))
-            {
-                // Perform a database query based on the user's queryText
-                string userQuery = args.QueryText;
-                string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
-
-                // Display the searchResults on your SalesPage or in a DataGrid
-                BrandIDAutoSuggestBox.Text = searchResult;
             }
         }
     }
