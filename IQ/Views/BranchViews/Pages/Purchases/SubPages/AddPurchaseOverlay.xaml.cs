@@ -13,11 +13,13 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
 using Npgsql;
 using System.Threading.Tasks;
 using Windows.UI;
 using CommunityToolkit.WinUI.UI.Animations;
+using IQ.Helpers.DatabaseOperations;
+using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -38,6 +40,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
         public static Decimal? CurrentBuyingPrice;
         public static string? CurrentPurchasedFrom;
         public static string? CurrentSupplierContactInfo;
+        bool IsCompleted;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -47,7 +50,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
             this.InitializeComponent();
         }
 
-        private void AddPurchaseButton_Click(object sender, RoutedEventArgs e)
+        private async void AddPurchaseButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentInvoiceID = InvoiceTextBox.Text;
             CurrentModelID = ModelIDAutoSuggestBox.Text;
@@ -83,38 +86,42 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                         cmd.Parameters.AddWithValue("modelID", CurrentModelID);
                         cmd.Parameters.AddWithValue("brandID", CurrentBrandID);
                         cmd.Parameters.AddWithValue("addOns", CurrentAddOns);
-                        cmd.Parameters.AddWithValue("qtySold", CurrentQuantityBought);
+                        cmd.Parameters.AddWithValue("qtyBought", CurrentQuantityBought);
                         cmd.Parameters.AddWithValue("buyingPrice", CurrentBuyingPrice);
                         cmd.Parameters.AddWithValue("purchasedFrom", CurrentPurchasedFrom);
                         cmd.Parameters.AddWithValue("supplierInfo", CurrentSupplierContactInfo);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();
-                        _ = ShowCompletionAlertDialogAsync("New Purchase Row Inserted Successfully");
+                        await ShowCompletionAlertDialogAsync("New Purchase Row Inserted Successfully");
                     }
+                    
+                    IsCompleted = await TriggerDbSubAction_PurchaseAsync(conn);
 
                     // Close the connection
                     conn.Close();
+                    
                 }
 
-                SalesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
+                PurchasesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
+
+                    if (IsCompleted == true) 
+                    {
+                        await ShowCompletionAlertDialogAsync("New Inventory Row Inserted Successfully");
+                    }
 
             }
             catch (Exception ex)
             {
                 string error = ex.Message;
-                _ = ShowCompletionAlertDialogAsync(error);
+                await ShowCompletionAlertDialogAsync(error);
             }
 
 
         }
 
-        private async Task<bool> TriggerDbSubAction_PurchaseAsync()
+        private async Task<bool> TriggerDbSubAction_PurchaseAsync(NpgsqlConnection con)
         {
-            var ConnectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
-            var con = new NpgsqlConnection(
-                            connectionString: ConnectionString);
-            con.Open();
             // Check if the model exists in the inventory
             using var checkModelCommand = new NpgsqlCommand("SELECT COUNT(*) FROM BranchInventory WHERE ModelID = @modelID", con);
             checkModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
@@ -130,8 +137,8 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                     // Set the title, content, and close button text
                     Title = "Alert",
                     Content = "This model does not exist in the inventory. Do you want to add it?",
-                    PrimaryButtonText = "Add",
-                    SecondaryButtonText = "No",
+                    PrimaryButtonText = "No",
+                    SecondaryButtonText = "Add",
                     IsSecondaryButtonEnabled = true,
                     IsPrimaryButtonEnabled = true,
                 };
@@ -146,7 +153,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                 // Show the ContentDialog and get the result
                 ContentDialogResult result = await alertDialog.ShowAsync();
 
-                if (result == ContentDialogResult.Primary)
+                if (result == ContentDialogResult.Secondary)
                 {
                     // Insert the model into the inventory
                     using var insertModelCommand = new NpgsqlCommand(@"
@@ -184,7 +191,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
                 updateModelCommand.ExecuteNonQuery();
 
-                isCompleted = true;
+                isCompleted = false;
                 return isCompleted;
             }
         }
@@ -210,6 +217,67 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
             // Show the ContentDialog and get the result
             ContentDialogResult result = await alertDialog.ShowAsync();
 
+        }
+
+        // This method sets the visibility and raises the event
+        public void SetVisibility(Visibility visibility)
+        {
+            this.Visibility = visibility;
+            VisibilityChanged?.Invoke(this, EventArgs.Empty);
+
+            Debug.WriteLine($"Visibility changed to {visibility}");
+        }
+
+        private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem is string chosenSuggestion)
+            {
+                sender.Text = chosenSuggestion;
+                if (!string.IsNullOrWhiteSpace(sender.Text))
+                {
+                    // Perform a database query based on the user's queryText
+                    string userQuery = sender.Text;
+                    string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
+                    Debug.WriteLine("PopupPageVisibilityChanged called");
+
+                    // Display the searchResults on your SalesPage or in a DataGrid
+                    BrandIDAutoSuggestBox.Text = searchResult;
+                }
+            }
+        }
+
+        private async void ModelIDAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                // Query the database for suggestions based on the user's input
+                string userInput = sender.Text;
+                List<string> suggestions = await DatabaseExtensions.QueryInventorySuggestionsFromDatabase(userInput);
+
+                // Set the suggestions for the AutoSuggestBox
+                sender.ItemsSource = suggestions;
+            }
+        }
+
+        private void BrandIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem is string chosenSuggestion)
+            {
+                sender.Text = chosenSuggestion;
+            }
+        }
+
+        private async void BrandIDAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                // Query the database for suggestions based on the user's input
+                string userInput = sender.Text;
+                List<string> suggestions = await DatabaseExtensions.QueryBrandIDSuggestionsFromDatabase(userInput);
+
+                // Set the suggestions for the AutoSuggestBox
+                sender.ItemsSource = suggestions;
+            }
         }
     }
 }

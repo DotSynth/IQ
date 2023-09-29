@@ -1,6 +1,5 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
 using IQ.Views;
 using Npgsql;
 using System;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using IQ.Views.BranchViews.Pages.Purchases;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {
@@ -39,7 +39,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
 
                 using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchPurchases WHERE DATE(Date) = @time;", connection))
                 {
-                    cmd.Parameters.AddWithValue("time", SalesPage.DateFilter!.Value.DateTime);
+                    cmd.Parameters.AddWithValue("time", PurchasesPage.DateFilter!.Value.DateTime);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

@@ -2,8 +2,7 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
-using IQ.Views.BranchViews.Pages.Sales.SubPages;
+using IQ.Views.BranchViews.Pages.Purchases.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -37,7 +36,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
-        public static AddSaleOverlay OverlayInstance = new AddSaleOverlay();
+        public static AddPurchaseOverlay OverlayInstance = new AddPurchaseOverlay();
 
         public PurchasesPage()
         {
@@ -81,7 +80,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases
                     // Query the database to retrieve values from the 'columnName' column
                     using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT InvoiceID FROM BranchPurchases WHERE DATE(Date) = @time;", connection))
                     {
-                        command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
+                        command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())

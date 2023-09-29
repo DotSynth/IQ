@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     mc:Ignorable="d"
     Width="400"
-    Height="750"
+    Height="790"
     Padding="20"
     Margin="8">
 
@@ -55,7 +55,6 @@
                 Header="Model Number:"
                 PlaceholderText="XX-XXX-XXXX"
                 SuggestionChosen="ModelIDAutoSuggestBox_SuggestionChosen"
-                QuerySubmitted="ModelIDAutoSuggestBox_QuerySubmitted"
                 TextChanged="ModelIDAutoSuggestBox_TextChanged"/>
 
             <AutoSuggestBox
@@ -82,7 +81,7 @@
                 Margin="14"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
-                Header="Quantity Sold:"
+                Header="Quantity Bought:"
                 PlaceholderText="E.g 3"/>
 
             <TextBox
@@ -90,7 +89,7 @@
                 Margin="14"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
-                Header="Selling Price:"
+                Header="Buying Price:"
                 PlaceholderText="XXXXXX.XX"/>
 
             <TextBox
@@ -98,15 +97,15 @@
                 Margin="14"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
-                Header="Customer Name:"
-                PlaceholderText="E.g ANITA JOHN"/>
+                Header="Supplier Name:"
+                PlaceholderText="E.g LG LTD."/>
 
             <TextBox
                 x:Name="SupplierInfoTextBox"
                 Margin="14"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
-                Header="Customer Info:"
+                Header="Supplier Info:"
                 PlaceholderText="PHONE, ADDRESS, ETC"/>
 
             <StackPanel
@@ -116,7 +115,7 @@
                 Margin="10,10,10,10">
 
                 <Button
-                    x:Name="AddSaleButton"
+                    x:Name="AddPurchaseButton"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Height="40"
@@ -124,7 +123,7 @@
                     Margin="10,0,0,0"
                     FontFamily="{StaticResource Righteous}"
                     Foreground="#020066"
-                    Click="AddSaleButton_Click">Add</Button>
+                    Click="AddPurchaseButton_Click">Add</Button>
 
             </StackPanel>
 

@@ -142,7 +142,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
             Debug.WriteLine($"Visibility changed to {visibility}");
         }
 
-        private async Task ModelIDAutoSuggestBox_SuggestionChosenAsync(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             if (args.SelectedItem is string chosenSuggestion)
             {

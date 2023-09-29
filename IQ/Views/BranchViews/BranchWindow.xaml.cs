@@ -1,4 +1,5 @@
-﻿using IQ.Views.BranchViews.Pages.CommitHistory;
+﻿using IQ.Helpers.WindowsOperations;
+using IQ.Views.BranchViews.Pages.CommitHistory;
 using IQ.Views.BranchViews.Pages.Inventory;
 using IQ.Views.BranchViews.Pages.Purchases;
 using IQ.Views.BranchViews.Pages.ReturnInwards;
@@ -32,6 +33,8 @@ namespace IQ.Views.BranchViews
     {
         public BranchWindow()
         {
+            // Set the initial window size
+            this.SetWindowSize(1400, 900);
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(BranchTitleBar);
