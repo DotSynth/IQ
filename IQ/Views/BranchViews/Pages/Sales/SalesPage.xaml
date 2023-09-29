@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" 
     xmlns:overlay="using:IQ.Views.BranchViews.Pages.Sales.SubPages"
-    xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     x:Name="SalesPageTitle"
     mc:Ignorable="d"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">

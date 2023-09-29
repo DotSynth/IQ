@@ -4,26 +4,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IQ.Views.BranchViews.Pages.Purchases"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    mc:Ignorable="d">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:overlay="using:IQ.Views.BranchViews.Pages.Purchases.SubPages"
+    x:Name="PurchasesPageTitle"
+    mc:Ignorable="d"
+    DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
     <StackPanel
     Orientation="Vertical">
         <TextBlock Text="BRANCH PURCHASES"
-       TextWrapping="NoWrap"
-       VerticalAlignment="Center"
-       HorizontalAlignment="Center"
-       Margin="0,10,0,0"
-       Foreground="#020066"
-       FontFamily="{StaticResource Righteous}"/>
+                   TextWrapping="NoWrap"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,0"
+                   Foreground="#020066"
+                   FontFamily="{StaticResource Righteous}"/>
+
+        <!-- Popup for overlay content -->
+        <Popup x:Name="PurchaseOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True">
+            <overlay:AddPurchaseOverlay/>
+        </Popup>
+        
         <Rectangle 
-        Height="1"
-        HorizontalAlignment="Stretch"
-        Fill="#E2E2E2"
-        Margin="0,10,0,0"/>
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"/>
+        
         <Grid
-        Margin="0,10,0,0"
-        RowSpacing="14">
+            Margin="0,10,0,0"
+            RowSpacing="14">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -33,40 +44,54 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button 
-            Grid.Row="0"
-            Grid.Column="0"
-            Content="Add"
-            Foreground="#020066"
-            FontFamily="{StaticResource Righteous}"
-            Width="120"
-            Margin="14,0,14,0"
-            HorizontalAlignment="Left"/>
+                x:Name="PurchasesAddButton"
+                Grid.Row="0"
+                Grid.Column="0"
+                Content="Add"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Width="120"
+                Margin="14,0,14,0"
+                HorizontalAlignment="Left"
+                Click="PurchasesAddButton_Click">
+            </Button>
             <AutoSuggestBox
-            x:Name="BranchPurchasesAutoSuggestBox"
-            Grid.Row="1"
-            Grid.Column="1"
-            QueryIcon="Zoom"
-            Margin="0,0,14,0"
-            Foreground="#020066"
-            FontFamily="{StaticResource Righteous}"/>
+                x:Name="BranchPurchasesAutoSuggestBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                QueryIcon="Zoom"
+                Margin="0,0,14,0"
+                Foreground="#020066"
+                SuggestionChosen="BranchPurchasesAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="BranchPurchasesAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="BranchPurchasesAutoSuggestBox_TextChangedAsync"
+                FontFamily="{StaticResource Righteous}"/>
             <DatePicker
-            Grid.Row="0"
-            Grid.Column="2"
-            x:Name="BranchPurchasesDatePicker"
-            Foreground="#020066"
-            FontFamily="{StaticResource Righteous}"
-            HorizontalAlignment="Right"
-            Margin="0,0,14,0">
+                Grid.Row="0"
+                Grid.Column="2"
+                x:Name="BranchPurchasesDatePicker"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                HorizontalAlignment="Right"
+                Margin="0,0,14,0"
+                SelectedDateChanged="BranchPurchasesDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
-        Height="1"
-        HorizontalAlignment="Stretch"
-        Fill="#E2E2E2"
-        Margin="0,10,0,0"/>
+            Height="1"
+            HorizontalAlignment="Stretch"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"/>
         <controls:DataGrid x:Name="BranchPurchasesDataGrid"
-           Margin="0,10,0,0"
-           FontFamily="{StaticResource SplineSans}">
+                           ColumnWidth="*"
+                           Margin="0,10,0,0"
+                           FontFamily="{StaticResource SplineSans}"
+                           ItemsSource="{x:Bind ViewModel.BranchPurchase}" 
+                           AutoGenerateColumns="True"
+                           Foreground="#020066"
+                           GridLinesVisibility="Vertical"
+                           AlternatingRowBackground="#f1f2f5">
         </controls:DataGrid>
+        <Frame x:Name="rootFrame"/>
     </StackPanel>
 </Page>

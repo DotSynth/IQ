@@ -470,5 +470,85 @@ namespace IQ.Helpers.DatabaseOperations
 
             return searchResult;
         }
+
+        public static async Task<List<string>> QueryPurchasesSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT ModelID FROM BranchPurchases WHERE ModelID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<BranchPurchase>> QueryPurchasesResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<BranchPurchase> searchResults = new ObservableCollection<BranchPurchase>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchPurchases WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchPurchase result = new BranchPurchase
+                            {
+                                // Map properties from reader columns
+                                InvoiceID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityBought = reader.GetInt32(4),
+                                BuyingPrice = reader.GetDecimal(5),
+                                PurchasedFrom = reader.GetString(6),
+                                SupplierContactInfo = reader.GetString(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
     }
 }
