@@ -8,11 +8,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Graphics;
-using Windows.System;
-using Windows.UI.ViewManagement;
 
 namespace IQ
 {
@@ -20,7 +15,7 @@ namespace IQ
     {
 
         public App()
-        {     
+        {
             this.InitializeComponent();
         }
 
@@ -45,7 +40,7 @@ namespace IQ
                                 m_window.Activate();
                             }
                         }
-                        else if(DatabaseExtensions.GetCurrentUserRole() == "Branch")
+                        else if (DatabaseExtensions.GetCurrentUserRole() == "Branch")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Branch())
                             {
@@ -71,7 +66,7 @@ namespace IQ
                         }
                     }
                 }
-                
+
             }
             else
             {
@@ -81,6 +76,6 @@ namespace IQ
                 m_window.Activate();
             }
         }
-            private Window? m_window;
+        private Window? m_window;
     }
 }

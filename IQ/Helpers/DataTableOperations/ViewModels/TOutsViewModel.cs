@@ -1,15 +1,10 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.TransferInwards;
 using IQ.Views;
+using IQ.Views.BranchViews.Pages.TransferOutwards;
 using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IQ.Views.BranchViews.Pages.TransferOutwards;
 using System.IO;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels

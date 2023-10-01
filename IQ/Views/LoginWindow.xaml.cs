@@ -1,20 +1,14 @@
+using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.FileOperations;
+using IQ.Helpers.WindowsOperations;
+using IQ.Views.AdminViews;
+using IQ.Views.BranchViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.Windows;
-using IQ.Helpers.WindowsOperations;
-using Microsoft.UI;
-using Windows.ApplicationModel.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI;
-using Microsoft.UI.Windowing;
-using IQ.Views.BranchViews;
-using IQ.Views.AdminViews;
-using System.Security.Cryptography.X509Certificates;
-using IQ.Helpers.FileOperations;
-using IQ.Helpers.DatabaseOperations;
-using Windows.Foundation;
-using System.IO;
 using System;
+using System.IO;
+using Windows.Foundation;
+using Windows.UI.ViewManagement;
 
 namespace IQ.Views
 {

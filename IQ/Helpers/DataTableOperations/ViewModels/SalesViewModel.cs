@@ -1,18 +1,11 @@
-﻿using IQ.Helpers.FileOperations;
+﻿using IQ.Helpers.DataTableOperations.Classes;
+using IQ.Helpers.FileOperations;
 using IQ.Views;
+using IQ.Views.BranchViews.Pages.Sales;
 using Npgsql;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using IQ.Helpers.DataTableOperations.Classes;
-using NpgsqlTypes;
-using Windows.Networking.Proximity;
-using IQ.Views.BranchViews.Pages.Sales;
+using System.IO;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {

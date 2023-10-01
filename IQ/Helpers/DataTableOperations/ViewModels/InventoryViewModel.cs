@@ -1,16 +1,10 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
 using IQ.Views;
 using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using IQ.Views.BranchViews.Pages.Inventory;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {
@@ -39,7 +33,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                 connection.Open();
 
                 using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchInventory;", connection))
-                {                    
+                {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

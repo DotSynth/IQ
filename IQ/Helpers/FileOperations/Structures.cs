@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IQ.Helpers.FileOperations
+﻿namespace IQ.Helpers.FileOperations
 {
     public class Structures
     {

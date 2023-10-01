@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IQ.Helpers.DataTableOperations.Classes;
 using Npgsql;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-using Windows.Networking.Proximity;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using IQ.Helpers.DataTableOperations.Classes;
-using IQ.Views.BranchViews.Pages.Purchases;
-using Windows.AI.MachineLearning.Preview;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace IQ.Helpers.DatabaseOperations
 {
@@ -190,7 +184,7 @@ namespace IQ.Helpers.DatabaseOperations
 
                 isCompleted = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 isCompleted = false;
                 Debug.WriteLine(ex);
@@ -254,23 +248,23 @@ namespace IQ.Helpers.DatabaseOperations
 
             try
             {
-                
-                    // Perform a database query to fetch suggestions
-                    using (NpgsqlCommand command = new NpgsqlCommand())
-                    {
-                        command.Connection = con;
-                        command.CommandText = "SELECT InvoiceID FROM BranchSales WHERE InvoiceID LIKE @userInput";
-                        command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
-                        using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT InvoiceID FROM BranchSales WHERE InvoiceID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
                         {
-                            while (await reader.ReadAsync())
-                            {
-                                suggestions.Add(reader.GetString(0));
-                            }
+                            suggestions.Add(reader.GetString(0));
                         }
                     }
-                
+                }
+
             }
             catch (Exception ex)
             {
@@ -287,36 +281,36 @@ namespace IQ.Helpers.DatabaseOperations
 
             try
             {
-                
-                    // Perform a database query to fetch search results
-                    using (NpgsqlCommand command = new NpgsqlCommand())
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchSales WHERE InvoiceID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        command.Connection = con;
-                        command.CommandText = "SELECT * FROM BranchSales WHERE InvoiceID = @userQuery";
-                        command.Parameters.AddWithValue("userQuery", userQuery);
-
-                        using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                        while (await reader.ReadAsync())
                         {
-                            while (await reader.ReadAsync())
+                            // Map the database results to your result type
+                            BranchSale result = new BranchSale
                             {
-                                // Map the database results to your result type
-                                BranchSale result = new BranchSale
-                                {
-                                    // Map properties from reader columns
-                                    InvoiceId = reader.GetString(0),
-                                    ModelID = reader.GetString(1),
-                                    BrandID = reader.GetString(2),
-                                    QuantitySold = reader.GetInt32(3),
-                                    SellingPrice = reader.GetDecimal(4),
-                                    SoldTo = reader.GetString(5),
-                                    CustomerContactInfo = reader.GetString(6),
-                                };
+                                // Map properties from reader columns
+                                InvoiceId = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantitySold = reader.GetInt32(3),
+                                SellingPrice = reader.GetDecimal(4),
+                                SoldTo = reader.GetString(5),
+                                CustomerContactInfo = reader.GetString(6),
+                            };
 
-                                searchResults.Add(result);
-                            }
+                            searchResults.Add(result);
                         }
                     }
-                
+                }
+
             }
             catch (Exception ex)
             {
@@ -610,6 +604,86 @@ namespace IQ.Helpers.DatabaseOperations
                 {
                     command.Connection = con;
                     command.CommandText = "SELECT TransferID FROM BranchTransferInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<BranchTOut>> QueryTOutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<BranchTOut> searchResults = new ObservableCollection<BranchTOut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchTransferOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchTOut result = new BranchTOut
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredTo = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryTOutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM BranchTransferOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())

@@ -19,6 +19,7 @@
     <Content Remove="Assets\Fonts\SplineSans-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="App.xaml" />
     <None Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <None Remove="Assets\Fonts\Righteous Regular.ttf" />
     <None Remove="Assets\Fonts\SplineSans-Regular.ttf" />
@@ -38,9 +39,12 @@
     <None Remove="Views\BranchViews\Pages\Sales\SubPages\AddSaleOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferInwardsPage.xaml" />
-    <None Remove="Views\BranchViews\Pages\TransferInwards\SubPages\AddTransferInwardOverlay.xaml" />
+    <None Remove="Views\BranchViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="App.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -105,7 +109,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\BranchViews\Pages\TransferInwards\SubPages\AddTransferInwardOverlay.xaml">
+    <Page Update="Views\BranchViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -148,4 +152,13 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Remove="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
 </Project>
