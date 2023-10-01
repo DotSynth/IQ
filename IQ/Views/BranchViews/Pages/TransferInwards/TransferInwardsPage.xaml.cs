@@ -2,8 +2,6 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Purchases;
-using IQ.Views.BranchViews.Pages.Purchases.SubPages;
 using IQ.Views.BranchViews.Pages.TransferInwards.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -65,7 +63,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards
 
             // Continue with the next line of code after the delay
             // Navigate back to the original page to refresh it
-            Frame.Navigate(typeof(PurchasesPage));
+            Frame.Navigate(typeof(TransferInwardsPage));
         }
 
         private async Task LoadSuggestionsAsync()

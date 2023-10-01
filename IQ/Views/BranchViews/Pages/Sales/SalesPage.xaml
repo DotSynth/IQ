@@ -65,7 +65,8 @@
                 SuggestionChosen="BranchSalesAutoSuggestBox_SuggestionChosen"
                 QuerySubmitted="BranchSalesAutoSuggestBox_QuerySubmittedAsync"
                 TextChanged="BranchSalesAutoSuggestBox_TextChangedAsync"
-                FontFamily="{StaticResource Righteous}"/>
+                FontFamily="{StaticResource Righteous}"
+                PlaceholderText="Search Invoice ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"

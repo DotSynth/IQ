@@ -60,7 +60,8 @@
                 FontFamily="{StaticResource Righteous}"                
                 SuggestionChosen="BranchInventoryAutoSuggestBox_SuggestionChosen"
                 QuerySubmitted="BranchInventoryAutoSuggestBox_QuerySubmittedAsync"
-                TextChanged="BranchInventoryAutoSuggestBox_TextChangedAsync"/>
+                TextChanged="BranchInventoryAutoSuggestBox_TextChangedAsync"
+                PlaceholderText="Search Model ID..."/>
             
         </Grid>
         <Rectangle 

@@ -34,7 +34,7 @@ namespace IQ.Views.BranchViews
         public BranchWindow()
         {
             // Set the initial window size
-            this.SetWindowSize(1400, 900);
+            this.SetWindowSize(1600, 900);
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(BranchTitleBar);

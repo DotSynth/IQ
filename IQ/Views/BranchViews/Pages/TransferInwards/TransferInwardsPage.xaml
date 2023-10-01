@@ -64,7 +64,8 @@
                 SuggestionChosen="BranchTInsAutoSuggestBox_SuggestionChosen"
                 QuerySubmitted="BranchTInsAutoSuggestBox_QuerySubmittedAsync"
                 TextChanged="BranchTInsAutoSuggestBox_TextChangedAsync"
-                FontFamily="{StaticResource Righteous}"/>
+                FontFamily="{StaticResource Righteous}"
+                PlaceholderText="Search Transfer ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"

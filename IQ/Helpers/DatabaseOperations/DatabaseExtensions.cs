@@ -100,14 +100,14 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
                 createPurchasesTableIndexCommand.ExecuteScalar();
 
-                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
                 createTransferInwardsTableCommand.ExecuteScalar();
                 string createTransferInwardsTableIndex = "CREATE INDEX IF NOT EXISTS TInsDate ON BranchTransferInwards(Date);";
                 using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
                 createTransferInwardsTableIndexCommand.ExecuteScalar();
 
-                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
                 createTransferOutwardsTableCommand.ExecuteScalar();
                 string createTransferOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS TOutsDate ON BranchTransferOutwards(Date);";
@@ -482,7 +482,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT ModelID FROM BranchPurchases WHERE ModelID LIKE @userInput";
+                    command.CommandText = "SELECT InvoiceID FROM BranchPurchases WHERE InvoiceID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -515,7 +515,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchPurchases WHERE ModelID = @userQuery";
+                    command.CommandText = "SELECT * FROM BranchPurchases WHERE InvoiceID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -551,14 +551,84 @@ namespace IQ.Helpers.DatabaseOperations
             return searchResults;
         }
 
-        internal static Task<ObservableCollection<BranchTIn>> QueryTInsResultsFromDatabase(string userQuery)
+        internal static async Task<ObservableCollection<BranchTIn>> QueryTInsResultsFromDatabase(string userQuery)
         {
-            throw new NotImplementedException();
+            ObservableCollection<BranchTIn> searchResults = new ObservableCollection<BranchTIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchTransferInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchTIn result = new BranchTIn
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredFrom = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
         }
 
-        internal static Task<List<string>> QueryTInsSuggestionsFromDatabase(string userInput)
+        internal static async Task<List<string>> QueryTInsSuggestionsFromDatabase(string userInput)
         {
-            throw new NotImplementedException();
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM BranchTransferInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
         }
     }
 }
