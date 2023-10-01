@@ -139,7 +139,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
                 string createReturnInwardsTableIndex = "CREATE INDEX IF NOT EXISTS RInsDate ON BranchReturnInwards(Date);";
