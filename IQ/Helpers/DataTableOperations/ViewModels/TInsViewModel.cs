@@ -45,7 +45,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                     {
                         while (reader.Read())
                         {
-                            var purchase = new BranchTIn
+                            var TIn = new BranchTIn
                             {
                                 TransferID = reader.GetString(0),
                                 ModelID = reader.GetString(1),
@@ -57,7 +57,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                                 TransferredProductPrice = reader.GetDecimal(7),
                             };
 
-                            _branchTIns.Add(purchase);
+                            _branchTIns.Add(TIn);
                         }
                     }
                 }

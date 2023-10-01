@@ -40,6 +40,7 @@
     <None Remove="Views\BranchViews\Pages\TransferInwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferInwards\SubPages\AddTransferInwardOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
+    <None Remove="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,12 +93,16 @@
   <ItemGroup>
     <Folder Include="Views\BranchViews\Pages\CommitHistory\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\Inventory\SubPages\" />
-    <Folder Include="Views\BranchViews\Pages\TransferOutwards\SubPages\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <Resource Include="Assets\Fonts\Righteous Regular.ttf" />
     <Resource Include="Assets\Fonts\SplineSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\BranchViews\Pages\TransferInwards\SubPages\AddTransferInwardOverlay.xaml">

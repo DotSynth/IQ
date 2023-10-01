@@ -6,7 +6,39 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.Classes
 {
-    internal class BranchTOuts
+    public class BranchTOut
     {
+        public string? TransferID
+        {
+            get; set;
+        }
+        public string? ModelID
+        {
+            get; set;
+        }
+        public string? BrandID
+        {
+            get; set;
+        }
+        public string? AddOns
+        {
+            get; set;
+        }
+        public int? QuantityTransferred
+        {
+            get; set;
+        }
+        public string? TransferredTo
+        {
+            get; set;
+        }
+        public string? SignedBy
+        {
+            get; set;
+        }
+        public Decimal? TransferredProductPrice
+        {
+            get; set;
+        }
     }
 }
