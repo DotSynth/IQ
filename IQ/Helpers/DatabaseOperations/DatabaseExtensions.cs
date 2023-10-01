@@ -1,17 +1,22 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace IQ.Helpers.DatabaseOperations
 {
     public class DatabaseExtensions
     {
         public static NpgsqlConnection? con;
-        public static bool ConnectToDb(string ConnectionString)
+        public static bool ConnectToDb(string ConnectionString, [Optional] Window m)
         {
             bool Connected;
             try
@@ -21,11 +26,37 @@ namespace IQ.Helpers.DatabaseOperations
                 con.Open();
                 Connected = true;
             }
-            catch
+            catch(Exception ex) 
             {
+                string error = ex.Message;
+                ShowCompletionAlertDialogAsync(error, m);
                 Connected = false;
             }
             return Connected;
+        }
+
+
+        public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
+        {
+            // Create a ContentDialog
+            ContentDialog alertDialog = new ContentDialog
+            {
+                // Set the title, content, and close button text
+                Title = "Alert",
+                Content = alert,
+                CloseButtonText = "OK"
+            };
+
+            // Set the foreground to hex color #020066
+            alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
+
+            // Set the XamlRoot property to the same as an element in the app window
+            // For example, if you have a StackPanel named MyPanel in your XAML
+            alertDialog.XamlRoot = m.Content.XamlRoot;
+
+            // Show the ContentDialog and get the result
+            ContentDialogResult result = await alertDialog.ShowAsync();
+
         }
 
         public static string GetCurrentUserRole()

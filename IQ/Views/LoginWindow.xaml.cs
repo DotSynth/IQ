@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
 
@@ -84,7 +85,7 @@ namespace IQ.Views
             File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, User), UserLogin);
             if (ConnectionString != null)
             {
-                if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
+                if (DatabaseExtensions.ConnectToDb(ConnectionString, this) == true)
                 {
                     if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
                     {
