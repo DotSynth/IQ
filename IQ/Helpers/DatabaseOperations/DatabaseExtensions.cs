@@ -576,7 +576,7 @@ namespace IQ.Helpers.DatabaseOperations
             return searchResults;
         }
 
-        internal static async Task<ObservableCollection<BranchTIn>> QueryTInsResultsFromDatabase(string userQuery)
+        public static async Task<ObservableCollection<BranchTIn>> QueryTInsResultsFromDatabase(string userQuery)
         {
             ObservableCollection<BranchTIn> searchResults = new ObservableCollection<BranchTIn>();
 
@@ -622,8 +622,7 @@ namespace IQ.Helpers.DatabaseOperations
 
             return searchResults;
         }
-
-        internal static async Task<List<string>> QueryTInsSuggestionsFromDatabase(string userInput)
+        public static async Task<List<string>> QueryTInsSuggestionsFromDatabase(string userInput)
         {
             List<string> suggestions = new List<string>();
 
@@ -656,7 +655,7 @@ namespace IQ.Helpers.DatabaseOperations
             return suggestions;
         }
 
-        internal static async Task<ObservableCollection<BranchTOut>> QueryTOutsResultsFromDatabase(string userQuery)
+        public static async Task<ObservableCollection<BranchTOut>> QueryTOutsResultsFromDatabase(string userQuery)
         {
             ObservableCollection<BranchTOut> searchResults = new ObservableCollection<BranchTOut>();
 
@@ -703,7 +702,7 @@ namespace IQ.Helpers.DatabaseOperations
             return searchResults;
         }
 
-        internal static async Task<List<string>> QueryTOutsSuggestionsFromDatabase(string userInput)
+        public static async Task<List<string>> QueryTOutsSuggestionsFromDatabase(string userInput)
         {
             List<string> suggestions = new List<string>();
 
@@ -715,6 +714,162 @@ namespace IQ.Helpers.DatabaseOperations
                 {
                     command.Connection = con;
                     command.CommandText = "SELECT TransferID FROM BranchTransferOutwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        public static async Task<ObservableCollection<BranchRIn>> QueryRInsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<BranchRIn> searchResults = new ObservableCollection<BranchRIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchReturnInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchRIn result = new BranchRIn
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedBy = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        public static async Task<List<string>> QueryRInsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM BranchReturnInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        public static async Task<ObservableCollection<BranchROut>> QueryROutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<BranchROut> searchResults = new ObservableCollection<BranchROut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchReturnOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchROut result = new BranchROut
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedTo = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        public static async Task<List<string>> QueryROutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM BranchReturnOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
