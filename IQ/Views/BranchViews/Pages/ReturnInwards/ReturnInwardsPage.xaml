@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" 
     xmlns:overlay="using:IQ.Views.BranchViews.Pages.ReturnInwards.SubPages"
     mc:Ignorable="d"
-    x:Name="SalesPageTitle"
+    x:Name="ReturnInwardsPageTitle"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
     <StackPanel
@@ -65,7 +65,7 @@
                 QuerySubmitted="BranchRInsAutoSuggestBox_QuerySubmittedAsync"
                 TextChanged="BranchRInsAutoSuggestBox_TextChangedAsync"
                 FontFamily="{StaticResource Righteous}"
-                PlaceholderText="Search Invoice ID..."/>
+                PlaceholderText="Search Return ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"

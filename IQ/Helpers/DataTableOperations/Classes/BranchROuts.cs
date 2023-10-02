@@ -22,6 +22,10 @@
         {
             get; set;
         }
+        public string? ReasonForReturn
+        {
+            get; set;
+        }
         public string? SignedBy
         {
             get; set;

@@ -27,6 +27,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages
         public static string? CurrentBrandID;
         public static int? CurrentQuantityReturned;
         public static string? CurrentReturnedTo;
+        public static string? CurrentReasonForReturn;
         public static string? CurrentSignedBy;
 
         // Define an event to notify when visibility changes
@@ -37,13 +38,14 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages
             this.InitializeComponent();
         }
 
-        private void AddRInsButton_Click(object sender, RoutedEventArgs e)
+        private void AddROutsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentReturnID = ReturnIDTextBox.Text;
             CurrentModelID = ModelIDAutoSuggestBox.Text;
             CurrentBrandID = BrandIDAutoSuggestBox.Text;
             CurrentQuantityReturned = int.Parse(QuantityReturnedTextBox.Text);
             CurrentReturnedTo = ReturnedToTextBox.Text;
+            CurrentReasonForReturn = ReasonForReturnTextBox.Text;
             CurrentSignedBy = SignedByTextBox.Text;
 
             // Create a connection string
@@ -64,7 +66,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO BranchReturnOutwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedTo, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedTo, @signedBy)";
+                        cmd.CommandText = "INSERT INTO BranchReturnOutwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedTo, ReasonForReturn, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedTo, @reasonForReturn @signedBy)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("ReturnID", CurrentReturnID);
@@ -72,6 +74,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages
                         cmd.Parameters.AddWithValue("brandID", CurrentBrandID);
                         cmd.Parameters.AddWithValue("qtyReturned", CurrentQuantityReturned);
                         cmd.Parameters.AddWithValue("returnedTo", CurrentReturnedTo);
+                        cmd.Parameters.AddWithValue("reasonForReturn", CurrentReasonForReturn);
                         cmd.Parameters.AddWithValue("signedBy", CurrentSignedBy);
 
                         // Execute the command and get the number of rows affected

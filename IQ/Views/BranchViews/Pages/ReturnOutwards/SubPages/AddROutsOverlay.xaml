@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Width="400"
-    Height="790"
+    Height="710"
     Padding="20"
     Margin="8">
 
@@ -81,8 +81,17 @@
                 Margin="14"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
-                Header="Returned By:"
+                Header="Returned To:"
                 PlaceholderText="E.g ANITA JOHN"/>
+
+
+            <TextBox
+                x:Name="ReasonForReturnTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Reason For Return:"
+                PlaceholderText="E.g DAMAGED FRAME"/>
 
             <TextBox
                 x:Name="SignedByTextBox"

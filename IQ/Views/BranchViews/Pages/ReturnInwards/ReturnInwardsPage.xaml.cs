@@ -42,7 +42,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
             OverlayInstance.VisibilityChanged += PopupPageVisibilityChanged!;
         }
 
-        private void BranchSalesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+        private void BranchRInsDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
             DateFilter = BranchRInsDatePicker.Date.UtcDateTime;
             RefreshPage();

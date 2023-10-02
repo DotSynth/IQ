@@ -27,6 +27,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
         public static string? CurrentBrandID;
         public static int? CurrentQuantityReturned;
         public static string? CurrentReturnedBy;
+        public static string? CurrentReasonForReturn;
         public static string? CurrentSignedBy;
 
         // Define an event to notify when visibility changes
@@ -44,6 +45,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
             CurrentBrandID = BrandIDAutoSuggestBox.Text;
             CurrentQuantityReturned = int.Parse(QuantityReturnedTextBox.Text);
             CurrentReturnedBy = ReturnedByTextBox.Text;
+            CurrentReasonForReturn = ReasonForReturnTextBox.Text;
             CurrentSignedBy = SignedByTextBox.Text;
 
             // Create a connection string
@@ -64,7 +66,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO BranchReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @signedBy)";
+                        cmd.CommandText = "INSERT INTO BranchReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, ReasonForReturn, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @reasonForReturn, @signedBy)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("ReturnID", CurrentReturnID);
@@ -72,6 +74,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
                         cmd.Parameters.AddWithValue("brandID", CurrentBrandID);
                         cmd.Parameters.AddWithValue("qtyReturned", CurrentQuantityReturned);
                         cmd.Parameters.AddWithValue("returnedBy", CurrentReturnedBy);
+                        cmd.Parameters.AddWithValue("reasonForReturn", CurrentReasonForReturn);
                         cmd.Parameters.AddWithValue("signedBy", CurrentSignedBy);
 
                         // Execute the command and get the number of rows affected

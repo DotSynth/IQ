@@ -48,7 +48,8 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                                 BrandID = reader.GetString(2),
                                 QuantityReturned = reader.GetInt32(3),
                                 ReturnedTo = reader.GetString(4),
-                                SignedBy = reader.GetString(5),
+                                ReasonForReturn = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
                             };
 
                             _branchROuts.Add(ROut);
