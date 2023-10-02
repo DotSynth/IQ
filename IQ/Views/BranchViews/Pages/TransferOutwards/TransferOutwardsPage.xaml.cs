@@ -2,7 +2,6 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
 using IQ.Views.BranchViews.Pages.TransferOutwards.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

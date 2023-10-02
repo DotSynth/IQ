@@ -26,7 +26,7 @@ namespace IQ.Helpers.DatabaseOperations
                 con.Open();
                 Connected = true;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 string error = ex.Message;
                 ShowCompletionAlertDialogAsync(error, m);

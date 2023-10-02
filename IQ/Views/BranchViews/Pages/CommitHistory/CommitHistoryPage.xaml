@@ -8,8 +8,7 @@
     mc:Ignorable="d">
     
 
-    <StackPanel
-    Orientation="Vertical">
+    <Grid>
         <TextBlock Text="BRANCH COMMIT HISTORY"
        TextWrapping="NoWrap"
        VerticalAlignment="Center"
@@ -69,5 +68,5 @@
            Margin="0,10,0,0"
            FontFamily="{StaticResource SplineSans}">
         </controls:DataGrid>
-    </StackPanel>
+    </Grid>
 </Page>

@@ -87,12 +87,16 @@
 
                     <MenuFlyoutItem 
                         Text="Log Out"
+                        x:Name="BranchWindowLogout"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                        Click="BranchWindowLogout_Click"/>
                     <MenuFlyoutItem 
                     Text="Exit"
+                        x:Name="BranchWindowExit"
                     FontFamily="{StaticResource Righteous}"
-                    Foreground="#61609D"/>
+                    Foreground="#61609D"
+                        Click="BranchWindowExit_Click"/>
                 </MenuBarItem>
 
                 <MenuBarItem 

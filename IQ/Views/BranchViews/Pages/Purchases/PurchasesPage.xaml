@@ -11,30 +11,42 @@
     mc:Ignorable="d"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
-    <StackPanel
-    Orientation="Vertical">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="42"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <TextBlock Text="BRANCH PURCHASES"
                    TextWrapping="NoWrap"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    Margin="0,10,0,0"
                    Foreground="#020066"
-                   FontFamily="{StaticResource Righteous}"/>
+                   FontFamily="{StaticResource Righteous}"
+                   Grid.Row="0"/>
 
         <!-- Popup for overlay content -->
-        <Popup x:Name="PurchaseOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True">
+        <Popup x:Name="PurchaseOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True" Grid.Row="1">
             <overlay:AddPurchaseOverlay/>
         </Popup>
-        
+
         <Rectangle 
             Height="1"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
             Fill="#E2E2E2"
-            Margin="0,10,0,0"/>
-        
-        <Grid
             Margin="0,10,0,0"
-            RowSpacing="14">
+            Grid.Row="1"/>
+
+        <Grid
+            Margin="0,0,0,0"
+            RowSpacing="14"
+            Grid.Row="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -81,8 +93,10 @@
         <Rectangle 
             Height="1"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
             Fill="#E2E2E2"
-            Margin="0,10,0,0"/>
+            Margin="0,10,0,0"
+            Grid.Row="3"/>
         <controls:DataGrid x:Name="BranchPurchasesDataGrid"
                            ColumnWidth="*"
                            Margin="0,10,0,0"
@@ -91,8 +105,14 @@
                            AutoGenerateColumns="True"
                            Foreground="#020066"
                            GridLinesVisibility="Vertical"
-                           AlternatingRowBackground="#f1f2f5">
+                           AlternatingRowBackground="#f1f2f5"
+                           VerticalScrollBarVisibility="Auto"
+                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           ScrollViewer.VerticalScrollMode="Enabled"
+                           IsReadOnly="True"
+                           Grid.Row="4"
+                           VerticalAlignment="Top">
         </controls:DataGrid>
         <Frame x:Name="rootFrame"/>
-    </StackPanel>
+    </Grid>
 </Page>

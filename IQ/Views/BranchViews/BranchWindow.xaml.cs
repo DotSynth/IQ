@@ -96,5 +96,15 @@ namespace IQ.Views.BranchViews
         {
 
         }
+
+        private void BranchWindowExit_Click(object sender, RoutedEventArgs e)
+        {
+            WindowExtensions.ExitApp(this);
+        }
+
+        private void BranchWindowLogout_Click(object sender, RoutedEventArgs e)
+        {
+            WindowExtensions.Logout(this);
+        }
     }
 }

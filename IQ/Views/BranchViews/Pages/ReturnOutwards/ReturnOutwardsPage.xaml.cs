@@ -2,9 +2,7 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.ReturnInwards;
 using IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages;
-using IQ.Views.BranchViews.Pages.Sales.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Npgsql;

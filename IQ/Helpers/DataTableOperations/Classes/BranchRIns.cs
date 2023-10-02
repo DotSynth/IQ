@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IQ.Helpers.DataTableOperations.Classes
+﻿namespace IQ.Helpers.DataTableOperations.Classes
 {
     public class BranchRIn
     {

@@ -1,12 +1,11 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.ReturnInwards;
 using IQ.Views;
-using Npgsql;
-using System.Collections.ObjectModel;
-using System;
-using System.IO;
 using IQ.Views.BranchViews.Pages.ReturnOutwards;
+using Npgsql;
+using System;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {

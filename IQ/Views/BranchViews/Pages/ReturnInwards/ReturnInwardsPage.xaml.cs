@@ -3,7 +3,6 @@ using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using IQ.Views.BranchViews.Pages.ReturnInwards.SubPages;
-using IQ.Views.BranchViews.Pages.Sales;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Npgsql;
@@ -32,7 +31,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
 
         public ReturnInwardsPage()
         {
-            this.InitializeComponent(); 
+            this.InitializeComponent();
             _ = LoadSuggestionsAsync();
             BranchRInsDatePicker.SelectedDate = DateFilter;
             BranchRInsDatePicker.MaxYear = DateTime.UtcNow.Date;
@@ -91,6 +90,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
             {
                 // Handle any exceptions (e.g., database connection issues)
                 string error = ex.Message;
+                Debug.WriteLine(error);
                 // You should implement proper error handling here.
             }
         }
