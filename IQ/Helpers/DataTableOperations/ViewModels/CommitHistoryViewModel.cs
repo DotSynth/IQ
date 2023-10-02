@@ -1,6 +1,54 @@
-﻿namespace IQ.Helpers.DataTableOperations.ViewModels
+﻿using IQ.Helpers.DataTableOperations.Classes;
+using IQ.Helpers.FileOperations;
+using IQ.Views;
+using Npgsql;
+using System.Collections.ObjectModel;
+using System;
+using System.IO;
+
+namespace IQ.Helpers.DataTableOperations.ViewModels
 {
-    internal class CommitHistoryViewModel
+    public class BranchCommitsViewModel
     {
+        private ObservableCollection<BranchCommits> _branchCommits;
+
+        public ObservableCollection<BranchCommits> BranchCommit
+        {
+            get { return _branchCommits; }
+            set { _branchCommits = value; }
+        }
+
+        public BranchCommitsViewModel()
+        {
+            _branchCommits = new ObservableCollection<BranchCommits>();
+            LoadBranchCommitsData();
+        }
+
+        private void LoadBranchCommitsData()
+        {
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchCommitHistory;", connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var Commit = new BranchCommits
+                            {
+                                CommitID = reader.GetString(0),
+                                CommitDate = reader.GetString(1),
+                            };
+
+                            _branchCommits.Add(Commit);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

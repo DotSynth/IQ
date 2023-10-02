@@ -153,7 +153,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
                 createReturnOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createCommitHistoryTable = "CREATE TABLE IF NOT EXISTS BranchCommitHistory (CommitID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, CommitDescription VARCHAR(255) NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, ApprovalStatus VARCHAR(255) NOT NULL,   ApprovalDate TIMESTAMP);";
+                string createCommitHistoryTable = "CREATE TABLE IF NOT EXISTS BranchCommitHistory (CommitID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createCommitHistoryTableCommand = new NpgsqlCommand(createCommitHistoryTable, con);
                 createCommitHistoryTableCommand.ExecuteScalar();
                 string createCommitHistoryTableIndex = "CREATE INDEX IF NOT EXISTS CommitDate ON BranchCommitHistory(CommitDate);";
@@ -881,6 +881,80 @@ namespace IQ.Helpers.DatabaseOperations
             }
 
             return suggestions;
+        }
+
+        internal static async Task<List<string>> QueryCommitHistorySuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT CommitID FROM BranchCommitHistory WHERE CommitID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<BranchCommits>> QueryCommitHistoryResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<BranchCommits> searchResults = new ObservableCollection<BranchCommits>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM BranchCommitHistory WHERE CommitID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            BranchCommits result = new BranchCommits
+                            {
+                                // Map properties from reader columns
+                                CommitID = reader.GetString(0),
+                                CommitDate = reader.GetString(1),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
         }
     }
 }

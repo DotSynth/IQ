@@ -1,6 +1,16 @@
-﻿namespace IQ.Helpers.DataTableOperations.Classes
+﻿using System;
+
+namespace IQ.Helpers.DataTableOperations.Classes
 {
-    internal class BranchCommitHistory
+    public class BranchCommits
     {
+        public string? CommitID
+        {
+            get; set;
+        }
+        public string? CommitDate
+        {
+            get; set;
+        }
     }
 }
