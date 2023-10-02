@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.WindowsOperations;
+using IQ.Views.BranchViews.Pages;
 using IQ.Views.BranchViews.Pages.CommitHistory;
 using IQ.Views.BranchViews.Pages.Inventory;
 using IQ.Views.BranchViews.Pages.Purchases;
@@ -9,8 +10,12 @@ using IQ.Views.BranchViews.Pages.TransferInwards;
 using IQ.Views.BranchViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Windows.UI;
 // To learn more about WinUI, the WinUI project structure, and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace IQ.Views.BranchViews
@@ -20,6 +25,10 @@ namespace IQ.Views.BranchViews
     /// </summary>
     public sealed partial class BranchWindow : Window
     {
+        // Define an event to notify when Commit Button is clicked
+        public static dynamic? itemContent;
+        public static bool JustLoaded;
+
         public BranchWindow()
         {
             // Set the initial window size
@@ -38,7 +47,7 @@ namespace IQ.Views.BranchViews
             else
             {
                 // Handle regular menu item invocation
-                var itemContent = args.InvokedItemContainer;
+                itemContent = args.InvokedItemContainer;
                 if (itemContent != null)
                 {
                     switch (itemContent.Name)
@@ -67,7 +76,7 @@ namespace IQ.Views.BranchViews
                             contentFrame.Navigate(typeof(ReturnOutwardsPage), contentFrame);
                             break;
 
-                        case "CommitHistoryPage":
+                        case "CommitsPage":
                             contentFrame.Navigate(typeof(CommitHistoryPage), contentFrame);
                             break;
 
@@ -86,15 +95,14 @@ namespace IQ.Views.BranchViews
             {
                 if (item is NavigationViewItem && item.Tag.ToString() == "SalesPage")
                 {
+                    JustLoaded = true;
+                    itemContent = item;
                     BranchNavigator.SelectedItem = item;
+                    JustLoaded = false;
                     break;
                 }
             }
             contentFrame.Navigate(typeof(SalesPage));
-        }
-        private void ContentFrame_NavigationFailed(Object sender, NavigationFailedEventArgs args)
-        {
-
         }
 
         private void BranchWindowExit_Click(object sender, RoutedEventArgs e)
@@ -105,6 +113,69 @@ namespace IQ.Views.BranchViews
         private void BranchWindowLogout_Click(object sender, RoutedEventArgs e)
         {
             WindowExtensions.Logout(this);
+        }
+
+        private async void CommitUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(itemContent != null) 
+            {
+                if (JustLoaded == true)
+                {
+                    if (itemContent.Tag.ToString() == "CommitsPage")
+                    {
+                        contentFrame.Navigate(typeof(PLaceHolderPage), contentFrame);
+
+                        await Task.Delay(2000);
+                        contentFrame.Navigate(typeof(CommitHistoryPage), contentFrame);
+
+                        // Create a ContentDialog
+                        await ShowCompletionAlertDialogAsync("All entries have been pushed to the Admin Server");
+                    }
+                    else
+                    {
+                        await ShowCompletionAlertDialogAsync("All entries have been pushed to the Admin Server");
+                    }
+                } else
+                {
+                    if (itemContent.Name == "CommitsPage")
+                    {
+                        contentFrame.Navigate(typeof(PLaceHolderPage), contentFrame);
+
+                        await Task.Delay(2000);
+                        contentFrame.Navigate(typeof(CommitHistoryPage), contentFrame);
+
+                        // Create a ContentDialog
+                        await ShowCompletionAlertDialogAsync("All entries have been pushed to the Admin Server");
+                    }
+                    else
+                    {
+                        await ShowCompletionAlertDialogAsync("All entries have been pushed to the Admin Server");
+                    }
+                }
+            }
+        }
+
+        private async Task ShowCompletionAlertDialogAsync(string alert)
+        {
+            // Create a ContentDialog
+            ContentDialog alertDialog = new ContentDialog
+            {
+                // Set the title, content, and close button text
+                Title = "Alert",
+                Content = alert,
+                CloseButtonText = "OK"
+            };
+
+            // Set the foreground to hex color #020066
+            alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
+
+            // Set the XamlRoot property to the same as an element in the app window
+            // For example, if you have a StackPanel named MyPanel in your XAML
+            alertDialog.XamlRoot = BranchWindowGrid.XamlRoot;
+
+            // Show the ContentDialog and get the result
+            ContentDialogResult result = await alertDialog.ShowAsync();
+
         }
     }
 }

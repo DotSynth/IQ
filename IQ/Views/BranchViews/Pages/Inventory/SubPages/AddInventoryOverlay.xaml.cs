@@ -118,8 +118,6 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
         {
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
-
-            Debug.WriteLine($"Visibility changed to {visibility}");
         }
     }
 }

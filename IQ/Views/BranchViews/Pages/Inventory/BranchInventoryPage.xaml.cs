@@ -50,8 +50,6 @@ namespace IQ.Views.BranchViews.Pages.Inventory
 
         private void PopupPageVisibilityChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("PopupPageVisibilityChanged called");
-            Debug.WriteLine($"PopupPageVisibilityChanged: OverlayInstance.Visibility = {OverlayInstance.Visibility}");
 
             // Check if the popup page's visibility is collapsed
             if (OverlayInstance.Visibility == Visibility.Collapsed)

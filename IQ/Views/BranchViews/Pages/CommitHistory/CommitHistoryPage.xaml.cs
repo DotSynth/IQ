@@ -24,6 +24,7 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
     {
         public BranchCommitsViewModel ViewModel { get; } = new BranchCommitsViewModel();
         private List<string> suggestions = new List<string>();
+
         public CommitHistoryPage()
         {
             this.InitializeComponent();
@@ -33,14 +34,17 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
 
         public async void RefreshPage()
         {
-            // Do something before the delay
-            // Navigate away to a placeholder page
-            Frame.Navigate(typeof(PLaceHolderPage));
+                // Do something before the delay
+                // Navigate away to a placeholder page
+                Frame.Navigate(typeof(PLaceHolderPage));
 
-            await Task.Delay(2000);
-            // Continue with the next line of code after the delay
-            // Navigate back to the original page to refresh it
-            Frame.Navigate(typeof(CommitHistoryPage));
+                //Delay
+                await Task.Delay(2000);
+
+                // Continue with the next line of code after the delay
+                // Navigate back to the original page to refresh it
+                Frame.Navigate(typeof(CommitHistoryPage));
+            Debug.WriteLine("Refreshed");
         }
 
         private async Task LoadSuggestionsAsync()
