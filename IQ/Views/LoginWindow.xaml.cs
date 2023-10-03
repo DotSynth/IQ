@@ -3,6 +3,7 @@ using IQ.Helpers.FileOperations;
 using IQ.Helpers.WindowsOperations;
 using IQ.Views.AdminViews;
 using IQ.Views.BranchViews;
+using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
@@ -91,14 +92,27 @@ namespace IQ.Views
                         LoadAdminWindow();
                         this.Close();
                     }
-                    else
+                    else if (DatabaseExtensions.GetCurrentUserRole() == "Branch")
                     {
                         LoadBranchWindow();
+                        this.Close();
+                    }
+                    else 
+                    {
+                        LoadWarehouseWindow();
                         this.Close();
                     }
                 }
             }
 
+        }
+
+        private void LoadWarehouseWindow()
+        {
+            m_window = new WarehouseWindow();
+            // Create a Frame to act as the navigation context and navigate to the Admin Window
+            Frame rootFrame = new Frame();
+            m_window.Activate();
         }
     }
 }

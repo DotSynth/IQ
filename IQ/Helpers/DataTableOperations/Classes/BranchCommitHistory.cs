@@ -8,7 +8,7 @@ namespace IQ.Helpers.DataTableOperations.Classes
         {
             get; set;
         }
-        public string? CommitDate
+        public DateTime? CommitDate
         {
             get; set;
         }

@@ -41,7 +41,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
                             var Commit = new BranchCommits
                             {
                                 CommitID = reader.GetString(0),
-                                CommitDate = reader.GetString(1),
+                                CommitDate = reader.GetDateTime(1),
                             };
 
                             _branchCommits.Add(Commit);

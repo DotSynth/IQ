@@ -16,6 +16,7 @@ namespace IQ.Helpers.DatabaseOperations
     public class DatabaseExtensions
     {
         public static NpgsqlConnection? con;
+        public static string? roleName;
         public static bool ConnectToDb(string ConnectionString, [Optional] Window m)
         {
             bool Connected;
@@ -69,33 +70,27 @@ namespace IQ.Helpers.DatabaseOperations
                 // Execute the query and retrieve the result
                 string? userRole = command.ExecuteScalar()?.ToString();
 
-                if (!string.IsNullOrEmpty(userRole))
-                {
+                // Specify the username whose roles you want to query
+                string usernameToQuery = userRole!;
 
-                    if (checkUserStatus(userRole))
-                    {
-                        string userIsAdmin = "Admin";
-                        return userIsAdmin;
-                    }
-                    else
-                    {
-                        return "Branch";
-                    }
-                }
-                else
+                // Query to retrieve roles for the specified user
+                string getRoleQuery = "SELECT r.rolname FROM pg_roles r, pg_auth_members m WHERE m.member = r.oid AND m.roleid = (SELECT oid FROM pg_roles WHERE rolname = @username)";
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand(getRoleQuery, con))
                 {
-                    return "noRoleAttached";
+                    cmd.Parameters.AddWithValue("username", usernameToQuery);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            roleName = reader.GetString(0);
+                            
+                        }
+                    }
                 }
+                return roleName!;
             }
-        }
-
-        static bool checkUserStatus(string userRole)
-        {
-            string queryUserStatus = "SELECT usesuper FROM pg_user WHERE usename = @username";
-            using var queryUserStatusCommand = new NpgsqlCommand(queryUserStatus, con);
-            queryUserStatusCommand.Parameters.AddWithValue("username", userRole);
-            bool isSuperUser = (bool)queryUserStatusCommand.ExecuteScalar()!;
-            return isSuperUser;
         }
 
         public static bool TriggerDbMassAction_Branch()
@@ -939,7 +934,7 @@ namespace IQ.Helpers.DatabaseOperations
                             {
                                 // Map properties from reader columns
                                 CommitID = reader.GetString(0),
-                                CommitDate = reader.GetString(1),
+                                CommitDate = reader.GetDateTime(1),
                             };
 
                             searchResults.Add(result);

@@ -7,6 +7,7 @@ using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace IQ
@@ -29,6 +30,7 @@ namespace IQ
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
+                        Debug.WriteLine(DatabaseExtensions.GetCurrentUserRole());
                         if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())
@@ -38,6 +40,10 @@ namespace IQ
                                 // Create a Frame to act as the navigation context and navigate to the first page
                                 Frame rootFrame = new Frame();
                                 m_window.Activate();
+                            }
+                            else
+                            {
+                                Exit();
                             }
                         }
                         else if (DatabaseExtensions.GetCurrentUserRole() == "Branch")
@@ -62,6 +68,10 @@ namespace IQ
                                 // Create a Frame to act as the navigation context and navigate to the first page
                                 Frame rootFrame = new Frame();
                                 m_window.Activate();
+                            }
+                            else
+                            {
+                                Exit();
                             }
                         }
                     }
