@@ -39,11 +39,6 @@
                 <MenuBarItem 
             Title="File"
             FontFamily="{StaticResource Righteous}">
-                    <MenuFlyoutItem 
-                    Text="Commit Updates"
-                    FontFamily="{StaticResource Righteous}"
-                    Foreground="#61609D"/>
-                    <MenuFlyoutSeparator/>
                     <MenuFlyoutSubItem 
                 Text="Export Entries"
                 FontFamily="{StaticResource Righteous}"
@@ -144,18 +139,34 @@
             IsSettingsVisible="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem 
+                Icon="Download" 
+                        Tag="TransferInwardsPage" 
+                        Foreground="#020066"  
+                                ToolTipService.ToolTip="Transfer Inwards"/>
+                <NavigationViewItem 
+                Icon="Upload" 
+                        Tag="TransferOutwardsPage" 
+                        Foreground="#020066"  
+                                ToolTipService.ToolTip="Transfer Outwards"/>
+                <NavigationViewItemSeparator/>
+                <NavigationViewItem 
+                Icon="ClosePane" 
+                        Tag="ReturnInwardsPage" 
+                        Foreground="#020066"  
+                                ToolTipService.ToolTip="Return Inwards"/>
+                <NavigationViewItem 
                 Icon="OpenPane" 
-                        x:Name="ReturnOutwardsPage" 
+                        Tag="ReturnOutwardsPage"
                         Foreground="#020066"  
                                 ToolTipService.ToolTip="Return Outwards"/>
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                     Icon="Library"
-                    x:Name="WareHouseInventoryPage"
+                    Tag="WareHouseInventoryPage"
                     Foreground="#020066"
                     ToolTipService.ToolTip="Warehouse Inventory"/>
             </NavigationView.MenuItems>
-            <Frame x:Name="contentFrame" NavigationFailed="ContentFrame_NavigationFailed" />
+            <Frame x:Name="contentFrame"/>
         </NavigationView>
     </Grid>
 </Window>

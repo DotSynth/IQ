@@ -42,6 +42,14 @@
     <None Remove="Views\BranchViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\ReturnInwards\ReturnInwardsPage.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\ReturnInwards\SubPages\AddRInsOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\ReturnOutwards\SubPages\AddROutsOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\TransferInwards\TransferInwardsPage.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\TransferOutwards\TransferOutwardsPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="App.xaml" />
@@ -162,5 +170,45 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\ReturnOutwards\SubPages\AddROutsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\ReturnInwards\SubPages\AddRInsOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\TransferOutwards\TransferOutwardsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\TransferInwards\TransferInwardsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\ReturnInwards\ReturnInwardsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

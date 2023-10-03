@@ -1,17 +1,16 @@
 ﻿<Page
-    x:Class="IQ.Views.WarehouseViews.Pages.ReturnOutwards.ReturnOutwardsPage"
+    x:Class="IQ.Views.WarehouseViews.Pages.TransferInwards.TransferInwardsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:IQ.Views.WarehouseViews.Pages.ReturnOutwards"
+    xmlns:local="using:IQ.Views.WarehouseViews.Pages.TransferInwards"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
-    xmlns:overlay="using:IQ.Views.WarehouseViews.Pages.ReturnOutwards.SubPages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls" xmlns:overlay="using:IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages"
+    x:Name="TransferInwardsPageTitle"
     mc:Ignorable="d"
-    x:Name="ROutsPageTitle"
     DataContext="IQ.Helpers.DatabaseOperations.DatabaseExtensions">
 
-    <Grid
-        Name="ROutsPanel">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition Height="20"/>
@@ -19,27 +18,28 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="BRANCH RETURN OUTWARDS"
-           TextWrapping="NoWrap"
-           VerticalAlignment="Center"
-           HorizontalAlignment="Center"
-           Margin="0,10,0,0"
-           Foreground="#020066"
-           FontFamily="{StaticResource Righteous}"
+
+        <TextBlock Text="BRANCH TRANSFER INWARDS"
+                   TextWrapping="NoWrap"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="0,10,0,0"
+                   Foreground="#020066"
+                   FontFamily="{StaticResource Righteous}"
                    Grid.Row="0"/>
 
         <!-- Popup for overlay content -->
-        <Popup x:Name="ROutsOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True" Grid.Row="1">
-            <overlay:AddROutsOverlay/>
+        <Popup x:Name="TInsOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True" Grid.Row="1">
+            <overlay:AddTInsOverlay/>
         </Popup>
 
         <Rectangle 
             Height="1"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
             Fill="#E2E2E2"
-            Margin="0,10,0,0"
+            Margin="0,0,0,0"
             Grid.Row="1"/>
+
         <Grid
             Margin="0,0,0,0"
             RowSpacing="14"
@@ -55,7 +55,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button 
-                x:Name="ROutsAddButton"
+                x:Name="TInsAddButton"
                 Grid.Row="0"
                 Grid.Column="0"
                 Content="Add"
@@ -64,29 +64,29 @@
                 Width="120"
                 Margin="14,0,14,0"
                 HorizontalAlignment="Left"
-                Click="ROutsAddButton_Click">
+                Click="TInsAddButton_Click">
             </Button>
             <AutoSuggestBox
-                x:Name="BranchROutsAutoSuggestBox"
+                x:Name="BranchTInsAutoSuggestBox"
                 Grid.Row="1"
                 Grid.Column="1"
                 QueryIcon="Zoom"
                 Margin="0,0,14,0"
                 Foreground="#020066"
-                SuggestionChosen="BranchROutsAutoSuggestBox_SuggestionChosen"
-                QuerySubmitted="BranchROutsAutoSuggestBox_QuerySubmittedAsync"
-                TextChanged="BranchROutsAutoSuggestBox_TextChangedAsync"
+                SuggestionChosen="BranchTInsAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="BranchTInsAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="BranchTInsAutoSuggestBox_TextChangedAsync"
                 FontFamily="{StaticResource Righteous}"
-                PlaceholderText="Search Return ID..."/>
+                PlaceholderText="Search Transfer ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"
-                x:Name="BranchROutsDatePicker"
+                x:Name="BranchTInsDatePicker"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 HorizontalAlignment="Right"
                 Margin="0,0,14,0"
-                SelectedDateChanged="BranchROutsDatePicker_SelectedDateChanged">
+                SelectedDateChanged="BranchTInsDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
@@ -96,17 +96,18 @@
             Fill="#E2E2E2"
             Margin="0,10,0,0"
             Grid.Row="3"/>
-        <controls:DataGrid x:Name="BranchROutsDataGrid"
+        <controls:DataGrid x:Name="BranchTInsDataGrid"
                            ColumnWidth="*"
                            Margin="0,10,0,0"
                            FontFamily="{StaticResource SplineSans}"
-                           ItemsSource="{x:Bind ViewModel.BranchROut}" 
+                           ItemsSource="{x:Bind ViewModel.BranchTIn}" 
                            AutoGenerateColumns="True"
                            Foreground="#020066"
                            GridLinesVisibility="Vertical"
                            AlternatingRowBackground="#f1f2f5"
                            VerticalScrollBarVisibility="Auto"
                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           ScrollViewer.VerticalScrollMode="Auto"
                            Grid.Row="4"
                            VerticalAlignment="Top">
         </controls:DataGrid>

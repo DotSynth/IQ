@@ -1,5 +1,9 @@
-﻿using IQ.Views.WarehouseViews.Pages.Inventory;
+﻿using IQ.Helpers.WindowsOperations;
+using IQ.Views.WarehouseViews.Pages.Inventory;
+using IQ.Views.WarehouseViews.Pages.ReturnInwards;
 using IQ.Views.WarehouseViews.Pages.ReturnOutwards;
+using IQ.Views.WarehouseViews.Pages.TransferInwards;
+using IQ.Views.WarehouseViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -40,6 +44,18 @@ namespace IQ.Views.WarehouseViews
                 {
                     switch (itemContent.Name)
                     {
+                        case "TransferInwardsPage":
+                            contentFrame.Navigate(typeof(TransferInwardsPage));
+                            break;
+
+                        case "TransferOutwardsPage":
+                            contentFrame.Navigate(typeof(TransferOutwardsPage));
+                            break;
+
+                        case "ReturnInwardsPage":
+                            contentFrame.Navigate(typeof(ReturnInwardsPage));
+                            break;
+
                         case "ReturnOutwardsPage":
                             contentFrame.Navigate(typeof(ReturnOutwardsPage));
                             break;
@@ -52,12 +68,13 @@ namespace IQ.Views.WarehouseViews
             }
 
         }
+
         private void WarehouseNavLoaded(object sender, RoutedEventArgs e)
         {
             // set the initial SelectedItem
             foreach (NavigationViewItemBase item in WarehouseNavigator.MenuItems)
             {
-                if (item is NavigationViewItem && item.Tag.ToString() == "InventoryPage")
+                if (item is NavigationViewItem && item.Tag.ToString() == "WareHouseInventoryPage")
                 {
                     WarehouseNavigator.SelectedItem = item;
                     break;
@@ -65,9 +82,16 @@ namespace IQ.Views.WarehouseViews
             }
             contentFrame.Navigate(typeof(WarehouseInventoryPage));
         }
-        private void ContentFrame_NavigationFailed(Object sender, NavigationFailedEventArgs args)
-        {
 
+        private void WarehouseWindowExit_Click(object sender, RoutedEventArgs e)
+        {
+            WindowExtensions.ExitApp(this);
         }
+
+        private void WarehouseWindowLogout_Click(object sender, RoutedEventArgs e)
+        {
+            WindowExtensions.Logout(this);
+        }
+
     }
 }
