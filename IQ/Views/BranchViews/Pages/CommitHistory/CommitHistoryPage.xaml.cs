@@ -57,7 +57,7 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT CommitID FROM BranchCommitHistory;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT CommitID FROM {App.UserName}.CommitHistory;", connection))
                     {
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                         {
@@ -96,7 +96,6 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<BranchCommits> searchResults = await DatabaseExtensions.QueryCommitHistoryResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateCommitHistoryPageWithResults(searchResults);

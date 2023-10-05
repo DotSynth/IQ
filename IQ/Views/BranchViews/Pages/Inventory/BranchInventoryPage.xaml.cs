@@ -83,7 +83,6 @@ namespace IQ.Views.BranchViews.Pages.Inventory
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<BranchInventory> searchResults = await DatabaseExtensions.QueryInventoryResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateInventoryPageWithResults(searchResults);

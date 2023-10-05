@@ -73,7 +73,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO WarehousePurchases (InvoiceID, ModelID, BrandID, AddOns, QuantityBought, BuyingPrice, PurchasedFrom, SupplierContactInfo) VALUES (@invoiceID, @modelID, @brandID, @addOns, @qtyBought, @buyingPrice, @purchasedFrom, @supplierInfo)";
+                        cmd.CommandText = $"INSERT INTO {App.UserName}.Purchases (InvoiceID, ModelID, BrandID, AddOns, QuantityBought, BuyingPrice, PurchasedFrom, SupplierContactInfo) VALUES (@invoiceID, @modelID, @brandID, @addOns, @qtyBought, @buyingPrice, @purchasedFrom, @supplierInfo)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceID);
@@ -117,7 +117,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
         private async Task<bool> TriggerDbSubAction_PurchaseAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
-            using var checkModelCommand = new NpgsqlCommand("SELECT COUNT(*) FROM WarehouseInventory WHERE ModelID = @modelID", con);
+            using var checkModelCommand = new NpgsqlCommand($"SELECT COUNT(*) FROM {App.UserName}.Inventory WHERE ModelID = @modelID", con);
             checkModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
 
             int modelCount = Convert.ToInt32(checkModelCommand.ExecuteScalar());
@@ -150,8 +150,8 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
                 if (result == ContentDialogResult.Secondary)
                 {
                     // Insert the model into the inventory
-                    using var insertModelCommand = new NpgsqlCommand(@"
-            INSERT INTO WarehouseInventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
+                    using var insertModelCommand = new NpgsqlCommand($@"
+            INSERT INTO {App.UserName}.Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
             VALUES (@modelID, @brandID, @addOns, @quantityBought, @buyingPrice)", con);
 
                     insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
@@ -175,8 +175,8 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
             else
             {
                 // Model exists in the inventory, update the quantityInStock
-                using var updateModelCommand = new NpgsqlCommand(@"
-        UPDATE WarehouseInventory
+                using var updateModelCommand = new NpgsqlCommand($@"
+        UPDATE {App.UserName}.Inventory
         SET QuantityInStock = QuantityInStock + @quantityBought
         WHERE ModelID = @modelID", con);
 
@@ -218,8 +218,6 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
         {
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
-
-            Debug.WriteLine($"Visibility changed to {visibility}");
         }
 
         private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -232,7 +230,6 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
                     // Perform a database query based on the user's queryText
                     string userQuery = sender.Text;
                     string searchResult = await DatabaseExtensions.QueryWHBrandNameFromDatabase(userQuery);
-                    Debug.WriteLine("PopupPageVisibilityChanged called");
 
                     // Display the searchResults on your SalesPage or in a DataGrid
                     BrandIDAutoSuggestBox.Text = searchResult;

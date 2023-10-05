@@ -105,105 +105,105 @@ namespace IQ.Helpers.DatabaseOperations
             try
             {
                 // Create Tables
-                string createBranchInventoryTable = "CREATE TABLE IF NOT EXISTS BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
+                string createBranchInventoryTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.BranchInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
                 using var createBranchInventoryTableCommand = new NpgsqlCommand(createBranchInventoryTable, con);
                 createBranchInventoryTableCommand.ExecuteScalar();
-                string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON BranchInventory(ModelID);";
+                string createBranchInventoryTableIndex = $"CREATE INDEX  IF NOT EXISTS {App.UserName}.InvModel ON {App.UserName}.BranchInventory(ModelID);";
                 using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
                 createBranchInventoryTableIndexCommand.ExecuteScalar();
 
-                string createSalesTable = "CREATE TABLE IF NOT EXISTS BranchSales (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createSalesTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.BranchSales (InvoiceID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createSalesTableCommand = new NpgsqlCommand(createSalesTable, con);
                 createSalesTableCommand.ExecuteScalar();
-                string createSalesTableIndex = "CREATE INDEX IF NOT EXISTS SalesDate ON BranchSales(Date);";
+                string createSalesTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.SalesDate ON {App.UserName}.BranchSales(Date);";
                 using var createSalesTableIndexCommand = new NpgsqlCommand(createSalesTableIndex, con);
                 createSalesTableIndexCommand.ExecuteScalar();
 
-                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS BranchPurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createPurchasesTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.Purchases (InvoiceID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
                 createPurchasesTableCommand.ExecuteScalar();
-                string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON BranchPurchases(Date);";
+                string createPurchasesTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.PurchaseDate ON {App.UserName}.Purchases(Date);";
                 using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
                 createPurchasesTableIndexCommand.ExecuteScalar();
 
-                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createTransferInwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.TransferInwards (TransferID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
                 createTransferInwardsTableCommand.ExecuteScalar();
-                string createTransferInwardsTableIndex = "CREATE INDEX IF NOT EXISTS TInsDate ON BranchTransferInwards(Date);";
+                string createTransferInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.TInsDate ON {App.UserName}.TransferInwards(Date);";
                 using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
                 createTransferInwardsTableIndexCommand.ExecuteScalar();
 
-                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createTransferOutwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.TransferOutwards  (TransferID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
                 createTransferOutwardsTableCommand.ExecuteScalar();
-                string createTransferOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS TOutsDate ON BranchTransferOutwards(Date);";
+                string createTransferOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.TOutsDate ON {App.UserName}.TransferOutwards(Date);";
                 using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID), FOREIGN KEY (ReturnID) REFERENCES BranchSales (InvoiceID));";
+                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.ReturnInwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID), FOREIGN KEY (ReturnID) REFERENCES BranchSales (InvoiceID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
-                string createReturnInwardsTableIndex = "CREATE INDEX IF NOT EXISTS RInsDate ON BranchReturnInwards(Date);";
+                string createReturnInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.RInsDate ON {App.UserName}.ReturnInwards(Date);";
                 using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
                 createReturnInwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS BranchReturnOutwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
+                string createReturnOutwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.ReturnOutwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID));";
                 using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
                 createReturnOutwardsTableCommand.ExecuteScalar();
-                string createReturnOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS ROutsDate ON BranchReturnOutwards(Date);";
+                string createReturnOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.ROutsDate ON {App.UserName}.ReturnOutwards(Date);";
                 using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
                 createReturnOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createCommitHistoryTable = "CREATE TABLE IF NOT EXISTS BranchCommitHistory (CommitID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createCommitHistoryTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.CommitHistory (CommitID VARCHAR(255) PRIMARY KEY NOT NULL, CommitDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createCommitHistoryTableCommand = new NpgsqlCommand(createCommitHistoryTable, con);
                 createCommitHistoryTableCommand.ExecuteScalar();
-                string createCommitHistoryTableIndex = "CREATE INDEX IF NOT EXISTS CommitDate ON BranchCommitHistory(CommitDate);";
+                string createCommitHistoryTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.CommitDate ON {App.UserName}.CommitHistory(CommitDate);";
                 using var createCommitHistoryTableIndexCommand = new NpgsqlCommand(createCommitHistoryTableIndex, con);
                 createCommitHistoryTableIndexCommand.ExecuteScalar();
 
                 // Create  Triggers
-                using var InventoryTriggerFunctionCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
+                using var InventoryTriggerFunctionCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
                 InventoryTriggerFunctionCommand.ExecuteNonQuery();
 
                 // Create the trigger for INSERT operations
-                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION updateTotalWorth();", con);
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateTotalWorth_insert    BEFORE INSERT ON {App.UserName}.Inventory   FOR EACH ROW    EXECUTE FUNCTION {App.UserName}.updateTotalWorth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
 
                 // Create the trigger for UPDATE operations
-                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION updateTotalWorth();", con);
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON {App.UserName}.Inventory   FOR EACH ROW   EXECUTE FUNCTION {App.UserName}.updateTotalWorth();", con);
                 InventoryUpdateTriggerCommand.ExecuteNonQuery();
 
                 // Sales-Inventory AutoUpdate
-                using var SalesCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_Sales()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var SalesCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateInventory_Sales()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock - NEW.QuantitySold    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 SalesCommand.ExecuteNonQuery();
 
                 // Sales - Inventory AutoUpdate Trigger
-                using var triggerSalesCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_salesTrigger  AFTER INSERT ON BranchSales   FOR EACH ROW  EXECUTE FUNCTION updateInventory_Sales();", con);
+                using var triggerSalesCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_salesTrigger  AFTER INSERT ON {App.UserName}.Sales   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_Sales();", con);
                 triggerSalesCommand.ExecuteNonQuery();
 
 
                 // ReturnIn-Inventory AutoUpdate
-                using var ReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnInCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnInCommand.ExecuteNonQuery();
 
                 // ReturnIn-Inventory AutoUpdate Trigger
-                using var triggerReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnInTrigger  AFTER INSERT ON BranchReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
+                using var triggerReturnInCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_ReturnInTrigger  AFTER INSERT ON {App.UserName}.ReturnInwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_ReturnIn();", con);
                 triggerReturnInCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate
-                using var ReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE  FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnOutCommand = new NpgsqlCommand($"CREATE OR REPLACE  FUNCTION {App.UserName}.updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnOutCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate Trigger
-                using var triggerReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnOutTrigger  AFTER INSERT ON BranchReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
+                using var triggerReturnOutCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_ReturnOutTrigger  AFTER INSERT ON {App.UserName}.ReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_ReturnOut();", con);
                 triggerReturnOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate
-                using var TransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE BranchInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var TransferOutCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 TransferOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate Trigger
-                using var triggerTransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_TransferOutTrigger  AFTER INSERT ON BranchTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
+                using var triggerTransferOutCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_TransferOutTrigger  AFTER INSERT ON {App.UserName}.TransferOutwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_TransferOut();", con);
                 triggerTransferOutCommand.ExecuteNonQuery();
 
                 isCompleted = true;
@@ -245,100 +245,87 @@ namespace IQ.Helpers.DatabaseOperations
 
         public static bool TriggerDbMassAction_Warehouse()
         {
-            Debug.WriteLine("Triggered");
             bool isCompleted;
             try
             {
 
-                string createWarehouseInventoryTable = "CREATE TABLE IF NOT EXISTS WarehouseInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
+                string createWarehouseInventoryTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.Inventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
                 using var createBranchInventoryTableCommand = new NpgsqlCommand(createWarehouseInventoryTable, con);
                 createBranchInventoryTableCommand.ExecuteScalar();
-                string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON WarehouseInventory(ModelID);";
+                string createBranchInventoryTableIndex = $"CREATE INDEX  IF NOT EXISTS {App.UserName}.InvModel ON {App.UserName}.Inventory(ModelID);";
                 using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
                 createBranchInventoryTableIndexCommand.ExecuteScalar();
 
-                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS WarehousePurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createPurchasesTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.Purchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
                 createPurchasesTableCommand.ExecuteScalar();
-                string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON WarehousePurchases(Date);";
+                string createPurchasesTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.PurchaseDate ON {App.UserName}.Purchases(Date);";
                 using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
                 createPurchasesTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Triggered1");
-
-                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createTransferInwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.TransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
                 createTransferInwardsTableCommand.ExecuteScalar();
-                string createTransferInwardsTableIndex = "CREATE INDEX IF NOT EXISTS TInsDate ON WarehouseTransferInwards(Date);";
+                string createTransferInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.TInsDate ON {App.UserName}.TransferInwards(Date);";
                 using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
                 createTransferInwardsTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Triggered2");
-
-                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
+                string createTransferOutwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.TransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
                 using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
                 createTransferOutwardsTableCommand.ExecuteScalar();
-                string createTransferOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS TOutsDate ON WarehouseTransferOutwards(Date);";
+                string createTransferOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.TOutsDate ON {App.UserName}.TransferOutwards(Date);";
                 using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Triggered3");
-
-                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
+                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.ReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
-                string createReturnInwardsTableIndex = "CREATE INDEX IF NOT EXISTS RInsDate ON WarehouseReturnInwards(Date);";
+                string createReturnInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.RInsDate ON {App.UserName}.ReturnInwards(Date);";
                 using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
                 createReturnInwardsTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Triggered4");
-
-                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseReturnOutwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
+                string createReturnOutwardsTable = $"CREATE TABLE IF NOT EXISTS {App.UserName}.ReturnOutwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
                 using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
                 createReturnOutwardsTableCommand.ExecuteScalar();
-                string createReturnOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS ROutsDate ON WarehouseReturnOutwards(Date);";
+                string createReturnOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS {App.UserName}.ROutsDate ON {App.UserName}.ReturnOutwards(Date);";
                 using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
                 createReturnOutwardsTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Triggered5");
-
                 // Create  Triggers
-                using var InventoryTriggerFunctionCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
+                using var InventoryTriggerFunctionCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
                 InventoryTriggerFunctionCommand.ExecuteNonQuery();
 
                 // Create the trigger for INSERT operations
-                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON WarehouseInventory   FOR EACH ROW    EXECUTE FUNCTION updateTotalWorth();", con);
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateTotalWorth_insert    BEFORE INSERT ON {App.UserName}.WarehouseInventory   FOR EACH ROW    EXECUTE FUNCTION {App.UserName}.updateTotalWorth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
 
                 // Create the trigger for UPDATE operations
-                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON WarehouseInventory   FOR EACH ROW   EXECUTE FUNCTION updateTotalWorth();", con);
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON {App.UserName}.Inventory   FOR EACH ROW   EXECUTE FUNCTION {App.UserName}.updateTotalWorth();", con);
                 InventoryUpdateTriggerCommand.ExecuteNonQuery();
 
                 // ReturnIn-Inventory AutoUpdate
-                using var ReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnInCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnInCommand.ExecuteNonQuery();
 
                 // ReturnIn-Inventory AutoUpdate Trigger
-                using var triggerReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnInTrigger  AFTER INSERT ON WarehouseReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
+                using var triggerReturnInCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_ReturnInTrigger  AFTER INSERT ON {App.UserName}.ReturnInwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_ReturnIn();", con);
                 triggerReturnInCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate
-                using var ReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE  FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var ReturnOutCommand = new NpgsqlCommand($"CREATE OR REPLACE  FUNCTION {App.UserName}.updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 ReturnOutCommand.ExecuteNonQuery();
 
                 // ReturnOut-Inventory AutoUpdate Trigger
-                using var triggerReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnOutTrigger  AFTER INSERT ON WarehouseReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
+                using var triggerReturnOutCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_ReturnOutTrigger  AFTER INSERT ON {App.UserName}.ReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_ReturnOut();", con);
                 triggerReturnOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate
-                using var TransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                using var TransferOutCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION {App.UserName}.updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE {App.UserName}.Inventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
                 TransferOutCommand.ExecuteNonQuery();
 
                 // TransferOut-Inventory AutoUpdate Trigger
-                using var triggerTransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_TransferOutTrigger  AFTER INSERT ON WarehouseTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
+                using var triggerTransferOutCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER {App.UserName}.updateInventory_TransferOutTrigger  AFTER INSERT ON {App.UserName}.TransferOutwards   FOR EACH ROW  EXECUTE FUNCTION {App.UserName}.updateInventory_TransferOut();", con);
                 triggerTransferOutCommand.ExecuteNonQuery();
-
-                Debug.WriteLine("Triggered");
 
 
 
@@ -365,7 +352,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT InvoiceID FROM BranchSales WHERE InvoiceID LIKE @userInput";
+                    command.CommandText = $"SELECT InvoiceID FROM {App.UserName}.Sales WHERE InvoiceID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -398,7 +385,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchSales WHERE InvoiceID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.Sales WHERE InvoiceID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -444,7 +431,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchInventory WHERE ModelID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.Inventory WHERE ModelID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -489,7 +476,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT ModelID FROM BranchInventory WHERE ModelID LIKE @userInput";
+                    command.CommandText = $"SELECT ModelID FROM {App.UserName}.Inventory WHERE ModelID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -522,7 +509,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT BrandID FROM BranchInventory WHERE BrandID LIKE @userInput";
+                    command.CommandText = $"SELECT BrandID FROM {App.UserName}.Inventory WHERE BrandID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -555,7 +542,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT BrandID FROM BranchInventory WHERE ModelID = @userQuery";
+                    command.CommandText = $"SELECT BrandID FROM {App.UserName}.Inventory WHERE ModelID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -588,7 +575,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT InvoiceID FROM BranchPurchases WHERE InvoiceID LIKE @userInput";
+                    command.CommandText = $"SELECT InvoiceID FROM {App.UserName}.Purchases WHERE InvoiceID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -621,7 +608,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchPurchases WHERE InvoiceID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.Purchases WHERE InvoiceID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -668,7 +655,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchTransferInwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.TransferInwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -714,7 +701,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM BranchTransferInwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.TransferInwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -747,7 +734,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchTransferOutwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.TransferOutwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -794,7 +781,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM BranchTransferOutwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.TransferOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -827,7 +814,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchReturnInwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.ReturnInwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -872,7 +859,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM BranchReturnInwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.ReturnInwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -905,7 +892,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchReturnOutwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.ReturnOutwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -950,7 +937,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM BranchReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.ReturnOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -983,7 +970,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT CommitID FROM BranchCommitHistory WHERE CommitID LIKE @userInput";
+                    command.CommandText = $"SELECT CommitID FROM {App.UserName}.CommitHistory WHERE CommitID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1016,7 +1003,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM BranchCommitHistory WHERE CommitID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.CommitHistory WHERE CommitID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1057,7 +1044,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM WarehouseReturnInwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.ReturnInwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1090,7 +1077,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM WarehouseReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.ReturnOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1123,7 +1110,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehouseReturnInwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.ReturnInwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1168,7 +1155,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehouseReturnOutwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.ReturnOutwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1213,7 +1200,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehouseTransferOutwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.TransferOutwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1260,7 +1247,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM WarehouseReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.ReturnOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1293,7 +1280,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT TransferID FROM WarehouseTransferInwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM {App.UserName}.TransferInwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1326,7 +1313,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehouseTransferInwards WHERE TransferID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.TransferInwards WHERE TransferID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1373,7 +1360,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehouseInventory WHERE ModelID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.Inventory WHERE ModelID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1418,7 +1405,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT ModelID FROM WarehouseInventory WHERE ModelID LIKE @userInput";
+                    command.CommandText = $"SELECT ModelID FROM {App.UserName}.Inventory WHERE ModelID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1451,7 +1438,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT BrandID FROM WarehouseInventory WHERE ModelID = @userQuery";
+                    command.CommandText = $"SELECT BrandID FROM {App.UserName}.Inventory WHERE ModelID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1484,7 +1471,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT BrandID FROM WarehouseInventory WHERE BrandID LIKE @userInput";
+                    command.CommandText = $"SELECT BrandID FROM {App.UserName}.Inventory WHERE BrandID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1517,7 +1504,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT InvoiceID FROM WarehousePurchases WHERE InvoiceID LIKE @userInput";
+                    command.CommandText = $"SELECT InvoiceID FROM {App.UserName}.Purchases WHERE InvoiceID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1550,7 +1537,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = "SELECT * FROM WarehousePurchases WHERE InvoiceID = @userQuery";
+                    command.CommandText = $"SELECT * FROM {App.UserName}.Purchases WHERE InvoiceID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())

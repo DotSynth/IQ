@@ -78,7 +78,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT TransferID FROM WarehouseTransferOutwards WHERE DATE(Date) = @time;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT TransferID FROM {App.UserName}.TransferOutwards WHERE DATE(Date) = @time;", connection))
                     {
                         command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -137,7 +137,6 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<WarehouseTOut> searchResults = await DatabaseExtensions.QueryWHTOutsResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateTOutsPageWithResults(searchResults);

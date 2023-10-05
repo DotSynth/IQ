@@ -27,6 +27,7 @@
     <None Remove="Assets\Icons\SplashScreen.scale-400.png" />
     <None Remove="Assets\Images\IqLogoNoBackground.png" />
     <None Remove="Assets\Images\LoadingAnimation.gif" />
+    <None Remove="Views\AdminViews\Pages\ManageUsers\ManageUsersPage.xaml" />
     <None Remove="Views\BranchViews\Pages\CommitHistoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\InventoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PLaceHolderPage.xaml" />
@@ -107,7 +108,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\BranchViews\Pages\CommitHistory\SubPages\" />
     <Folder Include="Views\BranchViews\Pages\Inventory\SubPages\" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +172,11 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\ManageUsers\ManageUsersPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\WarehouseViews\Pages\Purchases\PurchasesPage.xaml">

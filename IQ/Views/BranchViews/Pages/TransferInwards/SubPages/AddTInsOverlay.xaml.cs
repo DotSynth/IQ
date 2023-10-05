@@ -66,7 +66,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO BranchTransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice)";
+                        cmd.CommandText = $"INSERT INTO {App.UserName}.TransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("TransferID", CurrentTransferID);
@@ -110,7 +110,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
         private async Task<bool> TriggerDbSubAction_TransferInwardsAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
-            using var checkModelCommand = new NpgsqlCommand("SELECT COUNT(*) FROM BranchInventory WHERE ModelID = @modelID", con);
+            using var checkModelCommand = new NpgsqlCommand($"SELECT COUNT(*) FROM {App.UserName}.Inventory WHERE ModelID = @modelID", con);
             checkModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
 
             int modelCount = Convert.ToInt32(checkModelCommand.ExecuteScalar());
@@ -143,8 +143,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                 if (result == ContentDialogResult.Secondary)
                 {
                     // Insert the model into the inventory
-                    using var insertModelCommand = new NpgsqlCommand(@"
-            INSERT INTO BranchInventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
+                    using var insertModelCommand = new NpgsqlCommand($@"
+            INSERT INTO {App.UserName}.Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
             VALUES (@modelID, @brandID, @addOns, @quantityTransferred, @TInProductPrice)", con);
 
                     insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
@@ -168,8 +168,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
             else
             {
                 // Model exists in the inventory, update the quantityInStock
-                using var updateModelCommand = new NpgsqlCommand(@"
-        UPDATE BranchInventory
+                using var updateModelCommand = new NpgsqlCommand($@"
+        UPDATE {App.UserName}.Inventory
         SET QuantityInStock = QuantityInStock + @quantityTransferred
         WHERE ModelID = @modelID", con);
 
@@ -211,8 +211,6 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
         {
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
-
-            Debug.WriteLine($"Visibility changed to {visibility}");
         }
 
         private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -225,7 +223,6 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                     // Perform a database query based on the user's queryText
                     string userQuery = sender.Text;
                     string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
-                    Debug.WriteLine("PopupPageVisibilityChanged called");
 
                     // Display the searchResults on your SalesPage or in a DataGrid
                     BrandIDAutoSuggestBox.Text = searchResult;

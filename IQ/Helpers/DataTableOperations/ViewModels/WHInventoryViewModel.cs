@@ -25,10 +25,10 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
         public WHInventoryViewModel()
         {
             _warehouseInventory = new ObservableCollection<WarehouseInventory>();
-            LoadWarehouseSalesData();
+            LoadWarehouseInventoryData();
         }
 
-        private void LoadWarehouseSalesData()
+        private void LoadWarehouseInventoryData()
         {
             string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
 
@@ -36,7 +36,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM WarehouseInventory;", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM {App.UserName}.Inventory;", connection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {

@@ -14,6 +14,7 @@ namespace IQ
 {
     public partial class App : Application
     {
+        public static string UserName;
 
         public App()
         {
@@ -26,11 +27,11 @@ namespace IQ
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
             {
                 var ConnectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+                UserName = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).Username;
                 if (ConnectionString != null)
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        Debug.WriteLine($"{DatabaseExtensions.GetCurrentUserRole()} Fuck");
                         if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())

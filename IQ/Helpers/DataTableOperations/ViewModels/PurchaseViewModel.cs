@@ -33,7 +33,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM BranchPurchases WHERE DATE(Date) = @time;", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM {App.UserName}.Purchases WHERE DATE(Date) = @time;", connection))
                 {
                     cmd.Parameters.AddWithValue("time", PurchasesPage.DateFilter!.Value.DateTime);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())

@@ -79,7 +79,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT ReturnID FROM WarehouseReturnInwards WHERE DATE(Date) = @time;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT ReturnID FROM {App.UserName}.ReturnInwards WHERE DATE(Date) = @time;", connection))
                     {
                         command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -107,9 +107,6 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
 
         private void PopupPageVisibilityChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("PopupPageVisibilityChanged called");
-            Debug.WriteLine($"PopupPageVisibilityChanged: OverlayInstance.Visibility = {OverlayInstance.Visibility}");
-
             // Check if the popup page's visibility is collapsed
             if (OverlayInstance.Visibility == Visibility.Collapsed)
             {
@@ -142,7 +139,6 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<WarehouseRIn> searchResults = await DatabaseExtensions.QueryWHRInsResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateRInsPageWithResults(searchResults);

@@ -37,7 +37,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM WarehouseReturnOutwards WHERE DATE(Date) = @time;", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM {App.UserName}.ReturnOutwards WHERE DATE(Date) = @time;", connection))
                 {
                     cmd.Parameters.AddWithValue("time", ReturnOutwardsPage.DateFilter!.Value.DateTime);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())

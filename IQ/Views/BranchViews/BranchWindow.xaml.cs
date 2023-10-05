@@ -139,7 +139,7 @@ namespace IQ.Views.BranchViews
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO BranchCommitHistory (CommitID) VALUES (@CommitID)";
+                        cmd.CommandText = $"INSERT INTO {App.UserName}.CommitHistory (CommitID) VALUES (@CommitID)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("CommitID", uniqueKey);

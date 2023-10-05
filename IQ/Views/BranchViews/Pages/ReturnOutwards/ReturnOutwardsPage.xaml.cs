@@ -69,7 +69,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT ReturnID FROM BranchReturnOutwards WHERE DATE(Date) = @time;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT ReturnID FROM {App.UserName}.ReturnOutwards WHERE DATE(Date) = @time;", connection))
                     {
                         command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -96,9 +96,6 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
 
         private void PopupPageVisibilityChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("PopupPageVisibilityChanged called");
-            Debug.WriteLine($"PopupPageVisibilityChanged: OverlayInstance.Visibility = {OverlayInstance.Visibility}");
-
             // Check if the popup page's visibility is collapsed
             if (OverlayInstance.Visibility == Visibility.Collapsed)
             {
@@ -131,7 +128,6 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<BranchROut> searchResults = await DatabaseExtensions.QueryROutsResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateROutsPageWithResults(searchResults);

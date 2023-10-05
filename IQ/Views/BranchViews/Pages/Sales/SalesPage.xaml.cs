@@ -72,7 +72,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand("SELECT DISTINCT InvoiceID FROM BranchSales WHERE DATE(Date) = @time;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT InvoiceID FROM {App.UserName}.Sales WHERE DATE(Date) = @time;", connection))
                     {
                         command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -99,9 +99,6 @@ namespace IQ.Views.BranchViews.Pages.Sales
 
         private void PopupPageVisibilityChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("PopupPageVisibilityChanged called");
-            Debug.WriteLine($"PopupPageVisibilityChanged: OverlayInstance.Visibility = {OverlayInstance.Visibility}");
-
             // Check if the popup page's visibility is collapsed
             if (OverlayInstance.Visibility == Visibility.Collapsed)
             {
@@ -134,7 +131,6 @@ namespace IQ.Views.BranchViews.Pages.Sales
                 // Perform a database query based on the user's queryText
                 string userQuery = args.QueryText;
                 ObservableCollection<BranchSale> searchResults = await DatabaseExtensions.QuerySalesResultsFromDatabase(userQuery);
-                Debug.WriteLine("PopupPageVisibilityChanged called");
 
                 // Display the searchResults on your SalesPage or in a DataGrid
                 UpdateSalesPageWithResults(searchResults);

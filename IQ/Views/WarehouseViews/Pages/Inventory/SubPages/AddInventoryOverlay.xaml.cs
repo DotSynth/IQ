@@ -69,7 +69,7 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO WarehouseInventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice) VALUES (@modelID, @brandID, @addOns, @quantityInStock, @UnitPrice)";
+                        cmd.CommandText = $"INSERT INTO {App.UserName}.Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice) VALUES (@modelID, @brandID, @addOns, @quantityInStock, @UnitPrice)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("modelID", CurrentModelID);

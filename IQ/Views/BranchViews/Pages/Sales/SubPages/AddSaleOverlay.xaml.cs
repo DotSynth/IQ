@@ -65,7 +65,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = "INSERT INTO BranchSales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
+                        cmd.CommandText = $"INSERT INTO {App.UserName}.Sales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceId);
@@ -125,8 +125,6 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
         {
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
-
-            Debug.WriteLine($"Visibility changed to {visibility}");
         }
 
         private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -139,7 +137,6 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                     // Perform a database query based on the user's queryText
                     string userQuery = sender.Text;
                     string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
-                    Debug.WriteLine("PopupPageVisibilityChanged called");
 
                     // Display the searchResults on your SalesPage or in a DataGrid
                     BrandIDAutoSuggestBox.Text = searchResult;
