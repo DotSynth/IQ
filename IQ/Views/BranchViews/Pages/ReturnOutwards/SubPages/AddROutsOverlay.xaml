@@ -30,7 +30,7 @@
                 HorizontalAlignment="Center"
                 Margin="10,10,0,0"
                 Foreground="#020066">
-                Add Return Inwards
+                Add Return Outwards
             </TextBlock>
 
             <Rectangle 

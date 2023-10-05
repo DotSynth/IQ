@@ -6,9 +6,122 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    Width="400"
+    Height="710"
+    Padding="20"
+    Margin="8">
 
-    <Grid>
+    <Page.Resources>
+        <animations:FadeInThemeAnimation x:Key="MyFadeInAnimation" Duration="0:0:3.5" />
+    </Page.Resources>
+
+    <Grid
+        Background="White"
+        CornerRadius="7"
+        BorderBrush="#f1f2f5"
+        BorderThickness="2"
+        x:Name="ROutsOverlayGrid">
+
+        <StackPanel
+            Orientation="Vertical">
+            <TextBlock
+                FontFamily="{StaticResource Righteous}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="10,10,0,0"
+                Foreground="#020066">
+                Add Return Outwards
+            </TextBlock>
+
+            <Rectangle 
+                Height="1"
+                HorizontalAlignment="Stretch"
+                Fill="#E2E2E2"
+                Margin="0,10,0,0"/>
+
+            <TextBox
+                x:Name="ReturnIDTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Return Invoice Number:"
+                PlaceholderText="XXXXXX"/>
+
+            <AutoSuggestBox
+                x:Name="ModelIDAutoSuggestBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Model Number:"
+                PlaceholderText="XX-XXX-XXXX"
+                SuggestionChosen="ModelIDAutoSuggestBox_SuggestionChosen"
+                TextChanged="ModelIDAutoSuggestBox_TextChanged"/>
+
+            <AutoSuggestBox
+                x:Name="BrandIDAutoSuggestBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Brand Name:"
+                PlaceholderText="E.g SAMSUNG"
+                SuggestionChosen="BrandIDAutoSuggestBox_SuggestionChosen"
+                TextChanged="BrandIDAutoSuggestBox_TextChanged"/>
+
+
+            <TextBox
+                x:Name="QuantityReturnedTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Quantity Returned:"
+                PlaceholderText="E.g 3"/>
+
+            <TextBox
+                x:Name="ReturnedToTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Returned To:"
+                PlaceholderText="E.g ANITA JOHN"/>
+
+
+            <TextBox
+                x:Name="ReasonForReturnTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Reason For Return:"
+                PlaceholderText="E.g DAMAGED FRAME"/>
+
+            <TextBox
+                x:Name="SignedByTextBox"
+                Margin="14"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Header="Signed By:"
+                PlaceholderText="SIGNER'S NAME"/>
+
+            <StackPanel
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Margin="10,10,10,10">
+
+                <Button
+                    x:Name="AddROutsButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="40"
+                    Width="100"
+                    Margin="10,0,0,0"
+                    FontFamily="{StaticResource Righteous}"
+                    Foreground="#020066"
+                    Click="AddROutsButton_Click">Add</Button>
+
+            </StackPanel>
+
+        </StackPanel>
 
     </Grid>
 </Page>

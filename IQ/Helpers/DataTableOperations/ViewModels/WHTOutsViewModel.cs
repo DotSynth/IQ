@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {
-    class WHTOutsViewModel
+    public class WHTOutsViewModel
     {
         private ObservableCollection<WarehouseTOut> _warehouseTOuts;
 

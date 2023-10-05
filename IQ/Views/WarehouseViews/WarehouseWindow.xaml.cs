@@ -23,11 +23,11 @@ namespace IQ.Views.WarehouseViews
     {
         public WarehouseWindow()
         {
+            // Set the initial window size
+            this.SetWindowSize(1600, 900);
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(WarehouseTitleBar);
-            ApplicationView.PreferredLaunchViewSize = new Size(1200, 840);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
 
         private void WarehouseViewItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -42,26 +42,26 @@ namespace IQ.Views.WarehouseViews
                 var itemContent = args.InvokedItemContainer;
                 if (itemContent != null)
                 {
-                    switch (itemContent.Name)
+                    switch (itemContent.Tag.ToString())
                     {
                         case "TransferInwardsPage":
-                            contentFrame.Navigate(typeof(TransferInwardsPage));
+                            contentFrame.Navigate(typeof(TransferInwardsPage), contentFrame);
                             break;
 
                         case "TransferOutwardsPage":
-                            contentFrame.Navigate(typeof(TransferOutwardsPage));
+                            contentFrame.Navigate(typeof(TransferOutwardsPage), contentFrame);
                             break;
 
                         case "ReturnInwardsPage":
-                            contentFrame.Navigate(typeof(ReturnInwardsPage));
+                            contentFrame.Navigate(typeof(ReturnInwardsPage), contentFrame);
                             break;
 
                         case "ReturnOutwardsPage":
-                            contentFrame.Navigate(typeof(ReturnOutwardsPage));
+                            contentFrame.Navigate(typeof(ReturnOutwardsPage), contentFrame);
                             break;
 
                         case "WarehouseInventoryPage":
-                            contentFrame.Navigate(typeof(WarehouseInventoryPage));
+                            contentFrame.Navigate(typeof(WarehouseInventoryPage), contentFrame);
                             break;
                     }
                 }

@@ -20,7 +20,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="BRANCH TRANSFER OUTWARDS"
+        <TextBlock Text="WAREHOUSE TRANSFER OUTWARDS"
            TextWrapping="NoWrap"
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
@@ -68,26 +68,26 @@
                 Click="TOutsAddButton_Click">
             </Button>
             <AutoSuggestBox
-                x:Name="BranchTOutsAutoSuggestBox"
+                x:Name="WarehouseTOutsAutoSuggestBox"
                 Grid.Row="1"
                 Grid.Column="1"
                 QueryIcon="Zoom"
                 Margin="0,0,14,0"
                 Foreground="#020066"
-                SuggestionChosen="BranchTOutsAutoSuggestBox_SuggestionChosen"
-                QuerySubmitted="BranchTOutsAutoSuggestBox_QuerySubmittedAsync"
-                TextChanged="BranchTOutsAutoSuggestBox_TextChangedAsync"
+                SuggestionChosen="WarehouseTOutsAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="WarehouseTOutsAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="WarehouseTOutsAutoSuggestBox_TextChangedAsync"
                 FontFamily="{StaticResource Righteous}"
                 PlaceholderText="Search Transfer ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"
-                x:Name="BranchTOutsDatePicker"
+                x:Name="WarehouseTOutsDatePicker"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 HorizontalAlignment="Right"
                 Margin="0,0,14,0"
-                SelectedDateChanged="BranchTOutsDatePicker_SelectedDateChanged">
+                SelectedDateChanged="WarehouseTOutsDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
@@ -97,11 +97,11 @@
             Fill="#E2E2E2"
             Margin="0,10,0,0"
             Grid.Row="3"/>
-        <controls:DataGrid x:Name="BranchTOutsDataGrid"
+        <controls:DataGrid x:Name="WarehouseTOutsDataGrid"
                            ColumnWidth="*"
                            Margin="0,10,0,0"
                            FontFamily="{StaticResource SplineSans}"
-                           ItemsSource="{x:Bind ViewModel.BranchTOut}" 
+                           ItemsSource="{x:Bind ViewModel.WarehouseTOut}" 
                            AutoGenerateColumns="True"
                            Foreground="#020066"
                            GridLinesVisibility="Vertical"

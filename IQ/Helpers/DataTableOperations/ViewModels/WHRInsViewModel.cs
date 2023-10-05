@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {
-    class WHRInsViewModel
+    public class WHRInsViewModel
     {
         private ObservableCollection<WarehouseRIn> _warehouseRIns;
 

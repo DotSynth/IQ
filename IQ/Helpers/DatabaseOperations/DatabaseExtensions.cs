@@ -85,7 +85,7 @@ namespace IQ.Helpers.DatabaseOperations
                         while (reader.Read())
                         {
                             roleName = reader.GetString(0);
-                            
+
                         }
                     }
                 }
@@ -160,11 +160,11 @@ namespace IQ.Helpers.DatabaseOperations
                 InventoryTriggerFunctionCommand.ExecuteNonQuery();
 
                 // Create the trigger for INSERT operations
-                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION update_total_worth();", con);
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON BranchInventory   FOR EACH ROW    EXECUTE FUNCTION updateTotalWorth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
 
                 // Create the trigger for UPDATE operations
-                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION update_total_worth();", con);
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON BranchInventory   FOR EACH ROW   EXECUTE FUNCTION updateTotalWorth();", con);
                 InventoryUpdateTriggerCommand.ExecuteNonQuery();
 
                 // Sales-Inventory AutoUpdate
@@ -239,21 +239,102 @@ namespace IQ.Helpers.DatabaseOperations
 
         public static bool TriggerDbMassAction_Warehouse()
         {
+            Debug.WriteLine("Triggered");
             bool isCompleted;
             try
             {
 
-                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS ReturnOutwards (\r\n    ReturnID INT UNIQUE NOT NULL,\r\n    ModelID VARCHAR(255) FORIEGN KEY NOT NULL,\r\n    BrandID VARCHAR(255) NOT NULL,\r\n    QuantityReturned INT NOT NULL,\r\n    ReturnedTo VARCHAR(255) NOT NULL,\r\n    SignedBy VARCHAR(255) NOT NULL,\r\n    ReturnedOn TIMESTAMP NOT NULL\r\n);";
+                string createWarehouseInventoryTable = "CREATE TABLE IF NOT EXISTS WarehouseInventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
+                using var createBranchInventoryTableCommand = new NpgsqlCommand(createWarehouseInventoryTable, con);
+                createBranchInventoryTableCommand.ExecuteScalar();
+                string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON WarehouseInventory(ModelID);";
+                using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
+                createBranchInventoryTableIndexCommand.ExecuteScalar();
+
+                Debug.WriteLine("Triggered1");
+
+                string createTransferInwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseTransferInwards (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
+                createTransferInwardsTableCommand.ExecuteScalar();
+                string createTransferInwardsTableIndex = "CREATE INDEX IF NOT EXISTS TInsDate ON WarehouseTransferInwards(Date);";
+                using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
+                createTransferInwardsTableIndexCommand.ExecuteScalar();
+
+                Debug.WriteLine("Triggered2");
+
+                string createTransferOutwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseTransferOutwards  (TransferID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
+                using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
+                createTransferOutwardsTableCommand.ExecuteScalar();
+                string createTransferOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS TOutsDate ON WarehouseTransferOutwards(Date);";
+                using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
+                createTransferOutwardsTableIndexCommand.ExecuteScalar();
+
+                Debug.WriteLine("Triggered3");
+
+                string createReturnInwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseReturnInwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
+                using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
+                createReturnInwardsTableCommand.ExecuteScalar();
+                string createReturnInwardsTableIndex = "CREATE INDEX IF NOT EXISTS RInsDate ON WarehouseReturnInwards(Date);";
+                using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
+                createReturnInwardsTableIndexCommand.ExecuteScalar();
+
+                Debug.WriteLine("Triggered4");
+
+                string createReturnOutwardsTable = "CREATE TABLE IF NOT EXISTS WarehouseReturnOutwards (ReturnID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES WarehouseInventory (ModelID));";
                 using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
-                string createWarehouseInventoryTable = "CREATE TABLE IF NOT EXISTS WarehouseInventory (\r\n    ModelID VARCHAR(255) UNIQUE NOT NULL,\r\n    BrandID VARCHAR(255) NOT NULL,\r\n    Description VARCHAR(255) NOT NULL,\r\n    QuantityInStock INT NOT NULL,\r\n    UnitPrice FLOAT NOT NULL,\r\n    TotalWorth FLOAT NOT NULL,\r\n);";
-                using var createWarehouseInventoryTableCommand = new NpgsqlCommand(createWarehouseInventoryTable, con);
+                createReturnOutwardsTableCommand.ExecuteScalar();
+                string createReturnOutwardsTableIndex = "CREATE INDEX IF NOT EXISTS ROutsDate ON WarehouseReturnOutwards(Date);";
+                using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
+                createReturnOutwardsTableIndexCommand.ExecuteScalar();
+
+                Debug.WriteLine("Triggered5");
+
+                // Create  Triggers
+                using var InventoryTriggerFunctionCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
+                InventoryTriggerFunctionCommand.ExecuteNonQuery();
+
+                // Create the trigger for INSERT operations
+                using var InventoryInsertTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON WarehouseInventory   FOR EACH ROW    EXECUTE FUNCTION updateTotalWorth();", con);
+                InventoryInsertTriggerCommand.ExecuteNonQuery();
+
+                // Create the trigger for UPDATE operations
+                using var InventoryUpdateTriggerCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON WarehouseInventory   FOR EACH ROW   EXECUTE FUNCTION updateTotalWorth();", con);
+                InventoryUpdateTriggerCommand.ExecuteNonQuery();
+
+                // ReturnIn-Inventory AutoUpdate
+                using var ReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_ReturnIn()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock + NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                ReturnInCommand.ExecuteNonQuery();
+
+                // ReturnIn-Inventory AutoUpdate Trigger
+                using var triggerReturnInCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnInTrigger  AFTER INSERT ON WarehouseReturnInwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnIn();", con);
+                triggerReturnInCommand.ExecuteNonQuery();
+
+                // ReturnOut-Inventory AutoUpdate
+                using var ReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE  FUNCTION updateInventory_ReturnOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityReturned    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                ReturnOutCommand.ExecuteNonQuery();
+
+                // ReturnOut-Inventory AutoUpdate Trigger
+                using var triggerReturnOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_ReturnOutTrigger  AFTER INSERT ON WarehouseReturnOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_ReturnOut();", con);
+                triggerReturnOutCommand.ExecuteNonQuery();
+
+                // TransferOut-Inventory AutoUpdate
+                using var TransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE FUNCTION updateInventory_TransferOut()   RETURNS TRIGGER AS $$   BEGIN   UPDATE WarehouseInventory   SET QuantityInStock = QuantityInStock - NEW.QuantityTransferred    WHERE ModelID = NEW.ModelID;    RETURN NEW;    END;   $$ LANGUAGE plpgsql;", con);
+                TransferOutCommand.ExecuteNonQuery();
+
+                // TransferOut-Inventory AutoUpdate Trigger
+                using var triggerTransferOutCommand = new NpgsqlCommand("CREATE OR REPLACE TRIGGER updateInventory_TransferOutTrigger  AFTER INSERT ON WarehouseTransferOutwards   FOR EACH ROW  EXECUTE FUNCTION updateInventory_TransferOut();", con);
+                triggerTransferOutCommand.ExecuteNonQuery();
+
+                Debug.WriteLine("Triggered");
+
 
 
                 isCompleted = true;
             }
-            catch
+            catch(Exception ex)
             {
                 isCompleted = false;
+                Debug.WriteLine(ex);
             }
 
             return isCompleted;
@@ -950,6 +1031,466 @@ namespace IQ.Helpers.DatabaseOperations
             }
 
             return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryWHRInsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM WarehouseReturnInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<List<string>> QueryWHROutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM WarehouseReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<WarehouseRIn>> QueryWHRInsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehouseRIn> searchResults = new ObservableCollection<WarehouseRIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehouseReturnInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehouseRIn result = new WarehouseRIn
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedBy = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<ObservableCollection<WarehouseROut>> QueryWHROutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehouseROut> searchResults = new ObservableCollection<WarehouseROut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehouseReturnOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehouseROut result = new WarehouseROut
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedTo = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<ObservableCollection<WarehouseTOut>> QueryWHTOutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehouseTOut> searchResults = new ObservableCollection<WarehouseTOut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehouseTransferOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehouseTOut result = new WarehouseTOut
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredTo = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryWHTOutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM WarehouseReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<List<string>> QueryWHTInsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT TransferID FROM WarehouseTransferInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<WarehouseTIn>> QueryWHTInsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehouseTIn> searchResults = new ObservableCollection<WarehouseTIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehouseTransferInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehouseTIn result = new WarehouseTIn
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredFrom = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<ObservableCollection<WarehouseInventory>> QueryWHInventoryResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehouseInventory> searchResults = new ObservableCollection<WarehouseInventory>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehouseInventory WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehouseInventory result = new WarehouseInventory
+                            {
+                                // Map properties from reader columns
+                                ModelID = reader.GetString(0),
+                                BrandID = reader.GetString(1),
+                                AddOns = reader.GetString(2),
+                                QuantityInStock = reader.GetInt32(3),
+                                UnitPrice = reader.GetDecimal(4),
+                                TotalWorth = reader.GetDecimal(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryWHInventorySuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT ModelID FROM WarehouseInventory WHERE ModelID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<string> QueryWHBrandNameFromDatabase(string userQuery)
+        {
+            string? searchResult = "";
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT BrandID FROM WarehouseInventory WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            searchResult = reader.GetString(0);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResult;
+        }
+
+        internal static async Task<List<string>> QueryWHBrandIDSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT BrandID FROM WarehouseInventory WHERE BrandID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
         }
     }
 }

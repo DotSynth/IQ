@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels
 {
-    class WHInventoryViewModel
+    public class WHInventoryViewModel
     {
         private ObservableCollection<WarehouseInventory> _warehouseInventory;
 

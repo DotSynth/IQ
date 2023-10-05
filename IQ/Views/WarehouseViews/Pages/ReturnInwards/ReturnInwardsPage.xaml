@@ -19,7 +19,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="BRANCH RETURN INWARDS"
+        <TextBlock Text="WAREHOUSE RETURN INWARDS"
        TextWrapping="NoWrap"
        VerticalAlignment="Center"
        HorizontalAlignment="Center"
@@ -66,26 +66,26 @@
             Click="RInsAddButton_Click">
             </Button>
             <AutoSuggestBox
-            x:Name="BranchRInsAutoSuggestBox"
+            x:Name="WarehouseRInsAutoSuggestBox"
             Grid.Row="1"
             Grid.Column="1"
             QueryIcon="Zoom"
             Margin="0,0,14,0"
             Foreground="#020066"
-            SuggestionChosen="BranchRInsAutoSuggestBox_SuggestionChosen"
-            QuerySubmitted="BranchRInsAutoSuggestBox_QuerySubmittedAsync"
-            TextChanged="BranchRInsAutoSuggestBox_TextChangedAsync"
+            SuggestionChosen="WarehouseRInsAutoSuggestBox_SuggestionChosen"
+            QuerySubmitted="WarehouseRInsAutoSuggestBox_QuerySubmittedAsync"
+            TextChanged="WarehouseRInsAutoSuggestBox_TextChangedAsync"
             FontFamily="{StaticResource Righteous}"
             PlaceholderText="Search Return ID..."/>
             <DatePicker
             Grid.Row="0"
             Grid.Column="2"
-            x:Name="BranchRInsDatePicker"
+            x:Name="WarehouseRInsDatePicker"
             Foreground="#020066"
             FontFamily="{StaticResource Righteous}"
             HorizontalAlignment="Right"
             Margin="0,0,14,0"
-            SelectedDateChanged="BranchRInsDatePicker_SelectedDateChanged">
+            SelectedDateChanged="WarehouseRInsDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
@@ -95,11 +95,11 @@
         Fill="#E2E2E2"
         Margin="0,10,0,0"
         Grid.Row="3"/>
-        <controls:DataGrid x:Name="BranchRInsDataGrid"
+        <controls:DataGrid x:Name="WarehouseRInsDataGrid"
                        ColumnWidth="*"
                        Margin="0,10,0,0"
                        FontFamily="{StaticResource SplineSans}"
-                       ItemsSource="{x:Bind ViewModel.BranchRIn}" 
+                       ItemsSource="{x:Bind ViewModel.WarehouseRIn}" 
                        AutoGenerateColumns="True"
                        Foreground="#020066"
                        GridLinesVisibility="Vertical"

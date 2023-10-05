@@ -19,7 +19,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="BRANCH TRANSFER INWARDS"
+        <TextBlock Text="WAREHOUSE TRANSFER INWARDS"
                    TextWrapping="NoWrap"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
@@ -67,26 +67,26 @@
                 Click="TInsAddButton_Click">
             </Button>
             <AutoSuggestBox
-                x:Name="BranchTInsAutoSuggestBox"
+                x:Name="WarehouseTInsAutoSuggestBox"
                 Grid.Row="1"
                 Grid.Column="1"
                 QueryIcon="Zoom"
                 Margin="0,0,14,0"
                 Foreground="#020066"
-                SuggestionChosen="BranchTInsAutoSuggestBox_SuggestionChosen"
-                QuerySubmitted="BranchTInsAutoSuggestBox_QuerySubmittedAsync"
-                TextChanged="BranchTInsAutoSuggestBox_TextChangedAsync"
+                SuggestionChosen="WarehouseTInsAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="WarehouseTInsAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="WarehouseTInsAutoSuggestBox_TextChangedAsync"
                 FontFamily="{StaticResource Righteous}"
                 PlaceholderText="Search Transfer ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"
-                x:Name="BranchTInsDatePicker"
+                x:Name="WarehouseTInsDatePicker"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 HorizontalAlignment="Right"
                 Margin="0,0,14,0"
-                SelectedDateChanged="BranchTInsDatePicker_SelectedDateChanged">
+                SelectedDateChanged="WarehouseTInsDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
@@ -96,11 +96,11 @@
             Fill="#E2E2E2"
             Margin="0,10,0,0"
             Grid.Row="3"/>
-        <controls:DataGrid x:Name="BranchTInsDataGrid"
+        <controls:DataGrid x:Name="WarehouseTInsDataGrid"
                            ColumnWidth="*"
                            Margin="0,10,0,0"
                            FontFamily="{StaticResource SplineSans}"
-                           ItemsSource="{x:Bind ViewModel.BranchTIn}" 
+                           ItemsSource="{x:Bind ViewModel.WarehouseTIn}" 
                            AutoGenerateColumns="True"
                            Foreground="#020066"
                            GridLinesVisibility="Vertical"

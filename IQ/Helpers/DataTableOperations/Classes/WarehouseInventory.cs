@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.Classes
 {
-    class WarehouseInventory
+    public class WarehouseInventory
     {
         public string? ModelID
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.Classes
 {
-    class WarehouseRIn
+    public class WarehouseRIn
     {
         public string? ReturnID
         {

@@ -19,7 +19,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="BRANCH RETURN OUTWARDS"
+        <TextBlock Text="WAREHOUSE RETURN OUTWARDS"
            TextWrapping="NoWrap"
            VerticalAlignment="Center"
            HorizontalAlignment="Center"
@@ -67,26 +67,26 @@
                 Click="ROutsAddButton_Click">
             </Button>
             <AutoSuggestBox
-                x:Name="BranchROutsAutoSuggestBox"
+                x:Name="WarehouseROutsAutoSuggestBox"
                 Grid.Row="1"
                 Grid.Column="1"
                 QueryIcon="Zoom"
                 Margin="0,0,14,0"
                 Foreground="#020066"
-                SuggestionChosen="BranchROutsAutoSuggestBox_SuggestionChosen"
-                QuerySubmitted="BranchROutsAutoSuggestBox_QuerySubmittedAsync"
-                TextChanged="BranchROutsAutoSuggestBox_TextChangedAsync"
+                SuggestionChosen="WarehouseROutsAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="WarehouseROutsAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="WarehouseROutsAutoSuggestBox_TextChangedAsync"
                 FontFamily="{StaticResource Righteous}"
                 PlaceholderText="Search Return ID..."/>
             <DatePicker
                 Grid.Row="0"
                 Grid.Column="2"
-                x:Name="BranchROutsDatePicker"
+                x:Name="WarehouseROutsDatePicker"
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 HorizontalAlignment="Right"
                 Margin="0,0,14,0"
-                SelectedDateChanged="BranchROutsDatePicker_SelectedDateChanged">
+                SelectedDateChanged="WarehouseROutsDatePicker_SelectedDateChanged">
             </DatePicker>
         </Grid>
         <Rectangle 
@@ -96,11 +96,11 @@
             Fill="#E2E2E2"
             Margin="0,10,0,0"
             Grid.Row="3"/>
-        <controls:DataGrid x:Name="BranchROutsDataGrid"
+        <controls:DataGrid x:Name="WarehouseROutsDataGrid"
                            ColumnWidth="*"
                            Margin="0,10,0,0"
                            FontFamily="{StaticResource SplineSans}"
-                           ItemsSource="{x:Bind ViewModel.BranchROut}" 
+                           ItemsSource="{x:Bind ViewModel.WarehouseROut}" 
                            AutoGenerateColumns="True"
                            Foreground="#020066"
                            GridLinesVisibility="Vertical"

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IQ.Helpers.DataTableOperations.Classes
 {
-    class WarehouseROut
+    public class WarehouseROut
     {
         public string? ReturnID
         {

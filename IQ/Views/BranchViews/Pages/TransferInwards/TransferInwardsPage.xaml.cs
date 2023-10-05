@@ -33,7 +33,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards
         {
             this.InitializeComponent();
             BranchTInsDatePicker.SelectedDate = DateFilter;
-            BranchTInsDatePicker.SelectedDate = DateTime.Today;
+            BranchTInsDatePicker.MaxYear = DateTime.Today;
             DataContext = ViewModel;
 
             // Subscribe to the VisibilityChanged event of the popup page

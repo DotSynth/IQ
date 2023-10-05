@@ -162,7 +162,7 @@
                 <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                     Icon="Library"
-                    Tag="WareHouseInventoryPage"
+                    Tag="WarehouseInventoryPage"
                     Foreground="#020066"
                     ToolTipService.ToolTip="Warehouse Inventory"/>
             </NavigationView.MenuItems>
