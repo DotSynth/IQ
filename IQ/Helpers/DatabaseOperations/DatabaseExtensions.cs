@@ -36,6 +36,12 @@ namespace IQ.Helpers.DatabaseOperations
             return Connected;
         }
 
+        public static bool CloseConnection()
+        {
+            con!.Close();
+            return true;
+        }
+
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
         {
@@ -74,7 +80,7 @@ namespace IQ.Helpers.DatabaseOperations
                 string usernameToQuery = userRole!;
 
                 // Query to retrieve roles for the specified user
-                string getRoleQuery = "SELECT r.rolname FROM pg_roles r, pg_auth_members m WHERE m.member = r.oid AND m.roleid = (SELECT oid FROM pg_roles WHERE rolname = @username)";
+                string getRoleQuery = "SELECT r.rolname FROM pg_user u JOIN pg_auth_members m ON (m.member = u.usesysid) JOIN pg_roles r ON (m.roleid = r.oid) WHERE u.usename = @username";
 
                 using (NpgsqlCommand cmd = new NpgsqlCommand(getRoleQuery, con))
                 {
@@ -250,6 +256,13 @@ namespace IQ.Helpers.DatabaseOperations
                 string createBranchInventoryTableIndex = "CREATE INDEX  IF NOT EXISTS InvModel ON WarehouseInventory(ModelID);";
                 using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
                 createBranchInventoryTableIndexCommand.ExecuteScalar();
+
+                string createPurchasesTable = "CREATE TABLE IF NOT EXISTS WarehousePurchases (InvoiceID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
+                createPurchasesTableCommand.ExecuteScalar();
+                string createPurchasesTableIndex = "CREATE INDEX IF NOT EXISTS PurchaseDate ON WarehousePurchases(Date);";
+                using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
+                createPurchasesTableIndexCommand.ExecuteScalar();
 
                 Debug.WriteLine("Triggered1");
 
@@ -1491,6 +1504,86 @@ namespace IQ.Helpers.DatabaseOperations
             }
 
             return suggestions;
+        }
+
+        public static async Task<List<string>> QueryWHPurchasesSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT InvoiceID FROM WarehousePurchases WHERE InvoiceID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<WarehousePurchase>> QueryWHPurchasesResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<WarehousePurchase> searchResults = new ObservableCollection<WarehousePurchase>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = "SELECT * FROM WarehousePurchases WHERE InvoiceID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            WarehousePurchase result = new WarehousePurchase
+                            {
+                                // Map properties from reader columns
+                                InvoiceID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityBought = reader.GetInt32(4),
+                                BuyingPrice = reader.GetDecimal(5),
+                                PurchasedFrom = reader.GetString(6),
+                                SupplierContactInfo = reader.GetString(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
         }
     }
 }

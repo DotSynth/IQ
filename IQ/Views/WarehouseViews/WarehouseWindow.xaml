@@ -53,11 +53,13 @@
                     <MenuFlyoutItem 
                     Text="Log Out"
                     FontFamily="{StaticResource Righteous}"
-                    Foreground="#61609D"/>
+                    Foreground="#61609D"
+                        Click="WarehouseWindowLogout_Click"/>
                     <MenuFlyoutItem 
                 Text="Exit"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
+                Foreground="#61609D"
+                        Click="WarehouseWindowExit_Click"/>
                 </MenuBarItem>
 
                 <MenuBarItem 
@@ -138,6 +140,13 @@
             Loaded="WarehouseNavLoaded"
             IsSettingsVisible="False">
             <NavigationView.MenuItems>
+
+                <NavigationViewItem 
+                Icon="Shop" 
+                        Tag="PurchasesPage" 
+                        Foreground="#020066"  
+                                ToolTipService.ToolTip="Purchases"/>
+                <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                 Icon="Download" 
                         Tag="TransferInwardsPage" 
@@ -164,7 +173,8 @@
                     Icon="Library"
                     Tag="WarehouseInventoryPage"
                     Foreground="#020066"
-                    ToolTipService.ToolTip="Warehouse Inventory"/>
+                    ToolTipService.ToolTip="Warehouse Inventory"
+                    IsSelected="True"/>
             </NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </NavigationView>

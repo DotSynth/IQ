@@ -1,5 +1,6 @@
 ﻿using IQ.Helpers.WindowsOperations;
 using IQ.Views.WarehouseViews.Pages.Inventory;
+using IQ.Views.WarehouseViews.Pages.Purchases;
 using IQ.Views.WarehouseViews.Pages.ReturnInwards;
 using IQ.Views.WarehouseViews.Pages.ReturnOutwards;
 using IQ.Views.WarehouseViews.Pages.TransferInwards;
@@ -44,6 +45,10 @@ namespace IQ.Views.WarehouseViews
                 {
                     switch (itemContent.Tag.ToString())
                     {
+                        case "PurchasesPage":
+                            contentFrame.Navigate(typeof(PurchasesPage), contentFrame);
+                            break;
+
                         case "TransferInwardsPage":
                             contentFrame.Navigate(typeof(TransferInwardsPage), contentFrame);
                             break;

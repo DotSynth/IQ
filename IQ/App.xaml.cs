@@ -30,7 +30,7 @@ namespace IQ
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        Debug.WriteLine(DatabaseExtensions.GetCurrentUserRole());
+                        Debug.WriteLine($"{DatabaseExtensions.GetCurrentUserRole()} Fuck");
                         if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())

@@ -43,6 +43,8 @@
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
     <None Remove="Views\WarehouseViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\Purchases\PurchasesPage.xaml" />
+    <None Remove="Views\WarehouseViews\Pages\Purchases\SubPages\AddPurchase.xaml" />
     <None Remove="Views\WarehouseViews\Pages\ReturnInwards\ReturnInwardsPage.xaml" />
     <None Remove="Views\WarehouseViews\Pages\ReturnInwards\SubPages\AddRInsOverlay.xaml" />
     <None Remove="Views\WarehouseViews\Pages\ReturnOutwards\SubPages\AddROutsOverlay.xaml" />
@@ -170,6 +172,16 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\Purchases\PurchasesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\WarehouseViews\Pages\Purchases\SubPages\AddPurchase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\WarehouseViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml">

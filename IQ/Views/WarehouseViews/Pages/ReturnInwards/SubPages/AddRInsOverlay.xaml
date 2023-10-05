@@ -83,7 +83,7 @@
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 Header="Returned By:"
-                PlaceholderText="E.g ANITA JOHN"/>
+                PlaceholderText="E.g BRANCH 2"/>
 
 
             <TextBox

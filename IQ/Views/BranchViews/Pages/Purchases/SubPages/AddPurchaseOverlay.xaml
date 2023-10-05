@@ -30,7 +30,7 @@
                 HorizontalAlignment="Center"
                 Margin="10,10,0,0"
                 Foreground="#020066">
-                Add Sale
+                Add Purchase
             </TextBlock>
 
             <Rectangle 

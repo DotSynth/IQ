@@ -1,3 +1,4 @@
+using IQ.Helpers.DatabaseOperations;
 using IQ.Views;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
@@ -105,7 +106,8 @@ namespace IQ.Helpers.WindowsOperations
 This Will Clear Login Information.", m);
             if (result == ContentDialogResult.Secondary)
             {
-                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
+                
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)) && (DatabaseExtensions.CloseConnection() == true))
                 {
                     // If file found, delete it
                     File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User));
