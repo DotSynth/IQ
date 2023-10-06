@@ -88,19 +88,22 @@ namespace IQ.Views
             {
                 if (DatabaseExtensions.ConnectToDb(ConnectionString, this) == true)
                 {
-                    Debug.WriteLine($"{DatabaseExtensions.GetCurrentUserRole()} Fuck");
-                    if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
+                    App.UserName = Username;
+                    if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
                     {
+                        DatabaseExtensions.TriggerDbMassAction_Admin();
                         LoadAdminWindow();
                         this.Close();
                     }
-                    else if (DatabaseExtensions.GetCurrentUserRole() == "Branch")
+                    else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
                     {
+                        DatabaseExtensions.TriggerDbMassAction_Branch();
                         LoadBranchWindow();
                         this.Close();
                     }
                     else 
                     {
+                        DatabaseExtensions.TriggerDbMassAction_Warehouse();
                         LoadWarehouseWindow();
                         this.Close();
                     }

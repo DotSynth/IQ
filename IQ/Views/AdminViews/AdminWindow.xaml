@@ -140,13 +140,13 @@ Background="#f1f2f5">
         Loaded="AdminNavLoaded"
         IsSettingsVisible="False">
             <NavigationView.MenuItems>
-                <NavigationViewItemSeparator/>
                 <NavigationViewItem 
-                Icon="Account"
+                Icon="OtherUser"
                 Tag="ManageUsersPage"
                 Foreground="#020066"
                 ToolTipService.ToolTip="Manage Users"
                 IsSelected="True"/>
+                <NavigationViewItemSeparator/>
             </NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </NavigationView>

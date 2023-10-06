@@ -66,7 +66,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO {App.UserName}.TransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice)";
+                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".TransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("TransferID", CurrentTransferID);
@@ -110,7 +110,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
         private async Task<bool> TriggerDbSubAction_TransferInwardsAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
-            using var checkModelCommand = new NpgsqlCommand($"SELECT COUNT(*) FROM {App.UserName}.Inventory WHERE ModelID = @modelID", con);
+            using var checkModelCommand = new NpgsqlCommand($"SELECT COUNT(*) FROM \"{App.UserName}\".Inventory WHERE ModelID = @modelID", con);
             checkModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
 
             int modelCount = Convert.ToInt32(checkModelCommand.ExecuteScalar());
@@ -144,7 +144,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                 {
                     // Insert the model into the inventory
                     using var insertModelCommand = new NpgsqlCommand($@"
-            INSERT INTO {App.UserName}.Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
+            INSERT INTO ""{App.UserName}"".Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
             VALUES (@modelID, @brandID, @addOns, @quantityTransferred, @TInProductPrice)", con);
 
                     insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
@@ -169,7 +169,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
             {
                 // Model exists in the inventory, update the quantityInStock
                 using var updateModelCommand = new NpgsqlCommand($@"
-        UPDATE {App.UserName}.Inventory
+        UPDATE ""{App.UserName}"".Inventory
         SET QuantityInStock = QuantityInStock + @quantityTransferred
         WHERE ModelID = @modelID", con);
 

@@ -32,7 +32,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM {App.UserName}.CommitHistory;", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM \"{App.UserName}\".CommitHistory;", connection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {

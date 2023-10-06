@@ -28,6 +28,7 @@
     <None Remove="Assets\Images\IqLogoNoBackground.png" />
     <None Remove="Assets\Images\LoadingAnimation.gif" />
     <None Remove="Views\AdminViews\Pages\ManageUsers\ManageUsersPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\ManageUsers\Subpages\AddUserOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\CommitHistoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\InventoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PLaceHolderPage.xaml" />
@@ -172,6 +173,11 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\ManageUsers\Subpages\AddUserOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AdminViews\Pages\ManageUsers\ManageUsersPage.xaml">

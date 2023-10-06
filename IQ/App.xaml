@@ -25,6 +25,8 @@
             <FontFamily x:Key="ContentControlThemeFontFamily">/Assets/Fonts/Righteous Regular.ttf/#Righteous</FontFamily>
             <SolidColorBrush x:Key="ContentControlThemeHighlightRectangle"  Color="#020066" />
             <SolidColorBrush x:Key="HeaderedContentControlThemeForeground"  Color="#020066" />
+            <SolidColorBrush x:Key="ComboBoxHeaderForeground" Color="#020066" />
+            <SolidColorBrush x:Key="ComboBoxForeground" Color="#020066" />
 
         </ResourceDictionary>
     </Application.Resources>

@@ -1,46 +1,50 @@
 ﻿using IQ.Helpers.FileOperations;
+using IQ.Views.WarehouseViews.Pages.Inventory;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
 using Npgsql;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.UI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
+namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AddInventoryOverlay : Page
+    public sealed partial class AddUserOverlay : Page
     {
-        public string? CurrentModelID;
-        public string? CurrentBrandID;
-        public string? CurrentAddOns;
-        public int? CurrentQuantityInStock;
-        public Decimal? CurrentUnitPrice;
-        public Decimal? CurrentTotalWorth;
+        public string? CurrentUserName;
+        public string? CurrentPassword;
+        public string? CurrentAccessType;
+        public string? CurrentSyntaxAccessType;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
 
-        public AddInventoryOverlay()
+        public AddUserOverlay()
         {
             this.InitializeComponent();
         }
 
-        private void AddInventoryButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateUserButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrentModelID = ModelIDTextBox.Text;
-            CurrentBrandID = BrandIDTextBox.Text;
-            CurrentAddOns = AddOnsTextBox.Text;
-            CurrentQuantityInStock = int.Parse(QuantityInStockTextBox.Text);
-            CurrentUnitPrice = Decimal.Parse(UnitPriceTextBox.Text);
+            CurrentUserName = UserNameTextBox.Text;
+            CurrentPassword = PasswordTextBox.Text;
 
             // Create a connection string
             string connString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
@@ -60,31 +64,43 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice) VALUES (@modelID, @brandID, @addOns, @quantityInStock, @UnitPrice)";
+                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".UserLogins (UserName, Password, AccessType) VALUES (@UserName, @Password, @AccessType)";
 
                         // Create parameters and assign values
-                        cmd.Parameters.AddWithValue("modelID", CurrentModelID);
-                        cmd.Parameters.AddWithValue("brandID", CurrentBrandID);
-                        cmd.Parameters.AddWithValue("addOns", CurrentAddOns);
-                        cmd.Parameters.AddWithValue("quantityInStock", CurrentQuantityInStock);
-                        cmd.Parameters.AddWithValue("UnitPrice", CurrentUnitPrice);
+                        cmd.Parameters.AddWithValue("UserName", CurrentUserName);
+                        cmd.Parameters.AddWithValue("Password", CurrentPassword);
+                        cmd.Parameters.AddWithValue("AccessType", CurrentAccessType!);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();
-                        _ = ShowCompletionAlertDialogAsync("New Inventory Row Inserted Successfully");
+                        await ShowCompletionAlertDialogAsync("New User Created Successfully");
                     }
 
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE ROLE \"{CurrentUserName}\" WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 PASSWORD '{CurrentPassword}'; GRANT \"{CurrentAccessType}\" TO \"{CurrentUserName}\";", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE SCHEMA \"{CurrentUserName}\"", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"GRANT ALL ON SCHEMA \"{CurrentUserName}\" TO \"{CurrentUserName}\"", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
                     // Close the connection
                     conn.Close();
                 }
 
-                BranchInventoryPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
+                ManageUsersPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }
             catch (Exception ex)
             {
                 string error = ex.Message;
-                _ = ShowCompletionAlertDialogAsync(error);
+                await ShowCompletionAlertDialogAsync(error);
             }
 
 
@@ -119,5 +135,18 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (userTypeComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                CurrentAccessType = selectedItem.Content.ToString()!;
+
+                // You can now use the selectedValue as needed.
+                // For example, display it in a MessageBox or perform other actions.
+                // MessageBox.Show($"Selected value: {selectedValue}");
+            }
+        }
+
     }
 }

@@ -58,7 +58,7 @@ namespace IQ.Views.AdminViews
                     break;
                 }
             }
-            contentFrame.Navigate(typeof(WarehouseInventoryPage));
+            contentFrame.Navigate(typeof(ManageUsersPage));
         }
 
         private void AdminWindowExit_Click(object sender, RoutedEventArgs e)

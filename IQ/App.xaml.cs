@@ -32,7 +32,8 @@ namespace IQ
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        if (DatabaseExtensions.GetCurrentUserRole() == "Admin")
+                        Debug.WriteLine(DatabaseExtensions.GetCurrentUserRole());
+                        if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())
                             {
@@ -47,7 +48,7 @@ namespace IQ
                                 Exit();
                             }
                         }
-                        else if (DatabaseExtensions.GetCurrentUserRole() == "Branch")
+                        else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Branch())
                             {

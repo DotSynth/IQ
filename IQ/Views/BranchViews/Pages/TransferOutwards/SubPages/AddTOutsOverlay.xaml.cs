@@ -67,7 +67,7 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO {App.UserName}.TransferOutwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredTo, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredTo, @signedBy, @TInProductPrice)";
+                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".TransferOutwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredTo, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredTo, @signedBy, @TInProductPrice)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("TransferID", CurrentTransferID);
