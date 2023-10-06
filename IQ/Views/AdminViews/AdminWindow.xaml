@@ -141,12 +141,55 @@ Background="#f1f2f5">
         IsSettingsVisible="False">
             <NavigationView.MenuItems>
                 <NavigationViewItem 
-                Icon="OtherUser"
+                Icon="ViewAll"
+                Tag="CompanyOverviewPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Overview"
+                IsSelected="True"/>
+                <NavigationViewItem 
+                Icon="Contact"
                 Tag="ManageUsersPage"
                 Foreground="#020066"
-                ToolTipService.ToolTip="Manage Users"
-                IsSelected="True"/>
+                ToolTipService.ToolTip="Manage Users"/>
                 <NavigationViewItemSeparator/>
+                <NavigationViewItem 
+                Icon="Scan"
+                Tag="CompanySalesPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Sales"/>
+                <NavigationViewItem 
+                Icon="Shop"
+                Tag="CompanyPurchasesPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Purchases"/>
+                <NavigationViewItemSeparator/>
+                <NavigationViewItem 
+                Icon="Download"
+                Tag="CompanyTInsPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Transfer Inwards"/>
+                <NavigationViewItem 
+                Icon="Upload"
+                Tag="CompanyTOutsPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Transfer Outwards"/>
+                <NavigationViewItemSeparator/>
+                <NavigationViewItem 
+                Icon="OpenPane"
+                Tag="CompanyRInsPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Return Inwards"/>
+                <NavigationViewItem 
+                Icon="ClosePane"
+                Tag="CompanyROutsPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Return Outwards"/>
+                <NavigationViewItemSeparator/>
+                <NavigationViewItem 
+                Icon="Library"
+                Tag="CompanyInventoryPage"
+                Foreground="#020066"
+                ToolTipService.ToolTip="Inventory"/>
             </NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </NavigationView>

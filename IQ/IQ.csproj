@@ -27,8 +27,16 @@
     <None Remove="Assets\Icons\SplashScreen.scale-400.png" />
     <None Remove="Assets\Images\IqLogoNoBackground.png" />
     <None Remove="Assets\Images\LoadingAnimation.gif" />
+    <None Remove="Views\AdminViews\Pages\Inventory\CompanyInventoryPage.xaml" />
     <None Remove="Views\AdminViews\Pages\ManageUsers\ManageUsersPage.xaml" />
     <None Remove="Views\AdminViews\Pages\ManageUsers\Subpages\AddUserOverlay.xaml" />
+    <None Remove="Views\AdminViews\Pages\Overview\CompanyOverviewPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\Purchases\CompanyPurchasesPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\ReturnInwards\CompanyRInsPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\ReturnOutwards\CompanyROutsPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\Sales\CompanySalesPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\TransferInwards\CompanyTInsPage.xaml" />
+    <None Remove="Views\AdminViews\Pages\TransferOutwards\CompanyTOutsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\CommitHistoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\InventoryPage.xaml" />
     <None Remove="Views\BranchViews\Pages\PLaceHolderPage.xaml" />
@@ -173,6 +181,46 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\TransferOutwards\CompanyTOutsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\TransferInwards\CompanyTInsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\ReturnOutwards\CompanyROutsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\ReturnInwards\CompanyRInsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\Purchases\CompanyPurchasesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\Inventory\CompanyInventoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\Sales\CompanySalesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\AdminViews\Pages\Overview\CompanyOverviewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AdminViews\Pages\ManageUsers\Subpages\AddUserOverlay.xaml">
