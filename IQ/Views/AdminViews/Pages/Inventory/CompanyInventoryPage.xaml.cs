@@ -34,7 +34,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
         public static string? PreviousView = SelectedView;
         public List<string> Schemas { get; } = new List<string>();
         public CompanyInventoryViewModel ViewModel { get; } = new CompanyInventoryViewModel();
-        public Decimal? Total { get; set; }
+        public Decimal? Total { get; } = new Decimal();
 
         public CompanyInventoryPage()
         {
@@ -50,7 +50,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
         {
             // Set the ComboBox value here
             USERComboBox.SelectedItem = SelectedView;
-            TotalSales.Text = Total.ToString();
+            TotalWorth.Text = $"Total Inventory Worth: {Total.ToString()}";
         }
 
         private void USERComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

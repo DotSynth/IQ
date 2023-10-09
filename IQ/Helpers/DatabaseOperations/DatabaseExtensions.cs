@@ -2333,7 +2333,7 @@ namespace IQ.Helpers.DatabaseOperations
             {
                 using (NpgsqlCommand command = new NpgsqlCommand(
                     $@"SELECT SUM(BuyingPrice) AS total_purchases
-                      FROM ""{CompanySalesPage.SelectedView}"".Purchase
+                      FROM ""{CompanyPurchasesPage.SelectedView}"".Purchases
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", con))
                 {
@@ -2361,7 +2361,7 @@ namespace IQ.Helpers.DatabaseOperations
             {
                 using (NpgsqlCommand command = new NpgsqlCommand(
                     $@"SELECT SUM(TotalWorth) AS total_inventory_worth
-                      FROM ""{CompanySalesPage.SelectedView}"".Inventory;", con))
+                      FROM ""{CompanyInventoryPage.SelectedView}"".Inventory;", con))
                 {
                     object result = command.ExecuteScalar()!;
                     if (result != null && result != DBNull.Value)

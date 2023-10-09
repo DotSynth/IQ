@@ -37,6 +37,7 @@ namespace IQ.Views.AdminViews.Pages.Purchases
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         public CompanyPurchasesViewModel ViewModel { get; } = new CompanyPurchasesViewModel();
+        public Decimal? Total { get; } = new Decimal();
 
 
         public CompanyPurchasesPage()
@@ -46,6 +47,7 @@ namespace IQ.Views.AdminViews.Pages.Purchases
             CompanyPurchasesDatePicker.SelectedDate = DateFilter;
             CompanyPurchasesDatePicker.MaxYear = DateTime.UtcNow.Date;
             Schemas = DatabaseExtensions.GetSchemas();
+            Total = DatabaseExtensions.RetrieveTotalPurchase();
             USERComboBox.ItemsSource = Schemas;
             DataContext = ViewModel;
             this.Loaded += MainPage_Loaded;
@@ -55,6 +57,7 @@ namespace IQ.Views.AdminViews.Pages.Purchases
         {
             // Set the ComboBox value here
             USERComboBox.SelectedItem = SelectedView;
+            TotalPurchases.Text = $"Total Monthly Purchase: {Total.ToString()}";
         }
 
         private void USERComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
