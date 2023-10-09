@@ -52,39 +52,53 @@
                     FontFamily="{StaticResource Righteous}"
                     Foreground="#61609D">
                         <MenuFlyoutItem 
+                            x:Name="ExportAllEntriesButton"
                         Text="All Entries"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D">
+                        Foreground="#61609D"
+                            Click="ExportAllEntriesButton_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Modifiers="Control,Shift" Key="E"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator/>
                         <MenuFlyoutItem 
+                            x:Name="ExportSalesButton"
                         Text="Sales"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportSalesButton_Click"/>
                         <MenuFlyoutItem 
+                            x:Name="ExportTOutsButton"
                         Text="T/Outwards"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportTOutsButton_Click"/>
                         <MenuFlyoutItem 
+                            x:Name="ExportROutsButton"
                         Text="R/Outwards"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportROutsButton_Click"/>
                         <MenuFlyoutSeparator/>
                         <MenuFlyoutItem 
+                            x:Name="ExportPurchasesButton"
                         Text="Purchases"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportPurchasesButton_Click"/>
                         <MenuFlyoutItem 
+                            x:Name="ExportTInsButton"
                         Text="T/Inwards"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportTInsButton_Click"/>
                         <MenuFlyoutItem 
-                        Text="R/Outwards"
+                            x:Name="ExportRInsButton"
+                        Text="R/Inwards"
                         FontFamily="{StaticResource Righteous}"
-                        Foreground="#61609D"/>
+                        Foreground="#61609D"
+                            Click="ExportRInsButton_Click"/>
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSeparator/>
 

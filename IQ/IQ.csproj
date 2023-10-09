@@ -71,10 +71,11 @@
     <PackageReference Include="Aspose.PDF" Version="23.9.0" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
     <PackageReference Include="Npgsql" Version="7.0.6" />
-    <PackageReference Include="PDFsharp" Version="6.0.0-preview-3" />
+    <PackageReference Include="PDFsharp" Version="1.50.5147" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

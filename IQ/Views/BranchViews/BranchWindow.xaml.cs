@@ -13,12 +13,16 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using System.Runtime.InteropServices;
 using Npgsql;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+
 // To learn more about WinUI, the WinUI project structure, and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace IQ.Views.BranchViews
@@ -218,6 +222,46 @@ namespace IQ.Views.BranchViews
             // Show the ContentDialog and get the result
             ContentDialogResult result = await alertDialog.ShowAsync();
 
+        }
+
+        private async void ExportSalesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateSalesPdfForMonth(this);
+        }
+
+        private async void ExportAllEntriesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateSalesPdfForMonth(this);
+            await PDFOperations.CreateTOutsPdfForMonth(this);
+            await PDFOperations.CreateROutsPdfForMonth(this);
+            await PDFOperations.CreatePurchasesPdfForMonth(this);
+            await PDFOperations.CreateTInsPdfForMonth(this);
+            await PDFOperations.CreateRInsPdfForMonth(this);
+        }
+
+        private async void ExportTOutsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateTOutsPdfForMonth(this);
+        }
+
+        private async void ExportROutsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateROutsPdfForMonth(this);
+        }
+
+        private async void ExportPurchasesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreatePurchasesPdfForMonth(this);
+        }
+
+        private async void ExportTInsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateTInsPdfForMonth(this);
+        }
+
+        private async void ExportRInsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateRInsPdfForMonth(this);
         }
     }
 }

@@ -18,11 +18,13 @@ namespace IQ
 
         public App()
         {
+            this.RequestedTheme = ApplicationTheme.Light;
             this.InitializeComponent();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            
             base.OnLaunched(args);
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
             {
