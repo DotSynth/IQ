@@ -34,6 +34,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
         public static string? PreviousView = SelectedView;
         public List<string> Schemas { get; } = new List<string>();
         public CompanyInventoryViewModel ViewModel { get; } = new CompanyInventoryViewModel();
+        public Decimal? Total { get; set; }
 
         public CompanyInventoryPage()
         {
@@ -41,6 +42,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
             Schemas = DatabaseExtensions.GetSchemas();
             // Bind the list of schemas to the ComboBox
             USERComboBox.ItemsSource = Schemas;
+            Total = DatabaseExtensions.RetrieveTotalInventoryWorth();
             this.Loaded += MainPage_Loaded;
         }
 
@@ -48,6 +50,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
         {
             // Set the ComboBox value here
             USERComboBox.SelectedItem = SelectedView;
+            TotalSales.Text = Total.ToString();
         }
 
         private void USERComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

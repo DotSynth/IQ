@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<
-    x:Class=
-    "IQ.App"
+<Application
+    x:Class="IQ.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IQ">
-    <Application.>
+    <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
@@ -29,4 +28,5 @@
             <SolidColorBrush x:Key="ComboBoxForeground" Color="#020066" />
 
         </ResourceDictionary>
-    </Applic
+    </Application.Resources>
+</Application>

@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.UI;
-using System.Collections.Generic;
 using IQ.Views.AdminViews.Pages.Inventory;
 using IQ.Views.AdminViews.Pages.TransferInwards;
 using IQ.Views.AdminViews.Pages.TransferOutwards;
