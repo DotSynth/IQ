@@ -14,7 +14,7 @@ namespace IQ
 {
     public partial class App : Application
     {
-        public static string UserName;
+        public static string? UserName;
 
         public App()
         {

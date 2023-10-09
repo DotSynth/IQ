@@ -4,11 +4,99 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IQ.Views.AdminViews.Pages.Inventory"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="42"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock Text="INVENTORY OVERVIEW"
+       TextWrapping="NoWrap"
+       VerticalAlignment="Center"
+       HorizontalAlignment="Center"
+       Margin="0,10,0,0"
+       Foreground="#020066"
+       FontFamily="{StaticResource Righteous}"
+                   Grid.Row="0"/>
+
+        <Rectangle 
+        Height="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"
+            Grid.Row="1"/>
+        <Grid
+        Margin="0,0,0,0"
+        RowSpacing="14"
+            Grid.Row="2"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <AutoSuggestBox
+                x:Name="AdminInventoryAutoSuggestBox"
+                Grid.Row="0"
+                Grid.Column="0"
+                QueryIcon="Zoom"
+                Margin="14,0,14,0"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"                
+                SuggestionChosen="CompanyInventoryAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="CompanyInventoryAutoSuggestBox_QuerySubmittedAsync"
+                TextChanged="CompanyInventoryAutoSuggestBox_TextChangedAsync"
+                PlaceholderText="Search Model ID..."/>
+
+
+            <ComboBox 
+                x:Name="USERComboBox"
+                Grid.Row="0"
+                Grid.Column="1"
+                SelectionChanged="USERComboBox_SelectionChanged" 
+                Margin="14, 0, 14, 0"
+                Foreground="#020066"
+                PlaceholderText="SELECT BRANCH"
+                Width="200"
+                HorizontalAlignment="Right"
+                Height="32">
+                </ComboBox>
+
+        </Grid>
+        <Rectangle 
+            Height="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            Fill="#E2E2E2"
+            Margin="0,10,0,0"
+            Grid.Row="3"/>
+
+        <controls:DataGrid x:Name="CompanyInventoryDataGrid"
+                           Margin="0,10,0,0"
+                           ColumnWidth="*"
+                           FontFamily="{StaticResource SplineSans}"
+                           ItemsSource="{x:Bind ViewModel.CompanyInventory}" 
+                           AutoGenerateColumns="True"
+                           Foreground="#020066"
+                           GridLinesVisibility="Vertical"
+                           AlternatingRowBackground="#f1f2f5"
+                           VerticalScrollBarVisibility="Auto"
+                           ScrollViewer.VerticalScrollBarVisibility="Auto"
+                           Grid.Row="4"
+                           VerticalAlignment="Top">
+        </controls:DataGrid>
+        <Frame x:Name="rootFrame"/>
     </Grid>
 </Page>

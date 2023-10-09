@@ -11,6 +11,15 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.UI;
+using System.Collections.Generic;
+using IQ.Views.AdminViews.Pages.Inventory;
+using IQ.Views.AdminViews.Pages.TransferInwards;
+using IQ.Views.AdminViews.Pages.TransferOutwards;
+using IQ.Views.AdminViews.Pages.ReturnOutwards;
+using IQ.Views.AdminViews.Pages.ReturnInwards;
+using IQ.Views.AdminViews.Pages.Purchases;
+using IQ.Views.AdminViews.Pages.Sales;
+
 
 namespace IQ.Helpers.DatabaseOperations
 {
@@ -144,7 +153,7 @@ namespace IQ.Helpers.DatabaseOperations
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
 
-                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".ReturnInwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES BranchInventory (ModelID), FOREIGN KEY (ReturnID) REFERENCES \"{App.UserName}\".Sales (InvoiceID));";
+                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".ReturnInwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.UserName}\".Inventory (ModelID), FOREIGN KEY (ReturnID) REFERENCES \"{App.UserName}\".Sales (InvoiceID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
                 string createReturnInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS RInsDate ON \"{App.UserName}\".ReturnInwards(Date);";
@@ -173,7 +182,7 @@ namespace IQ.Helpers.DatabaseOperations
                 // Create the trigger for INSERT operations
                 using var InventoryInsertTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON \"{App.UserName}\".Inventory   FOR EACH ROW    EXECUTE FUNCTION \"{App.UserName}\".updateTotalWorth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
-                Debug.WriteLine("Done Top");
+                
 
                 // Create the trigger for UPDATE operations
                 using var InventoryUpdateTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON \"{App.UserName}\".Inventory   FOR EACH ROW   EXECUTE FUNCTION \"{App.UserName}\".updateTotalWorth();", con);
@@ -240,6 +249,62 @@ namespace IQ.Helpers.DatabaseOperations
                 string createUserLoginsTableIndex = $"CREATE INDEX IF NOT EXISTS UserName ON \"{App.UserName}\".UserLogins(UserName);";
                 using var createUserLoginsTableIndexCommand = new NpgsqlCommand(createUserLoginsTableIndex, con);
                 createUserLoginsTableIndexCommand.ExecuteScalar();
+
+                // Create Tables
+                string createBranchInventoryTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".Inventory (ModelID VARCHAR(255) UNIQUE PRIMARY KEY NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityInStock INT NOT NULL, UnitPrice DECIMAL NOT NULL, TotalWorth DECIMAL NOT NULL);";
+                using var createBranchInventoryTableCommand = new NpgsqlCommand(createBranchInventoryTable, con);
+                createBranchInventoryTableCommand.ExecuteScalar();
+                string createBranchInventoryTableIndex = $"CREATE INDEX  IF NOT EXISTS InvModel ON \"{App.UserName}\".Inventory(ModelID);";
+                using var createBranchInventoryTableIndexCommand = new NpgsqlCommand(createBranchInventoryTableIndex, con);
+                createBranchInventoryTableIndexCommand.ExecuteScalar();
+
+
+                string createSalesTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".Sales (InvoiceID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantitySold INT NOT NULL, SellingPrice DECIMAL NOT NULL, SoldTo VARCHAR(255) NOT NULL, CustomerContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.UserName}\".Inventory (ModelID));";
+                using var createSalesTableCommand = new NpgsqlCommand(createSalesTable, con);
+                createSalesTableCommand.ExecuteScalar();
+                string createSalesTableIndex = $"CREATE INDEX IF NOT EXISTS SalesDate ON \"{App.UserName}\".Sales(Date);";
+                using var createSalesTableIndexCommand = new NpgsqlCommand(createSalesTableIndex, con);
+                createSalesTableIndexCommand.ExecuteScalar();
+
+
+                string createPurchasesTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".Purchases (InvoiceID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, AddOns VARCHAR(255) NOT NULL, QuantityBought INT NOT NULL, BuyingPrice DECIMAL NOT NULL, PurchasedFrom VARCHAR(255) NOT NULL, SupplierContactInfo VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                using var createPurchasesTableCommand = new NpgsqlCommand(createPurchasesTable, con);
+                createPurchasesTableCommand.ExecuteScalar();
+                string createPurchasesTableIndex = $"CREATE INDEX IF NOT EXISTS PurchaseDate ON \"{App.UserName}\".Purchases(Date);";
+                using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
+                createPurchasesTableIndexCommand.ExecuteScalar();
+
+
+                string createTransferInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".TransferInwards (TransferID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
+                createTransferInwardsTableCommand.ExecuteScalar();
+                string createTransferInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS TInsDate ON \"{App.UserName}\".TransferInwards(Date);";
+                using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
+                createTransferInwardsTableIndexCommand.ExecuteScalar();
+
+                string createTransferOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".TransferOutwards  (TransferID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.UserName}\".Inventory (ModelID));";
+                using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
+                createTransferOutwardsTableCommand.ExecuteScalar();
+                string createTransferOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS TOutsDate ON \"{App.UserName}\".TransferOutwards(Date);";
+                using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
+                createTransferOutwardsTableIndexCommand.ExecuteScalar();
+
+
+
+                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".ReturnInwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.UserName}\".Inventory (ModelID), FOREIGN KEY (ReturnID) REFERENCES \"{App.UserName}\".Sales (InvoiceID));";
+                using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
+                createReturnInwardsTableCommand.ExecuteScalar();
+                string createReturnInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS RInsDate ON \"{App.UserName}\".ReturnInwards(Date);";
+                using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
+                createReturnInwardsTableIndexCommand.ExecuteScalar();
+
+                string createReturnOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.UserName}\".ReturnOutwards (ReturnID VARCHAR(255) PRIMARY KEY NOT NULL, ModelID VARCHAR(255) NOT NULL, BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.UserName}\".Inventory (ModelID));";
+                using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
+                createReturnOutwardsTableCommand.ExecuteScalar();
+                string createReturnOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS ROutsDate ON \"{App.UserName}\".ReturnOutwards(Date);";
+                using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
+                createReturnOutwardsTableIndexCommand.ExecuteScalar();
+
 
                 isCompleted = true;
             }
@@ -363,7 +428,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = $"SELECT InvoiceID FROM \"{App.UserName}\"..Sales WHERE InvoiceID LIKE @userInput";
+                    command.CommandText = $"SELECT InvoiceID FROM \"{App.UserName}\".Sales WHERE InvoiceID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -396,7 +461,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = $"SELECT * FROM \"{App.UserName}\"..Sales WHERE InvoiceID = @userQuery";
+                    command.CommandText = $"SELECT * FROM \"{App.UserName}\".Sales WHERE InvoiceID = @userQuery";
                     command.Parameters.AddWithValue("userQuery", userQuery);
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1258,7 +1323,7 @@ namespace IQ.Helpers.DatabaseOperations
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
                     command.Connection = con;
-                    command.CommandText = $"SELECT TransferID FROM \"{App.UserName}\".ReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.CommandText = $"SELECT TransferID FROM \"{App.UserName}\".TransferOutwards WHERE TransferID LIKE @userInput";
                     command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
 
                     using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
@@ -1657,5 +1722,663 @@ namespace IQ.Helpers.DatabaseOperations
 
             return suggestions;
         }
+
+
+        // Define a method to retrieve the list of schemas
+        public static List<string> GetSchemas()
+        {
+            List<string> schemas = new List<string>();
+
+            
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+            SELECT schema_name
+            FROM information_schema.schemata
+            WHERE schema_name NOT IN ('public', 'information_schema', 'pg_catalog', 'pg_toast');", con))
+                using (NpgsqlDataReader reader =  cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        schemas.Add(reader.GetString(0));
+                    }
+                }
+
+            return schemas;
+        }
+
+        internal static async Task<ObservableCollection<CompanyInventory>> QueryCompanyInventoryResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyInventory> searchResults = new ObservableCollection<CompanyInventory>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyInventoryPage.SelectedView}\".Inventory WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyInventory result = new CompanyInventory
+                            {
+                                // Map properties from reader columns
+                                ModelID = reader.GetString(0),
+                                BrandID = reader.GetString(1),
+                                AddOns = reader.GetString(2),
+                                QuantityInStock = reader.GetInt32(3),
+                                UnitPrice = reader.GetDecimal(4),
+                                TotalWorth = reader.GetDecimal(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<ObservableCollection<CompanyPurchase>> QueryCompanyPurchasesResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyPurchase> searchResults = new ObservableCollection<CompanyPurchase>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyPurchasesPage.SelectedView}\".Purchases WHERE InvoiceID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyPurchase result = new CompanyPurchase
+                            {
+                                // Map properties from reader columns
+                                InvoiceID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityBought = reader.GetInt32(4),
+                                BuyingPrice = reader.GetDecimal(5),
+                                PurchasedFrom = reader.GetString(6),
+                                SupplierContactInfo = reader.GetString(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanyRInsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT TransferID FROM \"{CompanyRInsPage.SelectedView}\".ReturnInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<CompanyRIn>> QueryCompanyRInsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyRIn> searchResults = new ObservableCollection<CompanyRIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyRInsPage.SelectedView}\".ReturnInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyRIn result = new CompanyRIn
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedBy = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanyROutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT ReturnID FROM \"{CompanyROutsPage.SelectedView}\".ReturnOutwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<CompanyROut>> QueryCompanyROutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyROut> searchResults = new ObservableCollection<CompanyROut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyROutsPage.SelectedView}\".ReturnOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyROut result = new CompanyROut
+                            {
+                                // Map properties from reader columns
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedTo = reader.GetString(4),
+                                SignedBy = reader.GetString(5),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanySalesSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT InvoiceID FROM \"{App.UserName}\".Sales WHERE InvoiceID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<CompanySale>> QueryCompanySaleResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanySale> searchResults = new ObservableCollection<CompanySale>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanySalesPage.SelectedView}\".Sales WHERE InvoiceID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanySale result = new CompanySale
+                            {
+                                // Map properties from reader columns
+                                InvoiceId = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantitySold = reader.GetInt32(3),
+                                SellingPrice = reader.GetDecimal(4),
+                                SoldTo = reader.GetString(5),
+                                CustomerContactInfo = reader.GetString(6),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanyTOutsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT TransferID FROM \"{CompanyTOutsPage.SelectedView}\".TransferOutwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<CompanyTOut>> QueryCompanyTOutsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyTOut> searchResults = new ObservableCollection<CompanyTOut>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyTOutsPage.SelectedView}\".TransferOutwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyTOut result = new CompanyTOut
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredTo = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanyTInsSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT TransferID FROM \"{CompanyTInsPage.SelectedView}\".TransferInwards WHERE TransferID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<ObservableCollection<CompanyTIn>> QueryCompanyTInsResultsFromDatabase(string userQuery)
+        {
+            ObservableCollection<CompanyTIn> searchResults = new ObservableCollection<CompanyTIn>();
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT * FROM \"{CompanyTInsPage.SelectedView}\".TransferInwards WHERE TransferID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Map the database results to your result type
+                            CompanyTIn result = new CompanyTIn
+                            {
+                                // Map properties from reader columns
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredFrom = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            searchResults.Add(result);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return searchResults;
+        }
+
+        internal static async Task<List<string>> QueryCompanyInventorySuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT ModelID FROM \"{CompanyInventoryPage.SelectedView}\".Inventory WHERE ModelID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        internal static async Task<List<string>> QueryCompanyPurchasesSuggestionsFromDatabase(string userInput)
+        {
+            List<string> suggestions = new List<string>();
+
+            try
+            {
+
+                // Perform a database query to fetch suggestions
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT InvoiceID FROM \"{CompanyPurchasesPage.SelectedView}\".Purchases WHERE InvoiceID LIKE @userInput";
+                    command.Parameters.AddWithValue("userInput", "%" + userInput + "%");
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            suggestions.Add(reader.GetString(0));
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine(ex.Message);
+            }
+
+            return suggestions;
+        }
+
+        public static decimal RetrieveTotalSales()
+        {
+            decimal totalSales = 0;
+
+            try
+            {                
+                    using (NpgsqlCommand command = new NpgsqlCommand(
+                        $@"SELECT SUM(SellingPrice) AS total_sales
+                      FROM ""{CompanySalesPage.SelectedView}"".Sales
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", con))
+                    {
+                        object result = command.ExecuteScalar()!;
+                        if (result != null && result != DBNull.Value)
+                        {
+                            totalSales = Convert.ToDecimal(result);
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur during database access.
+                Console.WriteLine(ex.Message);
+            }
+
+            return totalSales;
+        }
+
+        public static decimal RetrieveTotalPurchase()
+        {
+            decimal totalPurchases = 0;
+
+            try
+            {
+                using (NpgsqlCommand command = new NpgsqlCommand(
+                    $@"SELECT SUM(BuyingPrice) AS total_purchases
+                      FROM ""{CompanySalesPage.SelectedView}"".Purchase
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", con))
+                {
+                    object result = command.ExecuteScalar()!;
+                    if (result != null && result != DBNull.Value)
+                    {
+                        totalPurchases = Convert.ToDecimal(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur during database access.
+                Console.WriteLine(ex.Message);
+            }
+
+            return totalPurchases;
+        }
+
+        public static decimal RetrieveTotalInventoryWorth()
+        {
+            decimal totalworth = 0;
+
+            try
+            {
+                using (NpgsqlCommand command = new NpgsqlCommand(
+                    $@"SELECT SUM(TotalWorth) AS total_inventory_worth
+                      FROM ""{CompanySalesPage.SelectedView}"".Inventory;", con))
+                {
+                    object result = command.ExecuteScalar()!;
+                    if (result != null && result != DBNull.Value)
+                    {
+                        totalworth = Convert.ToDecimal(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur during database access.
+                Console.WriteLine(ex.Message);
+            }
+
+            return totalworth;
+        }
+
     }
 }

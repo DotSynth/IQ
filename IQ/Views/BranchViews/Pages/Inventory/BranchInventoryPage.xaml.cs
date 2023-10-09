@@ -22,7 +22,6 @@ namespace IQ.Views.BranchViews.Pages.Inventory
     {
 
         public BranchInventoryViewModel ViewModel { get; } = new BranchInventoryViewModel();
-        private List<string> suggestions = new List<string>();
         // Initialize OverlayInstance
         public static AddInventoryOverlay OverlayInstance = new AddInventoryOverlay();
 

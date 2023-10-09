@@ -17,7 +17,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
     {
         private ObservableCollection<CompanyROut> _companyROuts;
 
-        public ObservableCollection<CompanyROut> CompanyhROut
+        public ObservableCollection<CompanyROut> CompanyROut
         {
             get { return _companyROuts; }
             set { _companyROuts = value; }
