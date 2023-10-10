@@ -102,7 +102,12 @@ namespace IQ.Views.WarehouseViews
             WindowExtensions.Logout(this);
         }
 
-        private async Task<bool> CheckUpdates_Click(object sender, RoutedEventArgs e)
+        private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            await CheckForUpdate();
+        }
+
+        private async Task<bool> CheckForUpdate()
         {
             try
             {
