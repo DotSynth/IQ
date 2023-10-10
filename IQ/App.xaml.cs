@@ -24,7 +24,7 @@ namespace IQ
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            
+
             base.OnLaunched(args);
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
             {
@@ -34,7 +34,6 @@ namespace IQ
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        Debug.WriteLine(DatabaseExtensions.GetCurrentUserRole());
                         if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())

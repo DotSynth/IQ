@@ -6,7 +6,6 @@ using Microsoft.UI.Xaml.Media;
 using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
@@ -125,7 +124,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards.SubPages
         {
             this.Visibility = visibility;
             VisibilityChanged?.Invoke(this, EventArgs.Empty);
-                    }
+        }
 
         private async void ModelIDAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {

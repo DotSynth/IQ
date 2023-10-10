@@ -40,14 +40,52 @@
             Title="File"
             FontFamily="{StaticResource Righteous}">
                     <MenuFlyoutSubItem 
-                Text="Export Entries"
-                FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D">
-                        <MenuFlyoutItem 
-                    Text="R/Outwards"
+                    Text="Export Entries"
                     FontFamily="{StaticResource Righteous}"
-                    Foreground="#61609D"/>
-                    </MenuFlyoutSubItem>
+                    Foreground="#61609D">
+                            <MenuFlyoutItem 
+                            x:Name="ExportAllEntriesButton"
+                        Text="All Entries"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportAllEntriesButton_Click">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Modifiers="Control,Shift" Key="E"/>
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem 
+                            x:Name="ExportTOutsButton"
+                        Text="T/Outwards"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportTOutsButton_Click"/>
+                            <MenuFlyoutItem 
+                            x:Name="ExportROutsButton"
+                        Text="R/Outwards"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportROutsButton_Click"/>
+                            <MenuFlyoutSeparator/>
+                            <MenuFlyoutItem 
+                            x:Name="ExportPurchasesButton"
+                        Text="Purchases"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportPurchasesButton_Click"/>
+                            <MenuFlyoutItem 
+                            x:Name="ExportTInsButton"
+                        Text="T/Inwards"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportTInsButton_Click"/>
+                            <MenuFlyoutItem 
+                            x:Name="ExportRInsButton"
+                        Text="R/Inwards"
+                        FontFamily="{StaticResource Righteous}"
+                        Foreground="#61609D"
+                            Click="ExportRInsButton_Click"/>
+                        </MenuFlyoutSubItem>
                     <MenuFlyoutSeparator/>
 
                     <MenuFlyoutItem 
@@ -67,7 +105,8 @@
                     <MenuFlyoutItem 
                 Text="Server Status"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
+                Foreground="#61609D"
+                        IsEnabled="False"/>
                 </MenuBarItem>
 
                 <MenuBarItem 
@@ -75,7 +114,8 @@
                     <MenuFlyoutItem 
                 Text="View Manual"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D">
+                Foreground="#61609D"
+                        IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F1"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
@@ -83,16 +123,19 @@
                     <MenuFlyoutItem 
                 Text="Shorcut Reference"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D">
+                Foreground="#61609D"
+                        IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F2"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutSeparator/>
                     <MenuFlyoutItem 
+                        x:Name="CheckUpdates"
                 Text="Check For Updates"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D">
+                Foreground="#61609D"
+                        Click="CheckUpdates_Click">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F3"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
@@ -100,12 +143,14 @@
                     <MenuFlyoutItem 
                 Text="What's New?"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
+                Foreground="#61609D"
+                        IsEnabled="False"/>
                     <MenuFlyoutSeparator/>
                     <MenuFlyoutSubItem 
                 Text="Change Theme"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D">
+                Foreground="#61609D"
+                        IsEnabled="False">
                         <RadioMenuFlyoutItem 
                     Text="Dark Theme"
                     GroupName="ThemeGroup"
@@ -122,11 +167,13 @@
                     <MenuFlyoutItem 
                 Text="About IQ"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
+                Foreground="#61609D"
+                        IsEnabled="False"/>
                     <MenuFlyoutItem 
                 Text="DotSynth.com"
                 FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
+                Foreground="#61609D"
+                        IsEnabled="False"/>
                 </MenuBarItem>
             </MenuBar>
         </StackPanel>

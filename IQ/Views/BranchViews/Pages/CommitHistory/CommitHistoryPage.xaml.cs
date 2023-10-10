@@ -2,7 +2,6 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Purchases;
 using Microsoft.UI.Xaml.Controls;
 using Npgsql;
 using System;
@@ -34,16 +33,16 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
 
         public async void RefreshPage()
         {
-                // Do something before the delay
-                // Navigate away to a placeholder page
-                Frame.Navigate(typeof(PLaceHolderPage));
+            // Do something before the delay
+            // Navigate away to a placeholder page
+            Frame.Navigate(typeof(PLaceHolderPage));
 
-                //Delay
-                await Task.Delay(2000);
+            //Delay
+            await Task.Delay(2000);
 
-                // Continue with the next line of code after the delay
-                // Navigate back to the original page to refresh it
-                Frame.Navigate(typeof(CommitHistoryPage));
+            // Continue with the next line of code after the delay
+            // Navigate back to the original page to refresh it
+            Frame.Navigate(typeof(CommitHistoryPage));
             Debug.WriteLine("Refreshed");
         }
 

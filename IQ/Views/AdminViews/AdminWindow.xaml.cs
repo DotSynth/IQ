@@ -8,7 +8,6 @@ using IQ.Views.AdminViews.Pages.ReturnOutwards;
 using IQ.Views.AdminViews.Pages.Sales;
 using IQ.Views.AdminViews.Pages.TransferInwards;
 using IQ.Views.AdminViews.Pages.TransferOutwards;
-using IQ.Views.WarehouseViews.Pages.Inventory;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 

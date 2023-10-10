@@ -12,16 +12,11 @@ using IQ.Views.BranchViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System.Runtime.InteropServices;
 using Npgsql;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
-using Windows.Storage;
-using Windows.Storage.Pickers;
 
 // To learn more about WinUI, the WinUI project structure, and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -163,7 +158,7 @@ namespace IQ.Views.BranchViews
                 await ShowCompletionAlertDialogAsync(error);
             }
 
-            if (itemContent != null) 
+            if (itemContent != null)
             {
                 if (JustLoaded == true)
                 {
@@ -181,7 +176,8 @@ namespace IQ.Views.BranchViews
                     {
                         await ShowCompletionAlertDialogAsync("All entries have been pushed to the Admin Server");
                     }
-                } else
+                }
+                else
                 {
                     if (itemContent.Name == "CommitsPage")
                     {
@@ -262,6 +258,11 @@ namespace IQ.Views.BranchViews
         private async void ExportRInsButton_Click(object sender, RoutedEventArgs e)
         {
             await PDFOperations.CreateRInsPdfForMonth(this);
+        }
+
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -7,7 +7,6 @@ using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Diagnostics;
 using System.IO;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
@@ -101,7 +100,7 @@ namespace IQ.Views
                         LoadBranchWindow();
                         this.Close();
                     }
-                    else 
+                    else
                     {
                         DatabaseExtensions.TriggerDbMassAction_Warehouse();
                         LoadWarehouseWindow();

@@ -12,6 +12,10 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <SignAssembly>False</SignAssembly>
+    <PackageCertificateThumbprint>46FACB3B24FF4212F31BBBE1675F2CFC8E1924E4</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>IQ_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />

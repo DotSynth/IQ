@@ -1,15 +1,10 @@
 ﻿using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.FileOperations;
-using IQ.Views.BranchViews.Pages.Sales;
 using IQ.Views;
+using IQ.Views.AdminViews.Pages.Sales;
 using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IQ.Views.AdminViews.Pages.Sales;
 using System.IO;
 
 namespace IQ.Helpers.DataTableOperations.ViewModels

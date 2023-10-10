@@ -6,17 +6,18 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
-  IgnorableNamespaces="uap rescap uap3">
+  xmlns:uap6="http://schemas.microsoft.com/appx/manifest/uap/windows10/6"
+  IgnorableNamespaces="uap rescap uap3 uap6">
 
   <Identity
     Name="InventoryQubit"
-    Publisher="CN=cfdan"
+    Publisher="CN=DotSynth"
     Version="0.1.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="9c60a6e9-b308-4e8a-a26d-2b9032276552" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>WinUI3BlankApp</DisplayName>
+    <DisplayName>IQ</DisplayName>
     <PublisherDisplayName>DotSynth</PublisherDisplayName>
     <Logo>Assets\Icons\StoreLogo.png</Logo>
   </Properties>
@@ -52,5 +53,7 @@
     <Capability Name="privateNetworkClientServer"/>
     <Capability Name="internetClient"/>
     <Capability Name="internetClientServer"/>
+    <uap6:Capability Name="graphicsCapture"/>
+    <uap:Capability Name="userAccountInformation"/>
   </Capabilities>
 </Package>

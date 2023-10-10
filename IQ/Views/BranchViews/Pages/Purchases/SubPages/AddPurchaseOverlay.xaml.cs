@@ -6,7 +6,6 @@ using Microsoft.UI.Xaml.Media;
 using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;

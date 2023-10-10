@@ -1,16 +1,14 @@
 ﻿using IQ.Helpers.DatabaseOperations;
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
-using IQ.Views.BranchViews.Pages.Inventory;
 using IQ.Views.BranchViews.Pages;
+using IQ.Views.WarehouseViews.Pages.Inventory.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System;
-using IQ.Views.WarehouseViews.Pages.Inventory.SubPages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

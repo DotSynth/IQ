@@ -1,4 +1,5 @@
-﻿using IQ.Helpers.WindowsOperations;
+﻿using IQ.Helpers.FileOperations;
+using IQ.Helpers.WindowsOperations;
 using IQ.Views.WarehouseViews.Pages.Inventory;
 using IQ.Views.WarehouseViews.Pages.Purchases;
 using IQ.Views.WarehouseViews.Pages.ReturnInwards;
@@ -7,10 +8,6 @@ using IQ.Views.WarehouseViews.Pages.TransferInwards;
 using IQ.Views.WarehouseViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using Windows.Foundation;
-using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -98,5 +95,43 @@ namespace IQ.Views.WarehouseViews
             WindowExtensions.Logout(this);
         }
 
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void ExportAllEntriesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehouseTOutsPdfForMonth(this);
+            await PDFOperations.CreateWarehouseROutsPdfForMonth(this);
+            await PDFOperations.CreateWarehousePurchasesPdfForMonth(this);
+            await PDFOperations.CreateWarehouseTInsPdfForMonth(this);
+            await PDFOperations.CreateWarehouseRInsPdfForMonth(this);
+        }
+
+        private async void ExportTOutsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehouseTOutsPdfForMonth(this);
+        }
+
+        private async void ExportROutsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehouseROutsPdfForMonth(this);
+        }
+
+        private async void ExportPurchasesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehousePurchasesPdfForMonth(this);
+        }
+
+        private async void ExportTInsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehouseTInsPdfForMonth(this);
+        }
+
+        private async void ExportRInsButton_Click(object sender, RoutedEventArgs e)
+        {
+            await PDFOperations.CreateWarehouseRInsPdfForMonth(this);
+        }
     }
 }

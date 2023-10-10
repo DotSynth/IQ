@@ -1,26 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using IQ.Helpers.DataTableOperations.Classes;
+using IQ.Views;
+using IQ.Views.AdminViews.Pages.Sales;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.UI.Xaml;
 using Npgsql;
-using Windows.Storage.Pickers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.UI.Xaml.Documents;
-using Aspose.Pdf;
-using IQ.Helpers.DataTableOperations.ViewModels;
-using Document = iTextSharp.text.Document;
-using Rectangle = iTextSharp.text.Rectangle;
-using IQ.Helpers.DataTableOperations.Classes;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using IQ.Views.AdminViews.Pages.Sales;
-using IQ.Views;
-using IQ.Views.AdminViews.Pages.Purchases;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Microsoft.UI.Xaml;
+using Windows.Storage.Pickers;
+using Document = iTextSharp.text.Document;
 using PageSize = iTextSharp.text.PageSize;
 
 namespace IQ.Helpers.FileOperations
@@ -179,7 +171,7 @@ namespace IQ.Helpers.FileOperations
             }
         }
 
-        public static async 
+        public static async
         Task
 CreatePurchasesPdfForMonth(Window m)
         {
@@ -218,9 +210,9 @@ CreatePurchasesPdfForMonth(Window m)
             table.AddCell("Model ID");
             table.AddCell("Brand ID");
             table.AddCell("AddOns");
-            table.AddCell("Quantity Sold");
-            table.AddCell("Selling Price");
-            table.AddCell("Sold To");
+            table.AddCell("Quantity Bought");
+            table.AddCell("Buying Price");
+            table.AddCell("Purchased From");
             table.AddCell("Customer Contact Info");
 
             // Add table data from the retrieved data
@@ -424,7 +416,7 @@ CreatePurchasesPdfForMonth(Window m)
             }
         }
 
-        public static async 
+        public static async
         Task
 CreateROutsPdfForMonth(Window m)
         {
@@ -547,7 +539,7 @@ CreateROutsPdfForMonth(Window m)
             }
         }
 
-        public static async 
+        public static async
         Task
 CreateTInsPdfForMonth(Window m)
         {
@@ -672,7 +664,7 @@ CreateTInsPdfForMonth(Window m)
             }
         }
 
-        public static async 
+        public static async
         Task
 CreateTOutsPdfForMonth(Window m)
         {
@@ -777,6 +769,624 @@ CreateTOutsPdfForMonth(Window m)
         }
 
         public class TOutHeaderFooter : PdfPageEventHelper
+        {
+            public override void OnEndPage(PdfWriter writer, Document doc)
+            {
+                // Create a PdfPTable to hold the header
+                PdfPTable header = new PdfPTable(1);
+                header.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+                header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
+
+                // Add header content (customize as needed)
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Transfer Outwards"));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_CENTER;
+                cell.PaddingTop = 10f;
+                header.AddCell(cell);
+
+                // Add the header to the page
+                header.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - doc.TopMargin + header.TotalHeight, writer.DirectContent);
+            }
+        }
+
+        public static async
+        Task
+CreateWarehousePurchasesPdfForMonth(Window m)
+        {
+            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Purchases", m);
+            // Create a new document
+            Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
+
+            // Create a PdfWriter instance to write to the output file
+            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
+
+            // Set up a custom page event to add a header to each page
+            writer.PageEvent = new WarehousePurchasesHeaderFooter();
+
+            // Open the document for writing
+            doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+
+            // Retrieve data for the specified month
+            ObservableCollection<WarehousePurchase> purchasesForMonth = GetWarehousePurchasesForMonth();
+
+            // Create a PdfPTable to display the data
+            PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
+
+            // Add table headers
+            table.AddCell("Invoice ID");
+            table.AddCell("Model ID");
+            table.AddCell("Brand ID");
+            table.AddCell("AddOns");
+            table.AddCell("Quantity Purchased");
+            table.AddCell("Buying Price");
+            table.AddCell("Purchased From");
+            table.AddCell("Supplier Contact Info");
+
+            // Add table data from the retrieved data
+            foreach (var purchase in purchasesForMonth)
+            {
+                table.AddCell(purchase.InvoiceID);
+                table.AddCell(purchase.ModelID);
+                table.AddCell(purchase.BrandID);
+                table.AddCell(purchase.AddOns);
+                table.AddCell(purchase.QuantityBought.ToString());
+                table.AddCell(purchase.BuyingPrice.ToString());
+                table.AddCell(purchase.PurchasedFrom);
+                table.AddCell(purchase.SupplierContactInfo);
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the PDF document
+            doc.Close();
+        }
+
+        public static ObservableCollection<WarehousePurchase> GetWarehousePurchasesForMonth()
+        {
+            ObservableCollection<WarehousePurchase> purchasesForMonth = new ObservableCollection<WarehousePurchase>();
+
+            // Retrieve data from your database for the specified month
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".Purchases
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var purchase = new WarehousePurchase
+                            {
+                                InvoiceID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityBought = reader.GetInt32(4),
+                                BuyingPrice = reader.GetDecimal(5),
+                                PurchasedFrom = reader.GetString(6),
+                                SupplierContactInfo = reader.GetString(7),
+                            };
+
+                            purchasesForMonth.Add(purchase);
+                        }
+                    }
+                }
+            }
+
+            return purchasesForMonth;
+        }
+
+        public class WarehousePurchasesHeaderFooter : PdfPageEventHelper
+        {
+            public override void OnEndPage(PdfWriter writer, Document doc)
+            {
+                // Create a PdfPTable to hold the header
+                PdfPTable header = new PdfPTable(1);
+                header.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+                header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
+
+                // Add header content (customize as needed)
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Purchases"));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_CENTER;
+                cell.PaddingTop = 10f;
+                header.AddCell(cell);
+
+                // Add the header to the page
+                header.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - doc.TopMargin + header.TotalHeight, writer.DirectContent);
+            }
+        }
+
+        public static async Task CreateWarehouseRInsPdfForMonth(Window m)
+        {
+            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Inwards", m);
+            // Create a new document
+            Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
+
+            // Create a PdfWriter instance to write to the output file
+            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
+
+            // Set up a custom page event to add a header to each page
+            writer.PageEvent = new WarehouseRInsHeaderFooter();
+
+            // Open the document for writing
+            doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+
+            // Retrieve data for the specified month
+            ObservableCollection<WarehouseRIn> rinsForMonth = GetWarehouseRInsForMonth();
+
+            // Create a PdfPTable to display the data
+            PdfPTable table = new PdfPTable(7); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
+
+            // Add table headers
+            table.AddCell("Return ID");
+            table.AddCell("Model ID");
+            table.AddCell("Brand ID");
+            table.AddCell("Quantity Returned");
+            table.AddCell("Returned By");
+            table.AddCell("Reason For Return");
+            table.AddCell("Signed By");
+
+            // Add table data from the retrieved data
+            foreach (var rin in rinsForMonth)
+            {
+                table.AddCell(rin.ReturnID);
+                table.AddCell(rin.ModelID);
+                table.AddCell(rin.BrandID);
+                table.AddCell(rin.QuantityReturned.ToString());
+                table.AddCell(rin.ReturnedBy);
+                table.AddCell(rin.ReasonForReturn);
+                table.AddCell(rin.SignedBy);
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the PDF document
+            doc.Close();
+        }
+
+        public static ObservableCollection<WarehouseRIn> GetWarehouseRInsForMonth()
+        {
+            ObservableCollection<WarehouseRIn> rinsForMonth = new ObservableCollection<WarehouseRIn>();
+
+            // Retrieve data from your database for the specified month
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnInwards
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var rin = new WarehouseRIn
+                            {
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedBy = reader.GetString(4),
+                                ReasonForReturn = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                            };
+
+                            rinsForMonth.Add(rin);
+                        }
+                    }
+                }
+            }
+
+            return rinsForMonth;
+        }
+
+        public class WarehouseRInsHeaderFooter : PdfPageEventHelper
+        {
+            public override void OnEndPage(PdfWriter writer, Document doc)
+            {
+                // Create a PdfPTable to hold the header
+                PdfPTable header = new PdfPTable(1);
+                header.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+                header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
+
+                // Add header content (customize as needed)
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Inwards"));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_CENTER;
+                cell.PaddingTop = 10f;
+                header.AddCell(cell);
+
+                // Add the header to the page
+                header.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - doc.TopMargin + header.TotalHeight, writer.DirectContent);
+            }
+        }
+
+        public static async
+        Task
+CreateWarehouseROutsPdfForMonth(Window m)
+        {
+            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Outwards", m);
+            // Create a new document
+            Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
+
+            // Create a PdfWriter instance to write to the output file
+            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
+
+            // Set up a custom page event to add a header to each page
+            writer.PageEvent = new WarehouseROutsHeaderFooter();
+
+            // Open the document for writing
+            doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+
+            // Retrieve data for the specified month
+            ObservableCollection<WarehouseROut> routsForMonth = GetWarehouseROutsForMonth();
+
+            // Create a PdfPTable to display the data
+            PdfPTable table = new PdfPTable(7); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
+
+            // Add table headers
+            table.AddCell("Return ID");
+            table.AddCell("Model ID");
+            table.AddCell("Brand ID");
+            table.AddCell("Quantity Returned");
+            table.AddCell("Returned To");
+            table.AddCell("Reason For Return");
+            table.AddCell("Signed By");
+
+            // Add table data from the retrieved data
+            foreach (var rout in routsForMonth)
+            {
+                table.AddCell(rout.ReturnID);
+                table.AddCell(rout.ModelID);
+                table.AddCell(rout.BrandID);
+                table.AddCell(rout.QuantityReturned.ToString());
+                table.AddCell(rout.ReturnedTo);
+                table.AddCell(rout.ReasonForReturn);
+                table.AddCell(rout.SignedBy);
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the PDF document
+            doc.Close();
+        }
+
+        public static ObservableCollection<WarehouseROut> GetWarehouseROutsForMonth()
+        {
+            ObservableCollection<WarehouseROut> routsForMonth = new ObservableCollection<WarehouseROut>();
+
+            // Retrieve data from your database for the specified month
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnOutwards
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
+                {
+                    cmd.Parameters.AddWithValue("time", CompanySalesPage.DateFilter!.Value.DateTime);
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var rout = new WarehouseROut
+                            {
+                                ReturnID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                QuantityReturned = reader.GetInt32(3),
+                                ReturnedTo = reader.GetString(4),
+                                ReasonForReturn = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                            };
+
+                            routsForMonth.Add(rout);
+                        }
+                    }
+                }
+            }
+
+            return routsForMonth;
+        }
+
+        public class WarehouseROutsHeaderFooter : PdfPageEventHelper
+        {
+            public override void OnEndPage(PdfWriter writer, Document doc)
+            {
+                // Create a PdfPTable to hold the header
+                PdfPTable header = new PdfPTable(1);
+                header.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+                header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
+
+                // Add header content (customize as needed)
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Outwards"));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_CENTER;
+                cell.PaddingTop = 10f;
+                header.AddCell(cell);
+
+                // Add the header to the page
+                header.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - doc.TopMargin + header.TotalHeight, writer.DirectContent);
+            }
+        }
+
+        public static async
+        Task
+CreateWarehouseTInsPdfForMonth(Window m)
+        {
+            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Inwards", m);
+            // Create a new document
+            Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
+
+            // Create a PdfWriter instance to write to the output file
+            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
+
+            // Set up a custom page event to add a header to each page
+            writer.PageEvent = new WarehouseTInsHeaderFooter();
+
+            // Open the document for writing
+            doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+
+            // Retrieve data for the specified month
+            ObservableCollection<WarehouseTIn> tinsForMonth = GetWarehouseTInsForMonth();
+
+            // Create a PdfPTable to display the data
+            PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
+
+            // Add table headers
+            table.AddCell("Transfer ID");
+            table.AddCell("Model ID");
+            table.AddCell("Brand ID");
+            table.AddCell("AddOns");
+            table.AddCell("Quantity Transferred");
+            table.AddCell("Transferred To");
+            table.AddCell("Signed By");
+            table.AddCell("Transferred Product Price");
+
+            // Add table data from the retrieved data
+            foreach (var sale in tinsForMonth)
+            {
+                table.AddCell(sale.TransferID);
+                table.AddCell(sale.ModelID);
+                table.AddCell(sale.BrandID);
+                table.AddCell(sale.AddOns);
+                table.AddCell(sale.QuantityTransferred.ToString());
+                table.AddCell(sale.TransferredFrom);
+                table.AddCell(sale.SignedBy);
+                table.AddCell(sale.TransferredProductPrice.ToString());
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the PDF document
+            doc.Close();
+        }
+
+        public static ObservableCollection<WarehouseTIn> GetWarehouseTInsForMonth()
+        {
+            ObservableCollection<WarehouseTIn> tinsForMonth = new ObservableCollection<WarehouseTIn>();
+
+            // Retrieve data from your database for the specified month
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferInwards
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var tin = new WarehouseTIn
+                            {
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredFrom = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            tinsForMonth.Add(tin);
+                        }
+                    }
+                }
+            }
+
+            return tinsForMonth;
+        }
+
+        public class WarehouseTInsHeaderFooter : PdfPageEventHelper
+        {
+            public override void OnEndPage(PdfWriter writer, Document doc)
+            {
+                // Create a PdfPTable to hold the header
+                PdfPTable header = new PdfPTable(1);
+                header.TotalWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+                header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
+
+                // Add header content (customize as needed)
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Transfer Inwards"));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_CENTER;
+                cell.PaddingTop = 10f;
+                header.AddCell(cell);
+
+                // Add the header to the page
+                header.WriteSelectedRows(0, -1, doc.LeftMargin, doc.PageSize.Height - doc.TopMargin + header.TotalHeight, writer.DirectContent);
+            }
+        }
+
+        public static async
+        Task
+CreateWarehouseTOutsPdfForMonth(Window m)
+        {
+            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Outwards", m);
+            // Create a new document
+            Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
+
+            // Create a PdfWriter instance to write to the output file
+            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
+
+            // Set up a custom page event to add a header to each page
+            writer.PageEvent = new WarehouseTOutHeaderFooter();
+
+            // Open the document for writing
+            doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
+
+            // Retrieve data for the specified month
+            ObservableCollection<WarehouseTOut> toutsForMonth = GetWarehouseTOutsForMonth();
+
+            // Create a PdfPTable to display the data
+            PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
+
+            // Add table headers
+            table.AddCell("Transfer ID");
+            table.AddCell("Model ID");
+            table.AddCell("Brand ID");
+            table.AddCell("AddOns");
+            table.AddCell("Quantity Transferred");
+            table.AddCell("Transferred To");
+            table.AddCell("Signed By");
+            table.AddCell("Transferred Product Price");
+
+            // Add table data from the retrieved data
+            foreach (var sale in toutsForMonth)
+            {
+                table.AddCell(sale.TransferID);
+                table.AddCell(sale.ModelID);
+                table.AddCell(sale.BrandID);
+                table.AddCell(sale.AddOns);
+                table.AddCell(sale.QuantityTransferred.ToString());
+                table.AddCell(sale.TransferredTo);
+                table.AddCell(sale.SignedBy);
+                table.AddCell(sale.TransferredProductPrice.ToString());
+            }
+
+            // Add the table to the document
+            doc.Add(table);
+
+            // Close the PDF document
+            doc.Close();
+        }
+
+        public static ObservableCollection<WarehouseTOut> GetWarehouseTOutsForMonth()
+        {
+            ObservableCollection<WarehouseTOut> salesForMonth = new ObservableCollection<WarehouseTOut>();
+
+            // Retrieve data from your database for the specified month
+            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferOutwards
+                      WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
+                        AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var TOut = new WarehouseTOut
+                            {
+                                TransferID = reader.GetString(0),
+                                ModelID = reader.GetString(1),
+                                BrandID = reader.GetString(2),
+                                AddOns = reader.GetString(3),
+                                QuantityTransferred = reader.GetInt32(4),
+                                TransferredTo = reader.GetString(5),
+                                SignedBy = reader.GetString(6),
+                                TransferredProductPrice = reader.GetDecimal(7),
+                            };
+
+                            salesForMonth.Add(TOut);
+                        }
+                    }
+                }
+            }
+
+            return salesForMonth;
+        }
+
+        public class WarehouseTOutHeaderFooter : PdfPageEventHelper
         {
             public override void OnEndPage(PdfWriter writer, Document doc)
             {

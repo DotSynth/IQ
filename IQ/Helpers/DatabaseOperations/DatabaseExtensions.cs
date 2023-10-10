@@ -1,5 +1,11 @@
-﻿using CommunityToolkit.Common.Parsers;
-using IQ.Helpers.DataTableOperations.Classes;
+﻿using IQ.Helpers.DataTableOperations.Classes;
+using IQ.Views.AdminViews.Pages.Inventory;
+using IQ.Views.AdminViews.Pages.Purchases;
+using IQ.Views.AdminViews.Pages.ReturnInwards;
+using IQ.Views.AdminViews.Pages.ReturnOutwards;
+using IQ.Views.AdminViews.Pages.Sales;
+using IQ.Views.AdminViews.Pages.TransferInwards;
+using IQ.Views.AdminViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -11,13 +17,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.UI;
-using IQ.Views.AdminViews.Pages.Inventory;
-using IQ.Views.AdminViews.Pages.TransferInwards;
-using IQ.Views.AdminViews.Pages.TransferOutwards;
-using IQ.Views.AdminViews.Pages.ReturnOutwards;
-using IQ.Views.AdminViews.Pages.ReturnInwards;
-using IQ.Views.AdminViews.Pages.Purchases;
-using IQ.Views.AdminViews.Pages.Sales;
 
 
 namespace IQ.Helpers.DatabaseOperations
@@ -181,7 +180,7 @@ namespace IQ.Helpers.DatabaseOperations
                 // Create the trigger for INSERT operations
                 using var InventoryInsertTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER updateTotalWorth_insert    BEFORE INSERT ON \"{App.UserName}\".Inventory   FOR EACH ROW    EXECUTE FUNCTION \"{App.UserName}\".updateTotalWorth();", con);
                 InventoryInsertTriggerCommand.ExecuteNonQuery();
-                
+
 
                 // Create the trigger for UPDATE operations
                 using var InventoryUpdateTriggerCommand = new NpgsqlCommand($"CREATE OR REPLACE TRIGGER updateTotalWorth_update    BEFORE UPDATE OF UnitPrice, QuantityInStock ON \"{App.UserName}\".Inventory   FOR EACH ROW   EXECUTE FUNCTION \"{App.UserName}\".updateTotalWorth();", con);
@@ -307,7 +306,7 @@ namespace IQ.Helpers.DatabaseOperations
 
                 isCompleted = true;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 isCompleted = false;
                 Debug.WriteLine(ex);
@@ -364,7 +363,6 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createReturnOutwardsTableIndexCommand = new NpgsqlCommand(createReturnOutwardsTableIndex, con);
                 createReturnOutwardsTableIndexCommand.ExecuteScalar();
 
-                Debug.WriteLine("Done Top");
 
                 // Create  Triggers
                 using var InventoryTriggerFunctionCommand = new NpgsqlCommand($"CREATE OR REPLACE FUNCTION \"{App.UserName}\".updateTotalWorth()   RETURNS TRIGGER AS $$   BEGIN    NEW.TotalWorth = NEW.UnitPrice * NEW.QuantityInStock;   RETURN NEW;   END;    $$ LANGUAGE plpgsql;", con);
@@ -406,7 +404,7 @@ namespace IQ.Helpers.DatabaseOperations
 
                 isCompleted = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 isCompleted = false;
                 Debug.WriteLine(ex);
@@ -1728,18 +1726,18 @@ namespace IQ.Helpers.DatabaseOperations
         {
             List<string> schemas = new List<string>();
 
-            
-                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+
+            using (NpgsqlCommand cmd = new NpgsqlCommand(@"
             SELECT schema_name
             FROM information_schema.schemata
             WHERE schema_name NOT IN ('public', 'information_schema', 'pg_catalog', 'pg_toast');", con))
-                using (NpgsqlDataReader reader =  cmd.ExecuteReader())
+            using (NpgsqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        schemas.Add(reader.GetString(0));
-                    }
+                    schemas.Add(reader.GetString(0));
                 }
+            }
 
             return schemas;
         }
@@ -2302,19 +2300,19 @@ namespace IQ.Helpers.DatabaseOperations
             decimal totalSales = 0;
 
             try
-            {                
-                    using (NpgsqlCommand command = new NpgsqlCommand(
-                        $@"SELECT SUM(SellingPrice) AS total_sales
+            {
+                using (NpgsqlCommand command = new NpgsqlCommand(
+                    $@"SELECT SUM(SellingPrice) AS total_sales
                       FROM ""{CompanySalesPage.SelectedView}"".Sales
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", con))
+                {
+                    object result = command.ExecuteScalar()!;
+                    if (result != null && result != DBNull.Value)
                     {
-                        object result = command.ExecuteScalar()!;
-                        if (result != null && result != DBNull.Value)
-                        {
-                            totalSales = Convert.ToDecimal(result);
-                        }
+                        totalSales = Convert.ToDecimal(result);
                     }
+                }
             }
             catch (Exception ex)
             {
