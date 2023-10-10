@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>IQ</RootNamespace>
@@ -13,9 +13,16 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
     <SignAssembly>False</SignAssembly>
-    <PackageCertificateThumbprint>46FACB3B24FF4212F31BBBE1675F2CFC8E1924E4</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>IQ_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
+    <AppInstallerUri>https://iq-deployment.s3.eu-north-1.amazonaws.com/IQ/</AppInstallerUri>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
@@ -73,6 +80,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspose.PDF" Version="23.9.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.205.9" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
@@ -81,6 +89,7 @@
     <PackageReference Include="Npgsql" Version="7.0.6" />
     <PackageReference Include="Octokit" Version="8.0.1" />
     <PackageReference Include="PDFsharp" Version="1.50.5147" />
+    <PackageReference Include="Topshelf.Squirrel.Updater" Version="0.0.9" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

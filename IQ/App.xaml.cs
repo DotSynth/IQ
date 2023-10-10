@@ -9,6 +9,8 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Amazon.S3;
+using Amazon;
 
 namespace IQ
 {
@@ -18,6 +20,14 @@ namespace IQ
 
         public App()
         {
+            var awsCredentials = new Amazon.Runtime.BasicAWSCredentials("AKIAXH3AA2SOIL5MO2RW", "nbx9FE6lVBDaEHHMMqKOn1t/ZE7cIdM9sLAcv74t");
+            var s3Config = new AmazonS3Config
+            {
+                RegionEndpoint = RegionEndpoint.EUNorth1, // Replace with your desired AWS region
+            };
+
+            var s3Client = new AmazonS3Client(awsCredentials, s3Config);
+
             this.RequestedTheme = ApplicationTheme.Light;
             this.InitializeComponent();
         }

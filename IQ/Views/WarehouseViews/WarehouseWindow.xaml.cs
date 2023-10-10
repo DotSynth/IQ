@@ -102,39 +102,9 @@ namespace IQ.Views.WarehouseViews
             WindowExtensions.Logout(this);
         }
 
-        private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
-            await CheckForUpdate();
-        }
-
-        private async Task<bool> CheckForUpdate()
-        {
-            try
-            {
-                var github = new GitHubClient(new ProductHeaderValue("IQ"));
-                var releases = await github.Repository.Release.GetAll("DotSynth", "IQ");
-
-                if (releases.Count > 0)
-                {
-                    var latestRelease = releases[0]; // Get the latest release
-                    var latestVersion = new Version(latestRelease.TagName);
-
-                    // Compare the latest version with the current app version
-                    var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                    if (latestVersion > currentVersion)
-                    {
-                        // A new version is available
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., network error)
-                ShowCompletionAlertDialogAsync($"Error checking for updates: {ex.Message}", this);
-            }
-
-            return false;
+            
         }
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)

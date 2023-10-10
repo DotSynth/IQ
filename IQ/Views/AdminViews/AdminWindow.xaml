@@ -39,17 +39,6 @@ Background="#f1f2f5">
                 <MenuBarItem 
         Title="File"
         FontFamily="{StaticResource Righteous}">
-                    <MenuFlyoutSubItem 
-            Text="Export Entries"
-            FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D">
-                        <MenuFlyoutItem 
-                Text="R/Outwards"
-                FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"/>
-                    </MenuFlyoutSubItem>
-                    <MenuFlyoutSeparator/>
-
                     <MenuFlyoutItem 
                 Text="Log Out"
                 FontFamily="{StaticResource Righteous}"
@@ -67,7 +56,8 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="Server Status"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D"/>
+            Foreground="#61609D"
+                        IsEnabled="False"/>
                 </MenuBarItem>
 
                 <MenuBarItem 
@@ -75,7 +65,8 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="View Manual"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D">
+            Foreground="#61609D"
+                        IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F1"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
@@ -83,7 +74,8 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="Shorcut Reference"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D">
+            Foreground="#61609D"
+                        IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F2"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
@@ -100,12 +92,14 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="What's New?"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D"/>
+            Foreground="#61609D"
+                        IsEnabled="False"/>
                     <MenuFlyoutSeparator/>
                     <MenuFlyoutSubItem 
             Text="Change Theme"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D">
+            Foreground="#61609D"
+                        IsEnabled="False">
                         <RadioMenuFlyoutItem 
                 Text="Dark Theme"
                 GroupName="ThemeGroup"
@@ -122,11 +116,13 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="About IQ"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D"/>
+            Foreground="#61609D"
+                        IsEnabled="False"/>
                     <MenuFlyoutItem 
             Text="DotSynth.com"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D"/>
+            Foreground="#61609D"
+                        IsEnabled="False"/>
                 </MenuBarItem>
             </MenuBar>
         </StackPanel>
