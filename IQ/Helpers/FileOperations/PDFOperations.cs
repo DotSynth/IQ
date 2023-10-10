@@ -62,6 +62,7 @@ namespace IQ.Helpers.FileOperations
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Sales", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
@@ -87,6 +88,7 @@ namespace IQ.Helpers.FileOperations
             // Calculate the column width as a fraction of the available width
             float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
             table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Invoice ID");
@@ -184,21 +186,32 @@ CreatePurchasesPdfForMonth(Window m)
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Purchases", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
 
             // Set up a custom page event to add a header to each page
-            writer.PageEvent = new SalesHeaderFooter();
+            writer.PageEvent = new PurchasesHeaderFooter();
 
             // Open the document for writing
             doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
 
             // Retrieve data for the specified month
             ObservableCollection<BranchPurchase> purchasesForMonth = GetPurchasesForMonth();
 
             // Create a PdfPTable to display the data
             PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Invoice ID");
@@ -296,6 +309,7 @@ CreatePurchasesPdfForMonth(Window m)
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
@@ -305,12 +319,22 @@ CreatePurchasesPdfForMonth(Window m)
 
             // Open the document for writing
             doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
 
             // Retrieve data for the specified month
             ObservableCollection<BranchRIn> rinsForMonth = GetRInsForMonth();
 
             // Create a PdfPTable to display the data
             PdfPTable table = new PdfPTable(7); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Return ID");
@@ -407,6 +431,7 @@ CreateROutsPdfForMonth(Window m)
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
@@ -416,12 +441,22 @@ CreateROutsPdfForMonth(Window m)
 
             // Open the document for writing
             doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
 
             // Retrieve data for the specified month
             ObservableCollection<BranchROut> routsForMonth = GetROutsForMonth();
 
             // Create a PdfPTable to display the data
             PdfPTable table = new PdfPTable(7); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Return ID");
@@ -519,21 +554,32 @@ CreateTInsPdfForMonth(Window m)
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
 
             // Set up a custom page event to add a header to each page
-            writer.PageEvent = new SalesHeaderFooter();
+            writer.PageEvent = new TInsHeaderFooter();
 
             // Open the document for writing
             doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
 
             // Retrieve data for the specified month
             ObservableCollection<BranchTIn> tinsForMonth = GetTInsForMonth();
 
             // Create a PdfPTable to display the data
             PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Transfer ID");
@@ -633,6 +679,7 @@ CreateTOutsPdfForMonth(Window m)
             string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
+            doc.SetMargins(10, 10, 30, 10);
 
             // Create a PdfWriter instance to write to the output file
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(outputPath, FileMode.Create));
@@ -642,12 +689,22 @@ CreateTOutsPdfForMonth(Window m)
 
             // Open the document for writing
             doc.Open();
+            // Calculate the available width for the table (including left and right margins)
+            float availableWidth = doc.PageSize.Width - doc.LeftMargin - doc.RightMargin;
 
             // Retrieve data for the specified month
             ObservableCollection<BranchTOut> toutsForMonth = GetTOutsForMonth();
 
             // Create a PdfPTable to display the data
             PdfPTable table = new PdfPTable(8); // Assuming you have 7 columns
+
+            // Set the total width of the table to the available width
+            table.TotalWidth = availableWidth;
+
+            // Calculate the column width as a fraction of the available width
+            float[] columnWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }; // Adjust the weights as needed
+            table.SetTotalWidth(columnWidths);
+            table.WidthPercentage = 100;
 
             // Add table headers
             table.AddCell("Transfer ID");
