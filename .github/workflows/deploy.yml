@@ -9,10 +9,9 @@ jobs:
   deploy:
     runs-on: windows-latest
     steps:
-      - uses: GuillaumeFalourd/setup-rsync@v1.1
       - run: rsync --version
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2, GuillaumeFalourd/setup-rsync@v1.1
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
