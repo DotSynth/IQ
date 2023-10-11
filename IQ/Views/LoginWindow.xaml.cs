@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.IO;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI.ViewManagement;
 
 namespace IQ.Views
@@ -80,9 +81,22 @@ namespace IQ.Views
             Password = passworBoxString.Password;
             ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};";
             Datastore = [DataServer, Port, Database, Username, Password, ConnectionString];
-            Structures.IQXFile file = StructureTools.UserDataStoreToIQX(Datastore);
-            byte[] UserLogin = StructureTools.IQXFileToBytes(file);
-            File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, User), UserLogin);
+
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            // Save a setting locally on the device
+            localSettings.Values["CurrentUserSettings"] = "Current User Settings";
+
+            // Save a composite setting locally on the device
+            Windows.Storage.ApplicationDataCompositeValue composite = new Windows.Storage.ApplicationDataCompositeValue();
+            composite["DataServer"] = DataServer;
+            composite["Port"] = Port;
+            composite["Database"] = Database;
+            composite["Username"] = Username;
+            composite["Password"] = Password;
+            composite["ConnectionString"] = ConnectionString;
+            localSettings.Values["UserLogin"] = composite;
+
             if (ConnectionString != null)
             {
                 if (DatabaseExtensions.ConnectToDb(ConnectionString, this) == true)

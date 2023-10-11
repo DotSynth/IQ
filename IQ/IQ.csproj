@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <LangVersion>12.0</LangVersion>
-    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>IQ</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -77,7 +77,6 @@
   <ItemGroup>
     <Page Remove="App.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Aspose.PDF" Version="23.9.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.205.9" />
@@ -92,7 +91,6 @@
     <PackageReference Include="Topshelf.Squirrel.Updater" Version="0.0.9" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
-
   <!-- 
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget
@@ -179,7 +177,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-
   <!-- 
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution 
     Explorer "Package and Publish" context menu entry to be enabled for this project even if 
