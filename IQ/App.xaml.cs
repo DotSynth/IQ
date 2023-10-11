@@ -11,17 +11,23 @@ using System.Diagnostics;
 using System.IO;
 using Amazon.S3;
 using Amazon;
-using Windows.Storage;
 
 namespace IQ
 {
     public partial class App : Application
     {
-        public static string? ConnectionString;
         public static string? UserName;
 
         public App()
         {
+            var awsCredentials = new Amazon.Runtime.BasicAWSCredentials("AKIAXH3AA2SOIL5MO2RW", "nbx9FE6lVBDaEHHMMqKOn1t/ZE7cIdM9sLAcv74t");
+            var s3Config = new AmazonS3Config
+            {
+                RegionEndpoint = RegionEndpoint.EUNorth1, // Replace with your desired AWS region
+            };
+
+            var s3Client = new AmazonS3Client(awsCredentials, s3Config);
+
             this.RequestedTheme = ApplicationTheme.Light;
             this.InitializeComponent();
         }
@@ -30,76 +36,68 @@ namespace IQ
         {
 
             base.OnLaunched(args);
-            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            // load a setting that is local to the device
-            String? localValue = localSettings.Values["CurrentUserSettings"] as string;
-
-            // load a composite setting
-            Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["UserLogin"];
-            if (composite != null)
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
             {
-                ConnectionString = composite["ConnectionString"] as string;
-                UserName = composite["Username"] as string;
-
-                    if (ConnectionString != null)
+                var ConnectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+                UserName = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).Username;
+                if (ConnectionString != null)
+                {
+                    if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
+                        if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
                         {
-                            if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
+                            if (DatabaseExtensions.TriggerDbMassAction_Admin())
                             {
-                                if (DatabaseExtensions.TriggerDbMassAction_Admin())
-                                {
-                                    m_window = new AdminWindow();
+                                m_window = new AdminWindow();
 
-                                    // Create a Frame to act as the navigation context and navigate to the first page
-                                    Frame rootFrame = new Frame();
-                                    m_window.Activate();
-                                }
-                                else
-                                {
-                                    Exit();
-                                }
-                            }
-                            else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
-                            {
-                                if (DatabaseExtensions.TriggerDbMassAction_Branch())
-                                {
-                                    m_window = new BranchWindow();
-                                    // Create a Frame to act as the navigation context and navigate to the first page
-                                    Frame rootFrame = new Frame();
-                                    m_window.Activate();
-                                }
-                                else
-                                {
-                                    Exit();
-                                }
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
                             }
                             else
                             {
-                                if (DatabaseExtensions.TriggerDbMassAction_Warehouse())
-                                {
-                                    m_window = new WarehouseWindow();
-                                    // Create a Frame to act as the navigation context and navigate to the first page
-                                    Frame rootFrame = new Frame();
-                                    m_window.Activate();
-                                }
-                                else
-                                {
-                                    Exit();
-                                }
+                                Exit();
+                            }
+                        }
+                        else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
+                        {
+                            if (DatabaseExtensions.TriggerDbMassAction_Branch())
+                            {
+                                m_window = new BranchWindow();
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
+                            }
+                            else
+                            {
+                                Exit();
+                            }
+                        }
+                        else
+                        {
+                            if (DatabaseExtensions.TriggerDbMassAction_Warehouse())
+                            {
+                                m_window = new WarehouseWindow();
+                                // Create a Frame to act as the navigation context and navigate to the first page
+                                Frame rootFrame = new Frame();
+                                m_window.Activate();
+                            }
+                            else
+                            {
+                                Exit();
                             }
                         }
                     }
+                }
 
-                }
-                else
-                {
-                    // Perform login and get user role
-                    m_window = new LoginWindow();
-                    Frame rootFrame = new Frame();
-                    m_window.Activate();
-                }
+            }
+            else
+            {
+                // Perform login and get user role
+                m_window = new LoginWindow();
+                Frame rootFrame = new Frame();
+                m_window.Activate();
+            }
         }
         private Window? m_window;
     }

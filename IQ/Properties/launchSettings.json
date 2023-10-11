@@ -1,9 +1,7 @@
 {
   "profiles": {
     "IQ (Package)": {
-      "commandName": "MsixPackage",
-      "alwaysReinstallApp": true,
-      "remoteDebugEnabled": false
+      "commandName": "MsixPackage"
     },
     "IQ (Unpackaged)": {
       "commandName": "Project"
