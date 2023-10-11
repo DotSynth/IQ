@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using Amazon.S3;
 using Amazon;
+using Windows.Storage;
 
 namespace IQ
 {
@@ -36,10 +37,18 @@ namespace IQ
         {
 
             base.OnLaunched(args);
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            // load a setting that is local to the device
+            String? localValue = localSettings.Values["Login Setting"] as string;
+
+            // load a composite setting
+            Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["UserLogin"];
+            if (composite != null)
             {
-                var ConnectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
-                UserName = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).Username;
+                ConnectionString = composite["ConnectionString"] as string;
+                UserName = composite["Username"] as string;
+
                 if (ConnectionString != null)
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
@@ -89,7 +98,6 @@ namespace IQ
                         }
                     }
                 }
-
             }
             else
             {
@@ -100,5 +108,6 @@ namespace IQ
             }
         }
         private Window? m_window;
+        private static string? ConnectionString;
     }
 }
