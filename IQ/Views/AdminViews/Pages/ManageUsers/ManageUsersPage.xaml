@@ -73,7 +73,7 @@
                 SuggestionChosen="UserLoginsAutoSuggestBox_SuggestionChosen"
                 QuerySubmitted="UserLoginsAutoSuggestBox_QuerySubmittedAsync"
                 TextChanged="UserLoginsAutoSuggestBox_TextChangedAsync"
-                PlaceholderText="Search Model ID..."/>
+                PlaceholderText="Search User..."/>
 
         </Grid>
         <Rectangle 
