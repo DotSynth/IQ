@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Graphics;
+using Windows.Storage;
 using Windows.UI;
 using WinRT.Interop;
 
@@ -106,8 +107,8 @@ namespace IQ.Helpers.WindowsOperations
 This Will Clear Login Information.", m);
             if (result == ContentDialogResult.Secondary)
             {
-
-                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)) && (DatabaseExtensions.CloseConnection() == true))
+                ApplicationData.Current.LocalSettings.Values.Remove("IQ SETTING");
+                if (DatabaseExtensions.CloseConnection() == true)
                 {
                     // If file found, delete it
                     File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User));

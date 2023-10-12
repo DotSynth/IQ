@@ -68,7 +68,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT ReturnID FROM \"{App.UserName}\".ReturnOutwards WHERE DATE(Date) = @time;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT ReturnID FROM \"{App.Username}\".ReturnOutwards WHERE DATE(Date) = @time;", connection))
                     {
                         command.Parameters.AddWithValue("time", DateFilter!.Value.DateTime!);
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())

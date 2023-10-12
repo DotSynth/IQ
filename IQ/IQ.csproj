@@ -21,7 +21,7 @@
     <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Never</AppxBundle>
-    <AppInstallerUri>https://iq-deployment.s3.eu-north-1.amazonaws.com/IQ/</AppInstallerUri>
+    <AppInstallerUri>https://iq-deployment.s3.eu-north-1.amazonaws.com/IQ/IQ.MSIX</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
   </PropertyGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace IQ.Views.AdminViews.Pages.Inventory
     /// </summary>
     public sealed partial class CompanyInventoryPage : Page
     {
-        public static string? SelectedView = App.UserName;
+        public static string? SelectedView = App.Username;
         public static string? PreviousView = SelectedView;
         public List<string> Schemas { get; } = new List<string>();
         public CompanyInventoryViewModel ViewModel { get; } = new CompanyInventoryViewModel();

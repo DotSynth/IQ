@@ -64,7 +64,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".ReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, ReasonForReturn, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @reasonForReturn, @signedBy)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".ReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, ReasonForReturn, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @reasonForReturn, @signedBy)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("ReturnID", CurrentReturnID);

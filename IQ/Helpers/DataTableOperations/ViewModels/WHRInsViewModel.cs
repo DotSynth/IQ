@@ -33,7 +33,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM \"{App.UserName}\".ReturnInwards WHERE DATE(Date) = @time;", connection))
+                using (NpgsqlCommand cmd = new NpgsqlCommand($"SELECT * FROM \"{App.Username}\".ReturnInwards WHERE DATE(Date) = @time;", connection))
                 {
                     cmd.Parameters.AddWithValue("time", ReturnInwardsPage.DateFilter!.Value.DateTime);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())

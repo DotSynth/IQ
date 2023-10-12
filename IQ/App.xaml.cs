@@ -1,4 +1,6 @@
-﻿using IQ.Helpers.DatabaseOperations;
+﻿using Amazon;
+using Amazon.S3;
+using IQ.Helpers.DatabaseOperations;
 using IQ.Helpers.FileOperations;
 using IQ.Views;
 using IQ.Views.AdminViews;
@@ -7,16 +9,14 @@ using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Diagnostics;
 using System.IO;
-using Amazon.S3;
-using Amazon;
+using Windows.Storage;
 
 namespace IQ
 {
     public partial class App : Application
     {
-        public static string? UserName;
+        public static string? Username;
 
         public App()
         {
@@ -38,8 +38,18 @@ namespace IQ
             base.OnLaunched(args);
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
             {
-                var ConnectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
-                UserName = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).Username;
+                ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+                // load a setting that is local to the device
+                String? localValue = localSettings.Values["IQ SETTING"] as string;
+
+                // load a composite setting
+                Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["USER LOGIN"];
+                if (composite != null)
+                {
+                    ConnectionString = composite["DataServer"] as string;
+                    Username = composite["Username"] as string;
+                }
                 if (ConnectionString != null)
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
@@ -100,5 +110,6 @@ namespace IQ
             }
         }
         private Window? m_window;
+        private string? ConnectionString;
     }
 }

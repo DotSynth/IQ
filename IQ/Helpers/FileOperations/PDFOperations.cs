@@ -51,7 +51,7 @@ namespace IQ.Helpers.FileOperations
 
         public static async Task CreateSalesPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Sales", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Sales", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -121,7 +121,7 @@ namespace IQ.Helpers.FileOperations
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".Sales
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".Sales
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -160,7 +160,7 @@ namespace IQ.Helpers.FileOperations
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Sales"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Sales"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -175,7 +175,7 @@ namespace IQ.Helpers.FileOperations
         Task
 CreatePurchasesPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Purchases", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Purchases", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -246,7 +246,7 @@ CreatePurchasesPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".Purchases
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".Purchases
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -285,7 +285,7 @@ CreatePurchasesPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Purchases"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Purchases"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -298,7 +298,7 @@ CreatePurchasesPdfForMonth(Window m)
 
         public static async Task CreateRInsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Inwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Return Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -367,7 +367,7 @@ CreatePurchasesPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnInwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".ReturnInwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -405,7 +405,7 @@ CreatePurchasesPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Inwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Return Inwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -420,7 +420,7 @@ CreatePurchasesPdfForMonth(Window m)
         Task
 CreateROutsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Outwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Return Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -489,7 +489,7 @@ CreateROutsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnOutwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".ReturnOutwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -528,7 +528,7 @@ CreateROutsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Outwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Return Outwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -543,7 +543,7 @@ CreateROutsPdfForMonth(Window m)
         Task
 CreateTInsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Inwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Transfer Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -614,7 +614,7 @@ CreateTInsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferInwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".TransferInwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -653,7 +653,7 @@ CreateTInsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Transfer Inwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Transfer Inwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -668,7 +668,7 @@ CreateTInsPdfForMonth(Window m)
         Task
 CreateTOutsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Outwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Transfer Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -739,7 +739,7 @@ CreateTOutsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferOutwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".TransferOutwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -778,7 +778,7 @@ CreateTOutsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Transfer Outwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Transfer Outwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -793,7 +793,7 @@ CreateTOutsPdfForMonth(Window m)
         Task
 CreateWarehousePurchasesPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Purchases", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Purchases", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -864,7 +864,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".Purchases
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".Purchases
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -903,7 +903,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Purchases"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Purchases"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -916,7 +916,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
 
         public static async Task CreateWarehouseRInsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Inwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Return Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -985,7 +985,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnInwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".ReturnInwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -1023,7 +1023,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Inwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Return Inwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -1038,7 +1038,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
         Task
 CreateWarehouseROutsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Return Outwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Return Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -1107,7 +1107,7 @@ CreateWarehouseROutsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".ReturnOutwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".ReturnOutwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -1146,7 +1146,7 @@ CreateWarehouseROutsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Return Outwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Return Outwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -1161,7 +1161,7 @@ CreateWarehouseROutsPdfForMonth(Window m)
         Task
 CreateWarehouseTInsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Inwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Transfer Inwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -1232,7 +1232,7 @@ CreateWarehouseTInsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferInwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".TransferInwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -1271,7 +1271,7 @@ CreateWarehouseTInsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Transfer Inwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Transfer Inwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;
@@ -1286,7 +1286,7 @@ CreateWarehouseTInsPdfForMonth(Window m)
         Task
 CreateWarehouseTOutsPdfForMonth(Window m)
         {
-            string outputPath = await GetSaveFilePathAsync($"{App.UserName} Monthly Transfer Outwards", m);
+            string outputPath = await GetSaveFilePathAsync($"{App.Username} Monthly Transfer Outwards", m);
             // Create a new document
             Document doc = new Document((PageSize.LETTER.Rotate()));
             doc.SetMargins(10, 10, 30, 10);
@@ -1357,7 +1357,7 @@ CreateWarehouseTOutsPdfForMonth(Window m)
             {
                 connection.Open();
 
-                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.UserName}"".TransferOutwards
+                using (NpgsqlCommand cmd = new NpgsqlCommand($@"SELECT * FROM ""{App.Username}"".TransferOutwards
                       WHERE EXTRACT(MONTH FROM Date) = EXTRACT(MONTH FROM CURRENT_DATE)
                         AND EXTRACT(YEAR FROM Date) = EXTRACT(YEAR FROM CURRENT_DATE);", connection))
                 {
@@ -1396,7 +1396,7 @@ CreateWarehouseTOutsPdfForMonth(Window m)
                 header.DefaultCell.BorderColor = new BaseColor(255, 255, 255);
 
                 // Add header content (customize as needed)
-                PdfPCell cell = new PdfPCell(new Phrase($"{App.UserName} Monthly Transfer Outwards"));
+                PdfPCell cell = new PdfPCell(new Phrase($"{App.Username} Monthly Transfer Outwards"));
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.VerticalAlignment = Element.ALIGN_CENTER;
                 cell.PaddingTop = 10f;

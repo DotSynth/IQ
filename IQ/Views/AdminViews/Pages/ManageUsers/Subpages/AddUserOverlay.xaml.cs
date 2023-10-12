@@ -54,7 +54,7 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".UserLogins (UserName, Password, AccessType) VALUES (@UserName, @Password, @AccessType)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".UserLogins (UserName, Password, AccessType) VALUES (@UserName, @Password, @AccessType)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("UserName", CurrentUserName);

@@ -56,7 +56,7 @@ namespace IQ.Views.BranchViews.Pages.CommitHistory
                     await connection.OpenAsync();
 
                     // Query the database to retrieve values from the 'columnName' column
-                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT CommitID FROM \"{App.UserName}\"..CommitHistory;", connection))
+                    using (NpgsqlCommand command = new NpgsqlCommand($"SELECT DISTINCT CommitID FROM \"{App.Username}\"..CommitHistory;", connection))
                     {
                         using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
                         {

@@ -22,7 +22,7 @@ namespace IQ.Views.AdminViews.Pages.TransferInwards
     /// </summary>
     public sealed partial class CompanyTInsPage : Page
     {
-        public static string? SelectedView = App.UserName;
+        public static string? SelectedView = App.Username;
         public static string? PreviousView = SelectedView;
         public List<string> Schemas { get; } = new List<string>();
         private List<string> suggestions = new List<string>();

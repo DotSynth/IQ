@@ -64,7 +64,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.UserName}\".Sales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".Sales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceId);

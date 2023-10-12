@@ -7,14 +7,10 @@ using IQ.Views.WarehouseViews.Pages.ReturnOutwards;
 using IQ.Views.WarehouseViews.Pages.TransferInwards;
 using IQ.Views.WarehouseViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
-using Octokit;
 using Microsoft.UI.Xaml.Controls;
-using System.Reflection;
-using System;
-using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Media;
+using System;
 using Windows.UI;
-using Aspose.Pdf.Operators;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -104,7 +100,7 @@ namespace IQ.Views.WarehouseViews
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
