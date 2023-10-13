@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
+using Windows.ApplicationModel;
 using Windows.UI;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -98,9 +99,25 @@ namespace IQ.Views.WarehouseViews
             WindowExtensions.Logout(this);
         }
 
-        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
-
+            Package package = Package.Current;
+            PackageUpdateAvailabilityResult result = await package.CheckUpdateAvailabilityAsync();
+            switch (result.Availability)
+            {
+                case PackageUpdateAvailability.Available:
+                case PackageUpdateAvailability.Required:
+                    //update is available
+                    ShowCompletionAlertDialogAsync("Updates Available. Please Restart the app to Install.", this);
+                    break;
+                case PackageUpdateAvailability.NoUpdates:
+                    //no updates available
+                    ShowCompletionAlertDialogAsync("No Updates Available", this);
+                    break;
+                case PackageUpdateAvailability.Unknown:
+                default:
+                    break;
+            }
         }
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)

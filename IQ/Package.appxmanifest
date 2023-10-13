@@ -12,7 +12,7 @@
   <Identity
     Name="InventoryQubit"
     Publisher="CN=DotSynth"
-    Version="0.1.4.0" />
+    Version="0.1.5.0" />
 
   <mp:PhoneIdentity PhoneProductId="9c60a6e9-b308-4e8a-a26d-2b9032276552" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

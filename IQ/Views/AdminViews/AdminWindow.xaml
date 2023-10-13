@@ -84,7 +84,8 @@ Background="#f1f2f5">
                     <MenuFlyoutItem 
             Text="Check For Updates"
             FontFamily="{StaticResource Righteous}"
-            Foreground="#61609D">
+            Foreground="#61609D"
+                        Click="CheckUpdates_Click">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="F3"/>
                         </MenuFlyoutItem.KeyboardAccelerators>

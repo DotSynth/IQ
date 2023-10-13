@@ -16,6 +16,7 @@ using Npgsql;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.UI;
 
 // To learn more about WinUI, the WinUI project structure, and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -264,8 +265,47 @@ namespace IQ.Views.BranchViews
             await PDFOperations.CreateRInsPdfForMonth(this);
         }
 
-        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
+            Package package = Package.Current;
+            PackageUpdateAvailabilityResult result = await package.CheckUpdateAvailabilityAsync();
+            switch (result.Availability)
+            {
+                case PackageUpdateAvailability.Available:
+                case PackageUpdateAvailability.Required:
+                    //update is available
+                    ShowCompletionAlertDialogAsync("Updates Available. Please Restart the app to Install.", this);
+                    break;
+                case PackageUpdateAvailability.NoUpdates:
+                    //no updates available
+                    ShowCompletionAlertDialogAsync("No Updates Available", this);
+                    break;
+                case PackageUpdateAvailability.Unknown:
+                default:
+                    break;
+            }
+        }
+
+        public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
+        {
+            // Create a ContentDialog
+            ContentDialog alertDialog = new ContentDialog
+            {
+                // Set the title, content, and close button text
+                Title = "Alert",
+                Content = alert,
+                CloseButtonText = "OK"
+            };
+
+            // Set the foreground to hex color #020066
+            alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
+
+            // Set the XamlRoot property to the same as an element in the app window
+            // For example, if you have a StackPanel named MyPanel in your XAML
+            alertDialog.XamlRoot = m.Content.XamlRoot;
+
+            // Show the ContentDialog and get the result
+            ContentDialogResult result = await alertDialog.ShowAsync();
 
         }
     }
