@@ -131,16 +131,6 @@
                     </MenuFlyoutItem>
                     <MenuFlyoutSeparator/>
                     <MenuFlyoutItem 
-                        x:Name="CheckUpdates"
-                Text="Check For Updates"
-                FontFamily="{StaticResource Righteous}"
-                Foreground="#61609D"
-                        Click="CheckUpdates_Click">
-                        <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Modifiers="Control" Key="F3"/>
-                        </MenuFlyoutItem.KeyboardAccelerators>
-                    </MenuFlyoutItem>
-                    <MenuFlyoutItem 
                 Text="What's New?"
                 FontFamily="{StaticResource Righteous}"
                 Foreground="#61609D"

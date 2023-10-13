@@ -264,7 +264,7 @@ namespace IQ.Views.BranchViews
         {
             await PDFOperations.CreateRInsPdfForMonth(this);
         }
-
+        /*
         private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
             Package package = Package.Current;
@@ -285,6 +285,7 @@ namespace IQ.Views.BranchViews
                     break;
             }
         }
+        */
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
         {

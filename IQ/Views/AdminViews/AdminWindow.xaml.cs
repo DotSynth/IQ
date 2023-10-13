@@ -116,6 +116,7 @@ namespace IQ.Views.AdminViews
             WindowExtensions.Logout(this);
         }
 
+        /*
         private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
             Package package = Package.Current;
@@ -136,6 +137,7 @@ namespace IQ.Views.AdminViews
                     break;
             }
         }
+        */
 
         public static async void ShowCompletionAlertDialogAsync(string alert, Window m)
         {
