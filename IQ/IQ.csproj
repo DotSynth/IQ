@@ -16,13 +16,14 @@
     <SelfContained>true</SelfContained>
     <PackageCertificateKeyFile>IQ_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <GenerateAppInstallerFile>True</GenerateAppInstallerFile>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppInstallerUri>https://iq-deployment.s3.eu-north-1.amazonaws.com/IQ/IQ.MSIX</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxBundle>Never</AppxBundle>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />

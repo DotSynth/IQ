@@ -63,8 +63,6 @@
                       Header="Access Type:"
                       PlaceholderText="SELECT ACCESS TYPE"
                       Width="368">
-                <ComboBoxItem Content="ADMIN" 
-                              Foreground="#020066"/>
                 <ComboBoxItem Content="BRANCH" 
                               Foreground="#020066"/>
                 <ComboBoxItem Content="WAREHOUSE" 

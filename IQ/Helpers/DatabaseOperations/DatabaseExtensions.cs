@@ -39,7 +39,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 string error = ex.Message;
-                // ShowCompletionAlertDialogAsync(error, m);
+                ShowCompletionAlertDialogAsync(error, m);
                 Debug.WriteLine(error);
                 Connected = false;
             }

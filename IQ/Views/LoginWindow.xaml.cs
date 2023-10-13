@@ -89,17 +89,19 @@ namespace IQ.Views
 
             // Save a composite setting locally on the device
             Windows.Storage.ApplicationDataCompositeValue composite = new Windows.Storage.ApplicationDataCompositeValue();
-            composite["DataServer"] = DataServer;
-            composite["Port"] = Port;
-            composite["Database"] = Database;
-            composite["Username"] = Username;
-            composite["Password"] = Password;
-            composite["ConnectionString"] = ConnectionString;
-            localSettings.Values["USER LOGIN"] = composite;
+            
             if (ConnectionString != null)
             {
                 if (DatabaseExtensions.ConnectToDb(ConnectionString, this) == true)
                 {
+                    composite["DataServer"] = DataServer;
+                    composite["Port"] = Port;
+                    composite["Database"] = Database;
+                    composite["Username"] = Username;
+                    composite["Password"] = Password;
+                    composite["ConnectionString"] = ConnectionString;
+                    localSettings.Values["USER LOGIN"] = composite;
+
                     App.Username = Username;
                     if (DatabaseExtensions.IsAnAdministrator())
                     {
