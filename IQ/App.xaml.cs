@@ -9,6 +9,7 @@ using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Diagnostics;
 using System.IO;
 using Windows.Storage;
 
@@ -20,14 +21,6 @@ namespace IQ
 
         public App()
         {
-            var awsCredentials = new Amazon.Runtime.BasicAWSCredentials("AKIAXH3AA2SOIL5MO2RW", "nbx9FE6lVBDaEHHMMqKOn1t/ZE7cIdM9sLAcv74t");
-            var s3Config = new AmazonS3Config
-            {
-                RegionEndpoint = RegionEndpoint.EUNorth1, // Replace with your desired AWS region
-            };
-
-            var s3Client = new AmazonS3Client(awsCredentials, s3Config);
-
             this.RequestedTheme = ApplicationTheme.Light;
             this.InitializeComponent();
         }
@@ -36,26 +29,25 @@ namespace IQ
         {
 
             base.OnLaunched(args);
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User)))
+
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            // load a setting that is local to the device            
+            String? localValue = localSettings.Values["IQ SETTING"] as string;
+
+            // load a composite setting
+            Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["USER LOGIN"];
+            if ((localValue != null) && (composite != null))
             {
-                ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                ConnectionString = composite["ConnectionString"] as string;
+                Username = composite["Username"] as string;
 
-                // load a setting that is local to the device
-                String? localValue = localSettings.Values["IQ SETTING"] as string;
-
-                // load a composite setting
-                Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["USER LOGIN"];
-                if (composite != null)
-                {
-                    ConnectionString = composite["DataServer"] as string;
-                    Username = composite["Username"] as string;
-                }
                 if (ConnectionString != null)
                 {
                     if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
                     {
-                        if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
-                        {
+                        if (DatabaseExtensions.IsAnAdministrator())
+                        {                         
                             if (DatabaseExtensions.TriggerDbMassAction_Admin())
                             {
                                 m_window = new AdminWindow();
@@ -99,7 +91,6 @@ namespace IQ
                         }
                     }
                 }
-
             }
             else
             {
@@ -110,6 +101,6 @@ namespace IQ
             }
         }
         private Window? m_window;
-        private string? ConnectionString;
+        public static string? ConnectionString;
     }
 }

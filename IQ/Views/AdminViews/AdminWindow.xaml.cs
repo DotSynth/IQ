@@ -10,6 +10,7 @@ using IQ.Views.AdminViews.Pages.TransferInwards;
 using IQ.Views.AdminViews.Pages.TransferOutwards;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -104,6 +105,8 @@ namespace IQ.Views.AdminViews
             WindowExtensions.ExitApp(this);
         }
 
+        /// <exception cref="System.AppDomainUnloadedException"></exception>
+        /// <exception cref="System.NotSupportedException"></exception>
         private void AdminWindowLogout_Click(object sender, RoutedEventArgs e)
         {
             WindowExtensions.Logout(this);

@@ -27,7 +27,7 @@ namespace IQ.Helpers.DataTableOperations.ViewModels
 
         private void LoadWarehouseRInsData()
         {
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {

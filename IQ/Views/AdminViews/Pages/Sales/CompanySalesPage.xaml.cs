@@ -9,6 +9,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -112,7 +113,7 @@ namespace IQ.Views.AdminViews.Pages.Sales
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
         }
 

@@ -49,7 +49,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
             CurrentSupplierContactInfo = SupplierInfoTextBox.Text;
 
             // Create a connection string
-            string connString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connString = App.ConnectionString!;
 
             try
             {

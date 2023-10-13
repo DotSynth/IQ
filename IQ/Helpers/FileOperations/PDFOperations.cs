@@ -115,7 +115,7 @@ namespace IQ.Helpers.FileOperations
             ObservableCollection<BranchSale> salesForMonth = new ObservableCollection<BranchSale>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -171,6 +171,7 @@ namespace IQ.Helpers.FileOperations
             }
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         public static async
         Task
 CreatePurchasesPdfForMonth(Window m)
@@ -240,7 +241,7 @@ CreatePurchasesPdfForMonth(Window m)
             ObservableCollection<BranchPurchase> purchasesForMonth = new ObservableCollection<BranchPurchase>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -361,7 +362,7 @@ CreatePurchasesPdfForMonth(Window m)
             ObservableCollection<BranchRIn> rinsForMonth = new ObservableCollection<BranchRIn>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;       
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -483,7 +484,7 @@ CreateROutsPdfForMonth(Window m)
             ObservableCollection<BranchROut> routsForMonth = new ObservableCollection<BranchROut>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -608,7 +609,7 @@ CreateTInsPdfForMonth(Window m)
             ObservableCollection<BranchTIn> tinsForMonth = new ObservableCollection<BranchTIn>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -733,7 +734,7 @@ CreateTOutsPdfForMonth(Window m)
             ObservableCollection<BranchTOut> salesForMonth = new ObservableCollection<BranchTOut>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -858,7 +859,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
             ObservableCollection<WarehousePurchase> purchasesForMonth = new ObservableCollection<WarehousePurchase>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -979,7 +980,7 @@ CreateWarehousePurchasesPdfForMonth(Window m)
             ObservableCollection<WarehouseRIn> rinsForMonth = new ObservableCollection<WarehouseRIn>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -1101,7 +1102,7 @@ CreateWarehouseROutsPdfForMonth(Window m)
             ObservableCollection<WarehouseROut> routsForMonth = new ObservableCollection<WarehouseROut>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -1226,7 +1227,7 @@ CreateWarehouseTInsPdfForMonth(Window m)
             ObservableCollection<WarehouseTIn> tinsForMonth = new ObservableCollection<WarehouseTIn>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
@@ -1351,7 +1352,7 @@ CreateWarehouseTOutsPdfForMonth(Window m)
             ObservableCollection<WarehouseTOut> salesForMonth = new ObservableCollection<WarehouseTOut>();
 
             // Retrieve data from your database for the specified month
-            string connectionString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connectionString = App.ConnectionString!;
 
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {

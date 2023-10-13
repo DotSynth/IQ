@@ -4,9 +4,11 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Npgsql;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,7 +39,7 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
             CurrentPassword = PasswordTextBox.Text;
 
             // Create a connection string
-            string connString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connString = App.ConnectionString!;
 
             try
             {
@@ -47,6 +49,23 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
                     // Open the connection
                     conn.Open();
 
+                    
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE ROLE \"{CurrentUserName}\" WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 PASSWORD '{CurrentPassword}'; GRANT \"{CurrentAccessType}\" TO \"{CurrentUserName}\";", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE SCHEMA \"{CurrentUserName}\"", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand($"GRANT ALL ON SCHEMA \"{CurrentUserName}\" TO \"{CurrentUserName}\"", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    
                     // Create a command object
                     using (var cmd = new NpgsqlCommand())
                     {
@@ -65,21 +84,6 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
                         int rows = cmd.ExecuteNonQuery();
                         await ShowCompletionAlertDialogAsync("New User Created Successfully");
                     }
-
-                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE ROLE \"{CurrentUserName}\" WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1 PASSWORD '{CurrentPassword}'; GRANT \"{CurrentAccessType}\" TO \"{CurrentUserName}\";", conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    using (NpgsqlCommand cmd = new NpgsqlCommand($"CREATE SCHEMA \"{CurrentUserName}\"", conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    using (NpgsqlCommand cmd = new NpgsqlCommand($"GRANT ALL ON SCHEMA \"{CurrentUserName}\" TO \"{CurrentUserName}\"", conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
                     // Close the connection
                     conn.Close();
                 }
@@ -87,10 +91,18 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers.Subpages
                 ManageUsersPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }
+            catch (NpgsqlException ex)
+            {
+                // Handle the PostgreSQL exception
+                Debug.WriteLine($"PostgreSQL Error: {ex.Message}");
+                await ShowCompletionAlertDialogAsync(ex.Message);
+                Debug.WriteLine($"SQL State: {ex.SqlState}");
+            }
             catch (Exception ex)
             {
                 string error = ex.Message;
                 await ShowCompletionAlertDialogAsync(error);
+                Debug.WriteLine(error);
             }
 
 

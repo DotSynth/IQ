@@ -54,7 +54,7 @@
                 Foreground="#020066"
                 FontFamily="{StaticResource Righteous}"
                 Header="User Password:"
-                PlaceholderText="USER PASSWORD"/>
+                PlaceholderText="MUST INCLUDE SPECIAL CHARACTERS e.g. !, % , #"/>
 
             <ComboBox x:Name="userTypeComboBox" 
                       SelectionChanged="ComboBox_SelectionChanged" 

@@ -3,12 +3,13 @@ using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Views.AdminViews.Pages.ManageUsers.Subpages;
 using IQ.Views.BranchViews.Pages;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,11 +28,13 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers
 
         public ManageUsersPage()
         {
-            this.InitializeComponent();
             DataContext = ViewModel;
 
             // Subscribe to the VisibilityChanged event of the popup page
             OverlayInstance.VisibilityChanged += PopupPageVisibilityChanged!;
+
+            Debug.WriteLine("fuck");
+            this.InitializeComponent();
         }
 
         public async void RefreshPage()
@@ -102,7 +105,7 @@ namespace IQ.Views.AdminViews.Pages.ManageUsers
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
         }
 

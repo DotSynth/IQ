@@ -72,6 +72,7 @@ namespace IQ.Views
             this.Close();
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         private void Login(object sender, RoutedEventArgs e)
         {
             DataServer = ServerString.Text;
@@ -79,7 +80,7 @@ namespace IQ.Views
             Database = DatabaseString.Text;
             Username = UsernameString.Text;
             Password = passworBoxString.Password;
-            ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};";
+            App.ConnectionString = ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};Include Error Detail=true";
             Datastore = [DataServer, Port, Database, Username, Password, ConnectionString];
             ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -100,7 +101,7 @@ namespace IQ.Views
                 if (DatabaseExtensions.ConnectToDb(ConnectionString, this) == true)
                 {
                     App.Username = Username;
-                    if (DatabaseExtensions.GetCurrentUserRole() == "ADMIN")
+                    if (DatabaseExtensions.IsAnAdministrator())
                     {
                         DatabaseExtensions.TriggerDbMassAction_Admin();
                         LoadAdminWindow();

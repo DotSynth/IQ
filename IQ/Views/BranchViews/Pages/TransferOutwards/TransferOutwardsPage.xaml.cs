@@ -62,7 +62,7 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
             try
             {
                 // Establish a connection to your PostgreSQL database
-                using (NpgsqlConnection connection = new NpgsqlConnection(StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString))
+                using (NpgsqlConnection connection = new NpgsqlConnection(App.ConnectionString!))
                 {
                     await connection.OpenAsync();
 

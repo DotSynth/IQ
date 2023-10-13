@@ -112,6 +112,8 @@ namespace IQ.Views.BranchViews
             WindowExtensions.ExitApp(this);
         }
 
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="AppDomainUnloadedException"></exception>
         private void BranchWindowLogout_Click(object sender, RoutedEventArgs e)
         {
             WindowExtensions.Logout(this);
@@ -121,7 +123,7 @@ namespace IQ.Views.BranchViews
         {
             Guid uniqueKey = Guid.NewGuid();
             // Create a connection string
-            string connString = StructureTools.BytesToIQXFile(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User))).ConnectionString;
+            string connString = App.ConnectionString!;
 
             try
             {
@@ -225,6 +227,7 @@ namespace IQ.Views.BranchViews
             await PDFOperations.CreateSalesPdfForMonth(this);
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         private async void ExportAllEntriesButton_Click(object sender, RoutedEventArgs e)
         {
             await PDFOperations.CreateSalesPdfForMonth(this);
@@ -245,6 +248,7 @@ namespace IQ.Views.BranchViews
             await PDFOperations.CreateROutsPdfForMonth(this);
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         private async void ExportPurchasesButton_Click(object sender, RoutedEventArgs e)
         {
             await PDFOperations.CreatePurchasesPdfForMonth(this);

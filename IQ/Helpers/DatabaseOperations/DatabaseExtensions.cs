@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Npgsql;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,7 +39,8 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 string error = ex.Message;
-                ShowCompletionAlertDialogAsync(error, m);
+                // ShowCompletionAlertDialogAsync(error, m);
+                Debug.WriteLine(error);
                 Connected = false;
             }
             return Connected;
@@ -441,7 +443,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -487,7 +489,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -532,7 +534,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -565,7 +567,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -598,7 +600,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -631,7 +633,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResult;
@@ -664,7 +666,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -711,7 +713,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -758,7 +760,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -790,7 +792,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -837,7 +839,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -870,7 +872,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -915,7 +917,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -948,7 +950,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -993,7 +995,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1026,7 +1028,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1059,7 +1061,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1100,7 +1102,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1133,7 +1135,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1166,7 +1168,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1211,7 +1213,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1256,7 +1258,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1303,7 +1305,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1336,7 +1338,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1369,7 +1371,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1416,7 +1418,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1461,7 +1463,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1494,7 +1496,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1527,7 +1529,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResult;
@@ -1560,7 +1562,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1593,7 +1595,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1640,7 +1642,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1681,7 +1683,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1714,7 +1716,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1781,7 +1783,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1828,7 +1830,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1861,7 +1863,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1906,7 +1908,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -1939,7 +1941,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -1984,7 +1986,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -2017,7 +2019,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -2063,7 +2065,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -2096,7 +2098,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -2143,7 +2145,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -2176,7 +2178,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -2223,7 +2225,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return searchResults;
@@ -2256,7 +2258,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -2289,7 +2291,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return suggestions;
@@ -2317,7 +2319,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions that may occur during database access.
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return totalSales;
@@ -2345,7 +2347,7 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions that may occur during database access.
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return totalPurchases;
@@ -2371,11 +2373,40 @@ namespace IQ.Helpers.DatabaseOperations
             catch (Exception ex)
             {
                 // Handle any exceptions that may occur during database access.
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return totalworth;
         }
 
+        public static bool IsAnAdministrator()
+        {
+            try
+            {
+                using (NpgsqlCommand cmd = new NpgsqlCommand(
+                    "SELECT rolcreatedb FROM pg_roles WHERE rolname = current_user;", con))
+                {
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return reader.GetBoolean(0);
+                        }
+                        else
+                        {
+                            // Handle the case where the user does not exist
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(NpgsqlException ex) 
+            {
+                Debug.WriteLine(ex.Message); 
+               
+                return false;
+            }
+        }
     }
 }

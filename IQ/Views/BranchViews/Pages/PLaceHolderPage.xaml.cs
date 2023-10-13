@@ -12,6 +12,7 @@ namespace IQ.Views.BranchViews.Pages
     /// </summary>
     public sealed partial class PLaceHolderPage : Page
     {
+        /// <exception cref="UriFormatException"></exception>
         public PLaceHolderPage()
         {
             this.InitializeComponent();

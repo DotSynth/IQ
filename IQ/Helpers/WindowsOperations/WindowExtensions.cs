@@ -39,6 +39,7 @@ namespace IQ.Helpers.WindowsOperations
             appWindow.Resize(size);
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         public static void SetIsAlwaysOnTop(this Window window, bool value)
         {
             AppWindow appWindow = window.GetAppWindow();
@@ -52,6 +53,7 @@ namespace IQ.Helpers.WindowsOperations
             throw new NotSupportedException($"Always on top is not supported with {appWindow.Presenter.Kind}.");
         }
 
+        /// <exception cref="NotSupportedException"></exception>
         public static bool GetIsAlwaysOnTop(this Window window)
         {
             AppWindow appWindow = window.GetAppWindow();
@@ -101,17 +103,19 @@ namespace IQ.Helpers.WindowsOperations
             return result;
         }
 
+        /// <exception cref="AppDomainUnloadedException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         public static async void Logout(Window m)
         {
             var result = await ShowCompletionAlertDialogAsync(@"Are You Sure You want to Log Out?
 This Will Clear Login Information.", m);
             if (result == ContentDialogResult.Secondary)
             {
-                ApplicationData.Current.LocalSettings.Values.Remove("IQ SETTING");
+                ApplicationData.Current.LocalSettings.Values.Remove("USER LOGIN");
                 if (DatabaseExtensions.CloseConnection() == true)
                 {
                     // If file found, delete it
-                    File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, LoginWindow.User));
+                    ApplicationData.Current.LocalSettings.Values.Remove("USER LOGIN");
                     m_window = new LoginWindow();
                     // Create a Frame to act as the navigation context and navigate to the first page
                     Frame rootFrame = new Frame();
