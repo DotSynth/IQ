@@ -339,28 +339,28 @@ namespace IQ.Helpers.DatabaseOperations
                 using var createPurchasesTableIndexCommand = new NpgsqlCommand(createPurchasesTableIndex, con);
                 createPurchasesTableIndexCommand.ExecuteScalar();
 
-                string createTransferInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".TransferInwards (TransferID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(InvoiceID, ModelID), BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                string createTransferInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".TransferInwards (TransferID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(TransferID, ModelID), BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL, QuantityTransferred INT NOT NULL, TransferredFrom VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);";
                 using var createTransferInwardsTableCommand = new NpgsqlCommand(createTransferInwardsTable, con);
                 createTransferInwardsTableCommand.ExecuteScalar();
                 string createTransferInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS TInsDate ON \"{App.Username}\".TransferInwards(Date);";
                 using var createTransferInwardsTableIndexCommand = new NpgsqlCommand(createTransferInwardsTableIndex, con);
                 createTransferInwardsTableIndexCommand.ExecuteScalar();
 
-                string createTransferOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".TransferOutwards  (TransferID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(InvoiceID, ModelID), BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
+                string createTransferOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".TransferOutwards  (TransferID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(TransferID, ModelID), BrandID VARCHAR(255) NOT NULL,  AddOns VARCHAR(255) NOT NULL,  QuantityTransferred INT NOT NULL, TransferredTo VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, TransferredProductPrice DECIMAL NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
                 using var createTransferOutwardsTableCommand = new NpgsqlCommand(createTransferOutwardsTable, con);
                 createTransferOutwardsTableCommand.ExecuteScalar();
                 string createTransferOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS TOutsDate ON \"{App.Username}\".TransferOutwards(Date);";
                 using var createTransferOutwardsTableIndexCommand = new NpgsqlCommand(createTransferOutwardsTableIndex, con);
                 createTransferOutwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".ReturnInwards (ReturnID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(InvoiceID, ModelID), BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
+                string createReturnInwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".ReturnInwards (ReturnID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(ReturnID, ModelID), BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedBy VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL,   Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
                 using var createReturnInwardsTableCommand = new NpgsqlCommand(createReturnInwardsTable, con);
                 createReturnInwardsTableCommand.ExecuteScalar();
                 string createReturnInwardsTableIndex = $"CREATE INDEX IF NOT EXISTS RInsDate ON \"{App.Username}\".ReturnInwards(Date);";
                 using var createReturnInwardsTableIndexCommand = new NpgsqlCommand(createReturnInwardsTableIndex, con);
                 createReturnInwardsTableIndexCommand.ExecuteScalar();
 
-                string createReturnOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".ReturnOutwards (ReturnID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(InvoiceID, ModelID), BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
+                string createReturnOutwardsTable = $"CREATE TABLE IF NOT EXISTS \"{App.Username}\".ReturnOutwards (ReturnID VARCHAR(255) NOT NULL, ModelID VARCHAR(255) NOT NULL, PRIMARY KEY(ReturnID, ModelID), BrandID VARCHAR(255) NOT NULL, QuantityReturned INT NOT NULL, ReturnedTo VARCHAR(255) NOT NULL, ReasonForReturn VARCHAR(255) NOT NULL, SignedBy VARCHAR(255) NOT NULL, Date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (ModelID) REFERENCES \"{App.Username}\".Inventory (ModelID));";
                 using var createReturnOutwardsTableCommand = new NpgsqlCommand(createReturnOutwardsTable, con);
                 createReturnOutwardsTableCommand.ExecuteScalar();
                 string createReturnOutwardsTableIndex = $"CREATE INDEX IF NOT EXISTS ROutsDate ON \"{App.Username}\".ReturnOutwards(Date);";
