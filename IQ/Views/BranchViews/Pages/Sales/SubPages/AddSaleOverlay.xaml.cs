@@ -27,6 +27,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
         public Decimal? CurrentSellingPrice;
         public string? CurrentSoldTo;
         public string? CurrentCustomerContactInfo;
+        public static DateTime? CurrentDate;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -34,6 +35,8 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
         public AddSaleOverlay()
         {
             this.InitializeComponent();
+            ThisDatepicker.SelectedDate = DateTime.UtcNow.Date;
+            ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
         private void AddSaleButton_Click(object sender, RoutedEventArgs e)
@@ -45,6 +48,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
             CurrentSellingPrice = Decimal.Parse(SellingPriceTextBox.Text);
             CurrentSoldTo = SoldToTextBox.Text;
             CurrentCustomerContactInfo = CustomerInfoTextBox.Text;
+            CurrentDate = ThisDatepicker.Date.UtcDateTime;
 
             // Create a connection string
             string connString = App.ConnectionString!;
@@ -64,7 +68,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".Sales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".Sales (InvoiceID, ModelID, BrandID, QuantitySold, SellingPrice, SoldTo, CustomerContactInfo, Date) VALUES (@invoiceID, @modelID, @brandID, @qtySold, @sellingPrice, @SoldTo, @customerInfo, @date)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceId);
@@ -74,6 +78,7 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                         cmd.Parameters.AddWithValue("sellingPrice", CurrentSellingPrice);
                         cmd.Parameters.AddWithValue("SoldTo", CurrentSoldTo);
                         cmd.Parameters.AddWithValue("customerInfo", CurrentCustomerContactInfo);
+                        cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();

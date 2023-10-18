@@ -29,6 +29,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
         public static string? CurrentSignedBy;
         public static Decimal? CurrentTransferredProductPrice;
         bool IsCompleted;
+        public static DateTime? CurrentDate;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -36,6 +37,8 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
         public AddTInsOverlay()
         {
             this.InitializeComponent();
+            ThisDatepicker.SelectedDate = DateTime.UtcNow.Date;
+            ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
         private async void AddTInsButton_Click(object sender, RoutedEventArgs e)
@@ -48,6 +51,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
             CurrentTransferredFrom = TransferredFromTextBox.Text;
             CurrentSignedBy = SignedByTextBox.Text;
             CurrentTransferredProductPrice = Decimal.Parse(TransferredProductPriceTextBox.Text);
+            CurrentDate = ThisDatepicker.Date.UtcDateTime;
 
             // Create a connection string
             string connString = App.ConnectionString!;
@@ -67,7 +71,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".TransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".TransferInwards (TransferID, ModelID, BrandID, AddOns, QuantityTransferred, TransferredFrom, SignedBy, TransferredProductPrice, Date) VALUES (@TransferID, @modelID, @brandID, @addOns, @qtyTransferred, @transferredFrom, @signedBy, @TInProductPrice, @Date)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("TransferID", CurrentTransferID);
@@ -78,6 +82,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
                         cmd.Parameters.AddWithValue("transferredFrom", CurrentTransferredFrom);
                         cmd.Parameters.AddWithValue("signedBy", CurrentSignedBy);
                         cmd.Parameters.AddWithValue("TInProductPrice", CurrentTransferredProductPrice);
+                        cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();
@@ -263,6 +268,11 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
                 // Set the suggestions for the AutoSuggestBox
                 sender.ItemsSource = suggestions;
             }
+        }
+
+        private void AddTInsDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
+        {
+
         }
     }
 }

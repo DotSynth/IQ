@@ -28,6 +28,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards.SubPages
         public static string? CurrentTransferredTo;
         public static string? CurrentSignedBy;
         public static Decimal? CurrentTransferredProductPrice;
+        public static DateTime? CurrentDate;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -35,6 +36,8 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards.SubPages
         public AddTOutsOverlay()
         {
             this.InitializeComponent();
+            ThisDatepicker.SelectedDate = DateTime.UtcNow.Date;
+            ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
         private void AddTOutsButton_Click(object sender, RoutedEventArgs e)
@@ -47,6 +50,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards.SubPages
             CurrentTransferredTo = TransferredToTextBox.Text;
             CurrentSignedBy = SignedByTextBox.Text;
             CurrentTransferredProductPrice = Decimal.Parse(TransferredProductPriceTextBox.Text);
+            CurrentDate = ThisDatepicker.Date.UtcDateTime;
 
             // Create a connection string
             string connString = App.ConnectionString!;
@@ -77,6 +81,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards.SubPages
                         cmd.Parameters.AddWithValue("transferredTo", CurrentTransferredTo);
                         cmd.Parameters.AddWithValue("signedBy", CurrentSignedBy);
                         cmd.Parameters.AddWithValue("TInProductPrice", CurrentTransferredProductPrice);
+                        cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();

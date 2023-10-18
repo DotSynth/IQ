@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Media;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
@@ -30,6 +31,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
         public static string? CurrentPurchasedFrom;
         public static string? CurrentSupplierContactInfo;
         bool IsCompleted;
+        public static DateTime? CurrentDate;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -37,8 +39,12 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
         public AddPurchaseOverlay()
         {
             this.InitializeComponent();
+            ThisDatepicker.SelectedDate = DateTime.UtcNow.Date;
+            ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async void AddPurchaseButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentInvoiceID = InvoiceTextBox.Text;
@@ -49,6 +55,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
             CurrentBuyingPrice = Decimal.Parse(BuyingPriceTextBox.Text);
             CurrentPurchasedFrom = PurchasedFromTextBox.Text;
             CurrentSupplierContactInfo = SupplierInfoTextBox.Text;
+            CurrentDate = ThisDatepicker.Date.UtcDateTime;
 
             // Create a connection string
             string connString = App.ConnectionString!;
@@ -68,7 +75,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".Purchases (InvoiceID, ModelID, BrandID, AddOns, QuantityBought, BuyingPrice, PurchasedFrom, SupplierContactInfo) VALUES (@invoiceID, @modelID, @brandID, @addOns, @qtyBought, @buyingPrice, @purchasedFrom, @supplierInfo)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".Purchases (InvoiceID, ModelID, BrandID, AddOns, QuantityBought, BuyingPrice, PurchasedFrom, SupplierContactInfo, Date) VALUES (@invoiceID, @modelID, @brandID, @addOns, @qtyBought, @buyingPrice, @purchasedFrom, @supplierInfo, @Date)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("invoiceID", CurrentInvoiceID);
@@ -79,6 +86,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                         cmd.Parameters.AddWithValue("buyingPrice", CurrentBuyingPrice);
                         cmd.Parameters.AddWithValue("purchasedFrom", CurrentPurchasedFrom);
                         cmd.Parameters.AddWithValue("supplierInfo", CurrentSupplierContactInfo);
+                        cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();
@@ -109,6 +117,8 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async Task<bool> TriggerDbSubAction_PurchaseAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
@@ -265,5 +275,6 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                 sender.ItemsSource = suggestions;
             }
         }
+        
     }
 }

@@ -26,8 +26,8 @@ namespace IQ.Views.WarehouseViews
         public WarehouseWindow()
         {
             // Set the initial window size
-            this.SetWindowSize(1600, 900);
             this.InitializeComponent();
+            this.SetWindowSize(1600, 1200);
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(WarehouseTitleBar);
         }

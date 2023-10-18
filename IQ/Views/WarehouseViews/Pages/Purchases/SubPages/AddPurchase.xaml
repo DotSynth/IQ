@@ -6,8 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     mc:Ignorable="d"
-    Width="400"
-    Height="790"
     Padding="20"
     Margin="8">
 
@@ -107,6 +105,14 @@
                 FontFamily="{StaticResource Righteous}"
                 Header="Supplier Info:"
                 PlaceholderText="PHONE, ADDRESS, ETC"/>
+
+            <DatePicker
+                x:Name="ThisDatepicker"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Width="365"
+                Margin="14"
+                Header="Choose Date:"/>
 
             <StackPanel
                 Orientation="Horizontal"

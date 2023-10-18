@@ -27,6 +27,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
         public static string? CurrentReturnedBy;
         public static string? CurrentReasonForReturn;
         public static string? CurrentSignedBy;
+        public static DateTime? CurrentDate;
 
         // Define an event to notify when visibility changes
         public event EventHandler? VisibilityChanged;
@@ -34,6 +35,8 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
         public AddRInsOverlay()
         {
             this.InitializeComponent();
+            ThisDatepicker.SelectedDate = DateTime.UtcNow.Date;
+            ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
         private void AddRInsButton_Click(object sender, RoutedEventArgs e)
@@ -45,6 +48,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
             CurrentReturnedBy = ReturnedByTextBox.Text;
             CurrentReasonForReturn = ReasonForReturnTextBox.Text;
             CurrentSignedBy = SignedByTextBox.Text;
+            CurrentDate = ThisDatepicker.Date.UtcDateTime;
 
             // Create a connection string
             string connString = App.ConnectionString!;
@@ -64,7 +68,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
                         cmd.Connection = conn;
 
                         // Write the SQL statement for inserting data
-                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".ReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, ReasonForReturn, SignedBy) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @reasonForReturn, @signedBy)";
+                        cmd.CommandText = $"INSERT INTO \"{App.Username}\".ReturnInwards (ReturnID, ModelID, BrandID, QuantityReturned, ReturnedBy, ReasonForReturn, SignedBy, Date) VALUES (@ReturnID, @modelID, @brandID, @qtyReturned, @returnedBy, @reasonForReturn, @signedBy, @Date)";
 
                         // Create parameters and assign values
                         cmd.Parameters.AddWithValue("ReturnID", CurrentReturnID);
@@ -74,6 +78,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
                         cmd.Parameters.AddWithValue("returnedBy", CurrentReturnedBy);
                         cmd.Parameters.AddWithValue("reasonForReturn", CurrentReasonForReturn);
                         cmd.Parameters.AddWithValue("signedBy", CurrentSignedBy);
+                        cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
                         int rows = cmd.ExecuteNonQuery();

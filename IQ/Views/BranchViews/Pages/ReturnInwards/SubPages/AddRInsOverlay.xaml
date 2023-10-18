@@ -7,8 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:animations="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    Width="400"
-    Height="710"
     Padding="20"
     Margin="8">
 
@@ -101,6 +99,14 @@
                 FontFamily="{StaticResource Righteous}"
                 Header="Signed By:"
                 PlaceholderText="SIGNER'S NAME"/>
+
+            <DatePicker
+                x:Name="ThisDatepicker"
+                Foreground="#020066"
+                FontFamily="{StaticResource Righteous}"
+                Width="365"
+                Margin="14"
+                Header="Choose Date:"/>
 
             <StackPanel
                 Orientation="Horizontal"

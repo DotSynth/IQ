@@ -228,7 +228,8 @@
                         Icon="SwitchApps"
                         x:Name="CommitsPage"
                         Foreground="#020066"
-                        ToolTipService.ToolTip="Commit History"/>
+                        ToolTipService.ToolTip="Commit History"
+                    IsEnabled="False"/>
                     <NavigationViewItemSeparator/>
                 <NavigationViewItem 
                         Icon="Library"

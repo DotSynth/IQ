@@ -29,7 +29,7 @@
                    Grid.Row="0"/>
 
         <!-- Popup for overlay content -->
-        <Popup x:Name="PurchaseOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True" Grid.Row="1">
+        <Popup x:Name="PurchaseOverlayPopUp" IsOpen="False" LightDismissOverlayMode="Off" IsLightDismissEnabled="True" Grid.Row="0">
             <overlay:AddPurchaseOverlay/>
         </Popup>
 
