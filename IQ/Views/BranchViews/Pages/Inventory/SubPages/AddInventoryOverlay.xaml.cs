@@ -33,7 +33,7 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
             this.InitializeComponent();
         }
 
-        private void AddInventoryButton_Click(object sender, RoutedEventArgs e)
+        private async void AddInventoryButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentModelID = ModelIDTextBox.Text;
             CurrentBrandID = BrandIDTextBox.Text;
@@ -69,7 +69,7 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
                         cmd.Parameters.AddWithValue("UnitPrice", CurrentUnitPrice);
 
                         // Execute the command and get the number of rows affected
-                        int rows = cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                         _ = ShowCompletionAlertDialogAsync("New Inventory Row Inserted Successfully");
                     }
 

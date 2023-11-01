@@ -34,7 +34,7 @@ namespace IQ.Views.AdminViews.Pages.TransferOutwards
         public CompanyTOutsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             CompanyTOutsDatePicker.SelectedDate = DateFilter;
             CompanyTOutsDatePicker.MaxYear = DateTime.UtcNow.Date;
             Schemas = DatabaseExtensions.GetSchemas();

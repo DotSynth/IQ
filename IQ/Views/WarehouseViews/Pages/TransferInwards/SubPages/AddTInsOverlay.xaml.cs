@@ -148,21 +148,31 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
 
                 if (result == ContentDialogResult.Secondary)
                 {
-                    // Insert the model into the inventory
-                    using var insertModelCommand = new NpgsqlCommand($@"
+                    try
+                    {
+                        // Insert the model into the inventory
+                        using var insertModelCommand = new NpgsqlCommand($@"
             INSERT INTO ""{App.Username}"".Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
             VALUES (@modelID, @brandID, @addOns, @quantityTransferred, @TInProductPrice)", con);
 
-                    insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
-                    insertModelCommand.Parameters.AddWithValue("brandID", CurrentBrandID!);
-                    insertModelCommand.Parameters.AddWithValue("addOns", CurrentAddOns!);
-                    insertModelCommand.Parameters.AddWithValue("quantityTransferred", CurrentQuantityTransferred!);
-                    insertModelCommand.Parameters.AddWithValue("TInProductPrice", CurrentTransferredProductPrice!);
+                        insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
+                        insertModelCommand.Parameters.AddWithValue("brandID", CurrentBrandID!);
+                        insertModelCommand.Parameters.AddWithValue("addOns", CurrentAddOns!);
+                        insertModelCommand.Parameters.AddWithValue("quantityTransferred", CurrentQuantityTransferred!);
+                        insertModelCommand.Parameters.AddWithValue("TInProductPrice", CurrentTransferredProductPrice!);
 
-                    insertModelCommand.ExecuteNonQuery();
+                        insertModelCommand.ExecuteNonQuery();
 
-                    isCompleted = true;
-                    return isCompleted;
+                        isCompleted = true;
+                        return isCompleted;
+                    }
+                    catch (Exception ex)
+                    {
+                        string error = ex.Message;
+                        await ShowCompletionAlertDialogAsync(error);
+                        isCompleted = true;
+                        return isCompleted;
+                    }
                 }
                 else
                 {
@@ -173,19 +183,29 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
             }
             else
             {
-                // Model exists in the inventory, update the quantityInStock
-                using var updateModelCommand = new NpgsqlCommand($@"
+                try
+                {
+                    // Model exists in the inventory, update the quantityInStock
+                    using var updateModelCommand = new NpgsqlCommand($@"
         UPDATE ""{App.Username}"".Inventory
         SET QuantityInStock = QuantityInStock + @quantityTransferred
         WHERE ModelID = @modelID", con);
 
-                updateModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
-                updateModelCommand.Parameters.AddWithValue("quantityTransferred", CurrentQuantityTransferred!);
+                    updateModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
+                    updateModelCommand.Parameters.AddWithValue("quantityTransferred", CurrentQuantityTransferred!);
 
-                updateModelCommand.ExecuteNonQuery();
+                    updateModelCommand.ExecuteNonQuery();
 
-                isCompleted = false;
-                return isCompleted;
+                    isCompleted = false;
+                    return isCompleted;
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.Message;
+                    await ShowCompletionAlertDialogAsync(error);
+                    isCompleted = true;
+                    return isCompleted;
+                }
             }
         }
 

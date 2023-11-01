@@ -89,7 +89,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                         cmd.Parameters.AddWithValue("date", CurrentDate);
 
                         // Execute the command and get the number of rows affected
-                        int rows = cmd.ExecuteNonQuery();
+                        await cmd.ExecuteNonQueryAsync();
                         await ShowCompletionAlertDialogAsync("New Purchase Row Inserted Successfully");
                     }
 
@@ -104,7 +104,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
                 if (IsCompleted == true)
                 {
-                    await ShowCompletionAlertDialogAsync("New Inventory Row Inserted Successfully");
+                    _ = ShowCompletionAlertDialogAsync("New Inventory Row Inserted Successfully");
                 }
 
             }
@@ -119,6 +119,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
         /// <exception cref="FormatException"></exception>
         /// <exception cref="OverflowException"></exception>
+        /// <exception cref="System.Data.Common.DbException"></exception>
         private async Task<bool> TriggerDbSubAction_PurchaseAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
@@ -154,21 +155,31 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
                 if (result == ContentDialogResult.Secondary)
                 {
-                    // Insert the model into the inventory
-                    using var insertModelCommand = new NpgsqlCommand($@"
+                    try
+                    {
+                        // Insert the model into the inventory
+                        using var insertModelCommand = new NpgsqlCommand($@"
             INSERT INTO ""{App.Username}"".Inventory (ModelID, BrandID, AddOns, QuantityInStock, UnitPrice)
             VALUES (@modelID, @brandID, @addOns, @quantityBought, @buyingPrice)", con);
 
-                    insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
-                    insertModelCommand.Parameters.AddWithValue("brandID", CurrentBrandID!);
-                    insertModelCommand.Parameters.AddWithValue("addOns", CurrentAddOns!);
-                    insertModelCommand.Parameters.AddWithValue("quantityBought", CurrentQuantityBought!);
-                    insertModelCommand.Parameters.AddWithValue("buyingPrice", CurrentBuyingPrice!);
+                        insertModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
+                        insertModelCommand.Parameters.AddWithValue("brandID", CurrentBrandID!);
+                        insertModelCommand.Parameters.AddWithValue("addOns", CurrentAddOns!);
+                        insertModelCommand.Parameters.AddWithValue("quantityBought", CurrentQuantityBought!);
+                        insertModelCommand.Parameters.AddWithValue("buyingPrice", CurrentBuyingPrice!);
 
-                    insertModelCommand.ExecuteNonQuery();
+                        await insertModelCommand.ExecuteNonQueryAsync();
 
-                    isCompleted = true;
-                    return isCompleted;
+                        isCompleted = true;
+                        return isCompleted;
+                    }
+                    catch (Exception ex)
+                    {
+                        string error = ex.Message;
+                        await ShowCompletionAlertDialogAsync(error);
+                        isCompleted = true;
+                        return isCompleted;
+                    }
                 }
                 else
                 {
@@ -176,22 +187,33 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                     isCompleted = false;
                     return isCompleted;
                 }
+                
             }
             else
             {
-                // Model exists in the inventory, update the quantityInStock
-                using var updateModelCommand = new NpgsqlCommand($@"
+                try
+                {
+                    // Model exists in the inventory, update the quantityInStock
+                    using var updateModelCommand = new NpgsqlCommand($@"
         UPDATE ""{App.Username}"".Inventory
         SET QuantityInStock = QuantityInStock + @quantityBought
         WHERE ModelID = @modelID", con);
 
-                updateModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
-                updateModelCommand.Parameters.AddWithValue("quantityBought", CurrentQuantityBought!);
+                    updateModelCommand.Parameters.AddWithValue("modelID", CurrentModelID!);
+                    updateModelCommand.Parameters.AddWithValue("quantityBought", CurrentQuantityBought!);
 
-                updateModelCommand.ExecuteNonQuery();
+                    await updateModelCommand.ExecuteNonQueryAsync();
 
-                isCompleted = false;
-                return isCompleted;
+                    isCompleted = false;
+                    return isCompleted;
+                }
+                catch (Exception ex)
+                {
+                    string error = ex.Message;
+                    await ShowCompletionAlertDialogAsync(error);
+                    isCompleted = true;
+                    return isCompleted;
+                }
             }
         }
 

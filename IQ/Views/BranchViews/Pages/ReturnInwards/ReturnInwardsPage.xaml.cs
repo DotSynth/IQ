@@ -32,7 +32,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
         public ReturnInwardsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             BranchRInsDatePicker.SelectedDate = DateFilter;
             BranchRInsDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;

@@ -31,7 +31,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases
         public PurchasesPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             BranchPurchasesDatePicker.SelectedDate = DateFilter;
             BranchPurchasesDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;
