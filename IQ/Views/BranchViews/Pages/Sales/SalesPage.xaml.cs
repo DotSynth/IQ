@@ -32,7 +32,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
         public SalesPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             BranchSalesDatePicker.SelectedDate = DateFilter;
             BranchSalesDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;

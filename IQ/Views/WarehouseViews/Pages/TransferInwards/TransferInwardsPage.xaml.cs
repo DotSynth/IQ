@@ -10,6 +10,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -44,6 +45,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards
         {
             DateFilter = WarehouseTInsDatePicker.Date.UtcDateTime;
             RefreshPage();
+            Debug.WriteLine(DateFilter);
         }
 
         public async void RefreshPage()

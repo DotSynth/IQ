@@ -31,7 +31,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases
         public PurchasesPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             WarehousePurchasesDatePicker.SelectedDate = DateFilter;
             WarehousePurchasesDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;

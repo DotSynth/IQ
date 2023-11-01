@@ -33,7 +33,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
         public ReturnInwardsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             WarehouseRInsDatePicker.SelectedDate = DateFilter;
             WarehouseRInsDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;

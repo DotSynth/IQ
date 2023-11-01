@@ -35,7 +35,7 @@ namespace IQ.Views.AdminViews.Pages.Purchases
         public CompanyPurchasesPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             CompanyPurchasesDatePicker.SelectedDate = DateFilter;
             CompanyPurchasesDatePicker.MaxYear = DateTime.UtcNow.Date;
             Schemas = DatabaseExtensions.GetSchemas();

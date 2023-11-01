@@ -34,7 +34,7 @@ namespace IQ.Views.AdminViews.Pages.ReturnInwards
         public CompanyRInsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             CompanyRInsDatePicker.SelectedDate = DateFilter;
             CompanyRInsDatePicker.MaxYear = DateTime.UtcNow.Date;
             Schemas = DatabaseExtensions.GetSchemas();

@@ -17,6 +17,8 @@ namespace IQ
 {
     public partial class App : Application
     {
+        private static Window? m_window;
+        public static string? ConnectionString;
         public static string? Username;
 
         public App()
@@ -25,82 +27,16 @@ namespace IQ
             this.InitializeComponent();
         }
 
+        /// <exception cref="UriFormatException"></exception>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
 
             base.OnLaunched(args);
+            m_window = new Loading();
+            // Create a Frame to act as the navigation context and navigate to the first page
+            Frame rootFrame = new Frame();
+            m_window.Activate();
 
-            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            // load a setting that is local to the device            
-            String? localValue = localSettings.Values["IQ SETTING"] as string;
-
-            // load a composite setting
-            Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["USER LOGIN"];
-            if ((localValue != null) && (composite != null))
-            {
-                ConnectionString = composite["ConnectionString"] as string;
-                Username = composite["Username"] as string;
-
-                if (ConnectionString != null)
-                {
-                    if (DatabaseExtensions.ConnectToDb(ConnectionString) == true)
-                    {
-                        if (DatabaseExtensions.IsAnAdministrator())
-                        {                         
-                            if (DatabaseExtensions.TriggerDbMassAction_Admin())
-                            {
-                                m_window = new AdminWindow();
-
-                                // Create a Frame to act as the navigation context and navigate to the first page
-                                Frame rootFrame = new Frame();
-                                m_window.Activate();
-                            }
-                            else
-                            {
-                                Exit();
-                            }
-                        }
-                        else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
-                        {
-                            if (DatabaseExtensions.TriggerDbMassAction_Branch())
-                            {
-                                m_window = new BranchWindow();
-                                // Create a Frame to act as the navigation context and navigate to the first page
-                                Frame rootFrame = new Frame();
-                                m_window.Activate();
-                            }
-                            else
-                            {
-                                Exit();
-                            }
-                        }
-                        else
-                        {
-                            if (DatabaseExtensions.TriggerDbMassAction_Warehouse())
-                            {
-                                m_window = new WarehouseWindow();
-                                // Create a Frame to act as the navigation context and navigate to the first page
-                                Frame rootFrame = new Frame();
-                                m_window.Activate();
-                            }
-                            else
-                            {
-                                Exit();
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Perform login and get user role
-                m_window = new LoginWindow();
-                Frame rootFrame = new Frame();
-                m_window.Activate();
-            }
         }
-        private Window? m_window;
-        public static string? ConnectionString;
     }
 }
