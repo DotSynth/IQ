@@ -34,7 +34,7 @@ namespace IQ.Views.AdminViews.Pages.ReturnOutwards
         public CompanyROutsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             CompanyROutsDatePicker.SelectedDate = DateFilter;
             CompanyROutsDatePicker.MaxYear = DateTime.UtcNow.Date;
             Schemas = DatabaseExtensions.GetSchemas();

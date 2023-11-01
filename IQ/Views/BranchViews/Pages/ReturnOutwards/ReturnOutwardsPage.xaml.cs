@@ -31,7 +31,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
         public ReturnOutwardsPage()
         {
             this.InitializeComponent();
-            _ = LoadSuggestionsAsync();
+            Task task = LoadSuggestionsAsync();
             BranchROutsDatePicker.SelectedDate = DateFilter;
             BranchROutsDatePicker.MaxYear = DateTime.UtcNow.Date;
             DataContext = ViewModel;
