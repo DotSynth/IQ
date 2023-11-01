@@ -24,7 +24,8 @@
     <AppInstallerUri>https://iq-deployment.s3.eu-north-1.amazonaws.com/IQ/IQ.MSIX</AppInstallerUri>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxBundle>Auto</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxPackageSigningTimestampServerUrl>http://timestamp.sectigo.com</AppxPackageSigningTimestampServerUrl>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
