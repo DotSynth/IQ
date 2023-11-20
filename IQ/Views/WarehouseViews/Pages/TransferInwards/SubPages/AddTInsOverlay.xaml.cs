@@ -292,7 +292,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferInwards.SubPages
 
         private void AddTInsDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
-
+            
         }
     }
 }
