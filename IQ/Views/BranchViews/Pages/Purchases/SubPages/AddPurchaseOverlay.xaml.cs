@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -100,6 +101,8 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
 
                 }
 
+                Views.Loading.BPViewModel = new BranchPurchasesViewModel()!;
+                Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                 PurchasesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
                 if (IsCompleted == true)
@@ -171,6 +174,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                         await insertModelCommand.ExecuteNonQueryAsync();
 
                         isCompleted = true;
+                        Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                         return isCompleted;
                     }
                     catch (Exception ex)
@@ -205,6 +209,7 @@ namespace IQ.Views.BranchViews.Pages.Purchases.SubPages
                     await updateModelCommand.ExecuteNonQueryAsync();
 
                     isCompleted = false;
+                    Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                     return isCompleted;
                 }
                 catch (Exception ex)

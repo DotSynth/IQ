@@ -66,6 +66,7 @@
     <None Remove="Views\BranchViews\Pages\TransferInwards\SubPages\AddTInsOverlay.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwardsPage.xaml" />
     <None Remove="Views\BranchViews\Pages\TransferOutwards\SubPages\AddTOutsOverlay.xaml" />
+    <None Remove="Views\ErrorPage.xaml" />
     <None Remove="Views\Loading.xaml" />
     <None Remove="Views\WarehouseViews\Pages\Inventory\SubPages\AddInventoryOverlay.xaml" />
     <None Remove="Views\WarehouseViews\Pages\Purchases\PurchasesPage.xaml" />
@@ -204,6 +205,11 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\ErrorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Loading.xaml">

@@ -2,6 +2,7 @@
 using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
+using IQ.Views;
 using IQ.Views.BranchViews.Pages.ReturnInwards.SubPages;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -23,7 +24,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
     /// </summary>
     public sealed partial class ReturnInwardsPage : Page
     {
-        public BranchRInsViewModel ViewModel { get; } = new BranchRInsViewModel();
+        public BranchRInsViewModel? ViewModel { get; set; } = Views.Loading.BRIViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -50,6 +51,8 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BRIViewModel = new BranchRInsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -122,6 +125,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void BranchRInsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -135,10 +139,11 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards
             }
             else
             {
-                UpdateRInsPageWithResults(ViewModel.BranchRIn);
+                UpdateRInsPageWithResults(Views.Loading.BRIViewModel!.BranchRIn);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateRInsPageWithResults(ObservableCollection<BranchRIn> searchResults)
         {
             try

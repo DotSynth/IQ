@@ -185,5 +185,10 @@ namespace IQ.Views.WarehouseViews
             await PDFOperations.CreateWarehouseRInsPdfForMonth(this);
             ShowCompletionAlertDialogAsync("Export Complete", this);
         }
+
+        private void contentFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
+        {
+            contentFrame.Navigate(typeof(ErrorPage), contentFrame);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using IQ.Helpers.WindowsOperations;
 using IQ.Views.AdminViews;
@@ -7,6 +8,7 @@ using IQ.Views.WarehouseViews;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Diagnostics;
 using System.IO;
 using Windows.Foundation;
 using Windows.Storage;
@@ -112,12 +114,26 @@ namespace IQ.Views
                     else if (DatabaseExtensions.GetCurrentUserRole() == "BRANCH")
                     {
                         DatabaseExtensions.TriggerDbMassAction_Branch();
+                        Loading.BPViewModel = new BranchPurchasesViewModel()!;
+                        Loading.BIViewModel = new BranchInventoryViewModel()!;
+                        Loading.BRIViewModel = new BranchRInsViewModel()!;
+                        Loading.BROViewModel = new BranchROutsViewModel()!;
+                        Loading.BTOViewModel = new BranchTOutsViewModel();
+                        Loading.BTIViewModel = new BranchTInsViewModel()!;
+                        Loading.BSViewModel = new BranchSalesViewModel()!;
                         LoadBranchWindow();
                         this.Close();
                     }
                     else
                     {
                         DatabaseExtensions.TriggerDbMassAction_Warehouse();
+                        Debug.WriteLine("BLeh");
+                        Loading.WPViewModel = new WHPurchasesViewModel()!;
+                        Loading.WIViewModel = new WHInventoryViewModel()!;
+                        Loading.WRIViewModel = new WHRInsViewModel()!;
+                        Loading.WROViewModel = new WHROutsViewModel()!;
+                        Loading.WTOViewModel = new WHTOutsViewModel();
+                        Loading.WTIViewModel = new WHTInsViewModel()!;
                         LoadWarehouseWindow();
                         this.Close();
                     }

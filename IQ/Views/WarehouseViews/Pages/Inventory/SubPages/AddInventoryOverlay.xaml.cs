@@ -1,4 +1,5 @@
-﻿using IQ.Helpers.FileOperations;
+﻿using IQ.Helpers.DataTableOperations.ViewModels;
+using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -33,6 +34,8 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory.SubPages
             this.InitializeComponent();
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private void AddInventoryButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentModelID = ModelIDTextBox.Text;
@@ -77,6 +80,7 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory.SubPages
                     conn.Close();
                 }
 
+                Views.Loading.WIViewModel = new WHInventoryViewModel()!;
                 WarehouseInventoryPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }

@@ -3,6 +3,7 @@ using IQ.Helpers.DataTableOperations.Classes;
 using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Views.BranchViews.Pages.Inventory.SubPages;
 using Microsoft.UI.Xaml;
+using IQ.Views;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,9 @@ namespace IQ.Views.BranchViews.Pages.Inventory
     public sealed partial class BranchInventoryPage : Page
     {
 
-        public BranchInventoryViewModel ViewModel { get; } = new BranchInventoryViewModel();
         // Initialize OverlayInstance
         public static AddInventoryOverlay OverlayInstance = new AddInventoryOverlay();
+        public BranchInventoryViewModel? ViewModel {  get; set; } = Views.Loading.BIViewModel;
 
         public BranchInventoryPage()
         {
@@ -37,6 +38,8 @@ namespace IQ.Views.BranchViews.Pages.Inventory
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -88,7 +91,7 @@ namespace IQ.Views.BranchViews.Pages.Inventory
             }
             else
             {
-                UpdateInventoryPageWithResults(ViewModel.BranchInventory);
+                UpdateInventoryPageWithResults(Views.Loading.BIViewModel!.BranchInventory);
             }
         }
 

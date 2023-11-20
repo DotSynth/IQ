@@ -23,7 +23,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
     /// </summary>
     public sealed partial class TransferOutwardsPage : Page
     {
-        public WHTOutsViewModel ViewModel { get; } = new WHTOutsViewModel();
+        public WHTOutsViewModel? ViewModel { get; set; } = Views.Loading.WTOViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -49,6 +49,8 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.WTOViewModel = new WHTOutsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -120,6 +122,7 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void WarehouseTOutsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -133,10 +136,11 @@ namespace IQ.Views.WarehouseViews.Pages.TransferOutwards
             }
             else
             {
-                UpdateTOutsPageWithResults(ViewModel.WarehouseTOut);
+                UpdateTOutsPageWithResults(Views.Loading.WTOViewModel!.WarehouseTOut);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateTOutsPageWithResults(ObservableCollection<WarehouseTOut> searchResults)
         {
             try

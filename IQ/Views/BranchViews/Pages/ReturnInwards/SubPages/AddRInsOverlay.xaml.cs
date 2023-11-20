@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -39,6 +40,8 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
             ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private void AddRInsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentReturnID = ReturnIDTextBox.Text;
@@ -88,7 +91,8 @@ namespace IQ.Views.BranchViews.Pages.ReturnInwards.SubPages
                     // Close the connection
                     conn.Close();
                 }
-
+                Views.Loading.BRIViewModel = new BranchRInsViewModel()!;
+                Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                 ReturnInwardsPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }

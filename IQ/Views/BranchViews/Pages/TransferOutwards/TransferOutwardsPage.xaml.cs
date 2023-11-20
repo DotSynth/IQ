@@ -22,7 +22,7 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
     /// </summary>
     public sealed partial class TransferOutwardsPage : Page
     {
-        public BranchTOutsViewModel ViewModel { get; } = new BranchTOutsViewModel();
+        public BranchTOutsViewModel? ViewModel { get; set; } = Views.Loading.BTOViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -48,6 +48,8 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BTOViewModel = new BranchTOutsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -119,6 +121,7 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void BranchTOutsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -132,10 +135,11 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards
             }
             else
             {
-                UpdateTOutsPageWithResults(ViewModel.BranchTOut);
+                UpdateTOutsPageWithResults(Views.Loading.BTOViewModel!.BranchTOut);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateTOutsPageWithResults(ObservableCollection<BranchTOut> searchResults)
         {
             try

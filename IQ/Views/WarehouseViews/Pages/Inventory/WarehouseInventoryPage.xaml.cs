@@ -20,8 +20,9 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory
     /// </summary>
     public sealed partial class WarehouseInventoryPage : Page
     {
-        public WHInventoryViewModel ViewModel { get; } = new WHInventoryViewModel();
+        public WHInventoryViewModel? ViewModel { get; set; } = Views.Loading.WIViewModel;
         private List<string> suggestions = new List<string>();
+
         // Initialize OverlayInstance
         public static AddInventoryOverlay OverlayInstance = new AddInventoryOverlay();
 
@@ -37,6 +38,8 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.WIViewModel = new WHInventoryViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -75,6 +78,7 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory
             }
         }
 
+        /// <exception cref="System.IO.IOException"></exception>
         private async void WarehouseInventoryAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -88,10 +92,11 @@ namespace IQ.Views.WarehouseViews.Pages.Inventory
             }
             else
             {
-                UpdateInventoryPageWithResults(ViewModel.WarehouseInventory);
+                UpdateInventoryPageWithResults(Views.Loading.WIViewModel!.WarehouseInventory);
             }
         }
 
+        /// <exception cref="System.IO.IOException"></exception>
         private void UpdateInventoryPageWithResults(ObservableCollection<WarehouseInventory> searchResults)
         {
             try

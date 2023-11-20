@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using IQ.Helpers.WindowsOperations;
 using IQ.Views.AdminViews;
@@ -22,9 +23,23 @@ namespace IQ.Views
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Loading : Window
+    public partial class Loading : Window
     {
         private Window? m_window;
+        public static BranchPurchasesViewModel? BPViewModel { get; set; }
+        public static BranchInventoryViewModel? BIViewModel { get; set; }
+        public static BranchRInsViewModel? BRIViewModel { get; set; }
+        public static BranchROutsViewModel? BROViewModel { get; set; }
+        public static BranchTOutsViewModel? BTOViewModel { get; set; }
+        public static BranchTInsViewModel? BTIViewModel { get; set; }
+        public static BranchSalesViewModel? BSViewModel { get; set; }
+
+        public static WHPurchasesViewModel? WPViewModel { get; set; }
+        public static WHInventoryViewModel? WIViewModel { get; set; }
+        public static WHRInsViewModel? WRIViewModel { get; set; }
+        public static WHROutsViewModel? WROViewModel { get; set; }
+        public static WHTOutsViewModel? WTOViewModel { get; set; }
+        public static WHTInsViewModel? WTIViewModel { get; set; }
 
         /// <exception cref="UriFormatException"></exception>
         /// <exception cref="AggregateException"></exception>
@@ -79,6 +94,14 @@ namespace IQ.Views
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Branch())
                             {
+                                BPViewModel = new BranchPurchasesViewModel()!;
+                                BIViewModel = new BranchInventoryViewModel()!;
+                                BRIViewModel = new BranchRInsViewModel()!;
+                                BROViewModel = new BranchROutsViewModel()!;
+                                BTOViewModel = new BranchTOutsViewModel();
+                                BTIViewModel = new BranchTInsViewModel()!;
+                                BSViewModel = new BranchSalesViewModel()!;
+
                                 LoadBranchWindow();
                                 this.Close();
                                 return Task.CompletedTask.IsCompleted;
@@ -92,6 +115,12 @@ namespace IQ.Views
                         {
                             if (DatabaseExtensions.TriggerDbMassAction_Warehouse())
                             {
+                                WPViewModel = new WHPurchasesViewModel()!;
+                                WIViewModel = new WHInventoryViewModel()!;
+                                WRIViewModel = new WHRInsViewModel()!;
+                                WROViewModel = new WHROutsViewModel()!;
+                                WTOViewModel = new WHTOutsViewModel();
+                                WTIViewModel = new WHTInsViewModel()!;
                                 LoadWarehouseWindow();
                                 this.Close();
                                 return Task.CompletedTask.IsCompleted;

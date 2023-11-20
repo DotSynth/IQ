@@ -179,7 +179,9 @@ Background="#f1f2f5">
                 Foreground="#020066"
                 ToolTipService.ToolTip="Inventory"/>
             </NavigationView.MenuItems>
-            <Frame x:Name="contentFrame"/>
+            <Frame x:Name="contentFrame"
+                   NavigationFailed="contentFrame_NavigationFailed"
+                   />
         </NavigationView>
     </Grid>
 </Window>

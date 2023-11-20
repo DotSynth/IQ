@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -39,6 +40,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
             ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async void AddTInsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentTransferID = TransferIDTextBox.Text;
@@ -93,7 +96,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                     conn.Close();
 
                 }
-
+                Views.Loading.BTIViewModel = new BranchTInsViewModel()!;
+                Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                 TransferInwardsPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
                 if (IsCompleted == true)
@@ -111,6 +115,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
 
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async Task<bool> TriggerDbSubAction_TransferInwardsAsync(NpgsqlConnection con)
         {
 
@@ -163,6 +169,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                         insertModelCommand.ExecuteNonQuery();
 
                         isCompleted = true;
+                        Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                         return isCompleted;
                     }
                     catch (Exception ex)
@@ -196,6 +203,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards.SubPages
                     updateModelCommand.ExecuteNonQuery();
 
                     isCompleted = false;
+                    Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                     return isCompleted;
                 }
                 catch (Exception ex)

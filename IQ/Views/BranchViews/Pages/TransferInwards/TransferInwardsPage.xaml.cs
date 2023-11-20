@@ -23,7 +23,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards
     /// </summary>
     public sealed partial class TransferInwardsPage : Page
     {
-        public BranchTInsViewModel ViewModel { get; } = new BranchTInsViewModel();
+        public BranchTInsViewModel? ViewModel { get; set; } = Views.Loading.BTIViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -49,6 +49,8 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BTIViewModel = new BranchTInsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -133,7 +135,7 @@ namespace IQ.Views.BranchViews.Pages.TransferInwards
             }
             else
             {
-                UpdateTInsPageWithResults(ViewModel.BranchTIn);
+                UpdateTInsPageWithResults(Views.Loading.BTIViewModel!.BranchTIn);
             }
         }
 

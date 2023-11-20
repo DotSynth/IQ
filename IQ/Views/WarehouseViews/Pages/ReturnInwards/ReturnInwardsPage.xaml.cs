@@ -24,7 +24,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
     /// </summary>
     public sealed partial class ReturnInwardsPage : Page
     {
-        public WHRInsViewModel ViewModel { get; } = new WHRInsViewModel();
+        public WHRInsViewModel? ViewModel { get; set; } = Views.Loading.WRIViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -51,6 +51,8 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.WRIViewModel = new WHRInsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -123,6 +125,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void WarehouseRInsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -136,10 +139,11 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
             }
             else
             {
-                UpdateRInsPageWithResults(ViewModel.WarehouseRIn);
+                UpdateRInsPageWithResults(Views.Loading.WRIViewModel!.WarehouseRIn);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateRInsPageWithResults(ObservableCollection<WarehouseRIn> searchResults)
         {
             try

@@ -28,6 +28,7 @@ namespace IQ
         }
 
         /// <exception cref="UriFormatException"></exception>
+        /// <exception cref="AggregateException"></exception>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
 

@@ -22,7 +22,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases
     /// </summary>
     public sealed partial class PurchasesPage : Page
     {
-        public WHPurchasesViewModel ViewModel { get; } = new WHPurchasesViewModel();
+        public WHPurchasesViewModel? ViewModel { get; set; } = Views.Loading.WPViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -43,6 +43,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases
         private void WarehousePurchasesDatePicker_SelectedDateChanged(DatePicker sender, DatePickerSelectedValueChangedEventArgs args)
         {
             DateFilter = WarehousePurchasesDatePicker.Date.UtcDateTime;
+            Views.Loading.WPViewModel = new WHPurchasesViewModel()!;
             RefreshPage();
         }
 
@@ -121,6 +122,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void WarehousePurchasesAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -134,10 +136,11 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases
             }
             else
             {
-                UpdatePurchasesPageWithResults(ViewModel.WarehousePurchase);
+                UpdatePurchasesPageWithResults(Views.Loading.WPViewModel!.WarehousePurchase);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdatePurchasesPageWithResults(ObservableCollection<WarehousePurchase> searchResults)
         {
             try

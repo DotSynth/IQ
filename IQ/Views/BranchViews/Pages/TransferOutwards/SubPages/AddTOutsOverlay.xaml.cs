@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -40,6 +41,8 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards.SubPages
             ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private void AddTOutsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentTransferID = TransferIDTextBox.Text;
@@ -92,6 +95,8 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards.SubPages
                     conn.Close();
                 }
 
+                Views.Loading.BTOViewModel = new BranchTOutsViewModel()!;
+                Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                 TransferOutwardsPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }

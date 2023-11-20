@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -40,6 +41,8 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
             ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async void AddPurchaseButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentInvoiceID = InvoiceTextBox.Text;
@@ -95,6 +98,8 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
 
                 }
 
+                Views.Loading.WPViewModel = new WHPurchasesViewModel()!;
+                Views.Loading.WIViewModel = new WHInventoryViewModel()!;
                 PurchasesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
                 if (IsCompleted == true)
@@ -112,6 +117,8 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
 
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private async Task<bool> TriggerDbSubAction_PurchaseAsync(NpgsqlConnection con)
         {
             // Check if the model exists in the inventory
@@ -163,6 +170,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
                         insertModelCommand.ExecuteNonQuery();
 
                         isCompleted = true;
+                        Views.Loading.WIViewModel = new WHInventoryViewModel()!;
                         return isCompleted;
                     }
                     catch (Exception ex)
@@ -196,6 +204,7 @@ namespace IQ.Views.WarehouseViews.Pages.Purchases.SubPages
                     updateModelCommand.ExecuteNonQuery();
 
                     isCompleted = false;
+                    Views.Loading.WIViewModel = new WHInventoryViewModel()!;
                     return isCompleted;
                 }
                 catch (Exception ex)

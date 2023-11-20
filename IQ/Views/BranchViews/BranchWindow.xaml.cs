@@ -308,5 +308,10 @@ namespace IQ.Views.BranchViews
             ContentDialogResult result = await alertDialog.ShowAsync();
 
         }
+
+        private void contentFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
+        {
+            contentFrame.Navigate(typeof(ErrorPage), contentFrame);
+        }
     }
 }

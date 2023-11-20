@@ -23,7 +23,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnOutwards
     /// </summary>
     public sealed partial class ReturnOutwardsPage : Page
     {
-        public WHROutsViewModel ViewModel { get; } = new WHROutsViewModel();
+        public WHROutsViewModel? ViewModel { get; set; } = Views.Loading.WROViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -50,6 +50,8 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnOutwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.WROViewModel = new WHROutsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -121,6 +123,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnOutwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void WarehouseROutsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -134,10 +137,11 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnOutwards
             }
             else
             {
-                UpdateROutsPageWithResults(ViewModel.WarehouseROut);
+                UpdateROutsPageWithResults(Views.Loading.WROViewModel!.WarehouseROut);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateROutsPageWithResults(ObservableCollection<WarehouseROut> searchResults)
         {
             try

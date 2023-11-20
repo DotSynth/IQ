@@ -1,4 +1,5 @@
 ﻿using IQ.Helpers.DatabaseOperations;
+using IQ.Helpers.DataTableOperations.ViewModels;
 using IQ.Helpers.FileOperations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -39,6 +40,8 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
             ThisDatepicker.MaxYear = DateTime.UtcNow.Date;
         }
 
+        /// <exception cref="FormatException"></exception>
+        /// <exception cref="OverflowException"></exception>
         private void AddSaleButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentInvoiceId = InvoiceTextBox.Text;
@@ -89,6 +92,8 @@ namespace IQ.Views.BranchViews.Pages.Sales.SubPages
                     conn.Close();
                 }
 
+                Views.Loading.BSViewModel = new BranchSalesViewModel()!; 
+                Views.Loading.BIViewModel = new BranchInventoryViewModel()!;
                 SalesPage.OverlayInstance.SetVisibility(Visibility.Collapsed);
 
             }

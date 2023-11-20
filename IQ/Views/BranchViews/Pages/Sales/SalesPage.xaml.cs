@@ -22,7 +22,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
     /// </summary>
     public sealed partial class SalesPage : Page
     {
-        public BranchSalesViewModel ViewModel { get; } = new BranchSalesViewModel();
+        public BranchSalesViewModel? ViewModel { get; set; } = Views.Loading.BSViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -51,6 +51,8 @@ namespace IQ.Views.BranchViews.Pages.Sales
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BSViewModel = new BranchSalesViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -123,6 +125,7 @@ namespace IQ.Views.BranchViews.Pages.Sales
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void BranchSalesAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -136,10 +139,11 @@ namespace IQ.Views.BranchViews.Pages.Sales
             }
             else
             {
-                UpdateSalesPageWithResults(ViewModel.BranchSales);
+                UpdateSalesPageWithResults(Views.Loading.BSViewModel!.BranchSales);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateSalesPageWithResults(ObservableCollection<BranchSale> searchResults)
         {
             try

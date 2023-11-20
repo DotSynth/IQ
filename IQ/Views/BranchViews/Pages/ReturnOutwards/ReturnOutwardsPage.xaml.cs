@@ -22,7 +22,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
     /// </summary>
     public sealed partial class ReturnOutwardsPage : Page
     {
-        public BranchROutsViewModel ViewModel { get; } = new BranchROutsViewModel();
+        public BranchROutsViewModel? ViewModel { get; set; } = Views.Loading.BROViewModel;
         private List<string> suggestions = new List<string>();
         public static DateTimeOffset? DateFilter = DateTime.UtcNow.Date;
         // Initialize OverlayInstance
@@ -49,6 +49,8 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
         public async void RefreshPage()
         {
             // Do something before the delay
+            Views.Loading.BROViewModel = new BranchROutsViewModel()!;
+
             // Navigate away to a placeholder page
             Frame.Navigate(typeof(PLaceHolderPage));
 
@@ -120,6 +122,7 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private async void BranchROutsAutoSuggestBox_QuerySubmittedAsync(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (!string.IsNullOrWhiteSpace(args.QueryText))
@@ -133,10 +136,11 @@ namespace IQ.Views.BranchViews.Pages.ReturnOutwards
             }
             else
             {
-                UpdateROutsPageWithResults(ViewModel.BranchROut);
+                UpdateROutsPageWithResults(Views.Loading.BROViewModel!.BranchROut);
             }
         }
 
+        /// <exception cref="IOException"></exception>
         private void UpdateROutsPageWithResults(ObservableCollection<BranchROut> searchResults)
         {
             try
