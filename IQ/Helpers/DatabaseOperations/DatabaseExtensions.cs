@@ -641,6 +641,39 @@ namespace IQ.Helpers.DatabaseOperations
             return searchResult;
         }
 
+        public static async Task<string> QueryAddonsFromDatabase(string userQuery)
+        {
+            string? searchResult = "";
+
+            try
+            {
+
+                // Perform a database query to fetch search results
+                using (NpgsqlCommand command = new NpgsqlCommand())
+                {
+                    command.Connection = con;
+                    command.CommandText = $"SELECT AddOns FROM \"{App.Username}\".Inventory WHERE ModelID = @userQuery";
+                    command.Parameters.AddWithValue("userQuery", userQuery);
+
+                    using (NpgsqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            searchResult = reader.GetString(0);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Debug.WriteLine(ex.Message);
+            }
+
+            return searchResult;
+        }
+
         public static async Task<List<string>> QueryPurchasesSuggestionsFromDatabase(string userInput)
         {
             List<string> suggestions = new List<string>();

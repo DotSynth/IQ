@@ -148,10 +148,12 @@ namespace IQ.Views.BranchViews.Pages.TransferOutwards.SubPages
                 {
                     // Perform a database query based on the user's queryText
                     string userQuery = sender.Text;
-                    string searchResult = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
+                    string searchResultBrand = await DatabaseExtensions.QueryBrandNameFromDatabase(userQuery);
+                    string searchResultAddons = await DatabaseExtensions.QueryAddonsFromDatabase(userQuery);
 
                     // Display the searchResults on your SalesPage or in a DataGrid
-                    BrandIDAutoSuggestBox.Text = searchResult;
+                    BrandIDAutoSuggestBox.Text = searchResultBrand;
+                    AddOnsTextBox.Text = searchResultAddons;
                 }
             }
         }
