@@ -60,6 +60,12 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards
             // Continue with the next line of code after the delay
             // Navigate back to the original page to refresh it
             Frame.Navigate(typeof(ReturnInwardsPage));
+            Frame.NavigationFailed += Frame_NavigationFailed;
+        }
+
+        private void Frame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
+        {
+            Frame.Navigate(typeof(ErrorPage), Frame);
         }
 
         private async Task LoadSuggestionsAsync()
