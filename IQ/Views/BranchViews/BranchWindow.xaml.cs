@@ -9,6 +9,7 @@ using IQ.Views.BranchViews.Pages.ReturnOutwards;
 using IQ.Views.BranchViews.Pages.Sales;
 using IQ.Views.BranchViews.Pages.TransferInwards;
 using IQ.Views.BranchViews.Pages.TransferOutwards;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -34,10 +35,13 @@ namespace IQ.Views.BranchViews
 
         public BranchWindow()
         {
+            AppWindow m_AppWindow = this.AppWindow;
+            m_AppWindow.SetIcon("Assets/Icons/Appicon.ico");
             this.InitializeComponent();
             this.SetWindowSize(1600, 1200);
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(BranchTitleBar);
+            this.Title = "IQ";
         }
 
         private void BranchViewItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

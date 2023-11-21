@@ -5,10 +5,13 @@ using IQ.Helpers.WindowsOperations;
 using IQ.Views.AdminViews;
 using IQ.Views.BranchViews;
 using IQ.Views.WarehouseViews;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -41,20 +44,26 @@ namespace IQ.Views
         public static WHTOutsViewModel? WTOViewModel { get; set; }
         public static WHTInsViewModel? WTIViewModel { get; set; }
 
+
         /// <exception cref="UriFormatException"></exception>
         /// <exception cref="AggregateException"></exception>
         public Loading()
         {
+            AppWindow m_AppWindow = this.AppWindow;
+            m_AppWindow.SetIcon("Assets/Icons/Appicon.ico");
             // Set the initial window size
-            this.SetWindowSize(500, 500);
+            this.SetWindowSize(500, 500); 
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             this.SetTitleBar(TitleBar);
+            this.Title = "IQ";
 
             // Set the source of the Image control to your GIF file
             BitmapImage bitmapImage = new(new Uri("ms-appx:///Assets/Images/IqLogoNoBackground.png"));
             LoadingAnimation.Source = bitmapImage;
             _ = LoadAllPages();
+
+            
         }
 
         private async Task<bool> LoadAllPages()
@@ -74,7 +83,7 @@ namespace IQ.Views
 
                 if (App.ConnectionString != null)
                 {
-                    if (DatabaseExtensions.ConnectToDb(App.ConnectionString, this) == true)
+                    if (DatabaseExtensions.ConnectToDb(App.ConnectionString + ";Timeout=100;", this) == true)
                     {
                         if (DatabaseExtensions.IsAnAdministrator())
                         {

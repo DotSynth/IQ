@@ -42,7 +42,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnOutwards.SubPages
 
         /// <exception cref="FormatException"></exception>
         /// <exception cref="OverflowException"></exception>
-        private void AddROutsButton_Click(object sender, RoutedEventArgs e)
+        private async void AddROutsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentReturnID = ReturnIDTextBox.Text;
             CurrentModelID = ModelIDAutoSuggestBox.Text;

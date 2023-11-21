@@ -4,10 +4,12 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Npgsql;
+using Octokit;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI;
+using Page = Microsoft.UI.Xaml.Controls.Page;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -54,7 +56,6 @@ namespace IQ.Views.BranchViews.Pages.Inventory.SubPages
                 {
                     // Open the connection
                     conn.Open();
-
                     // Create a command object
                     using (var cmd = new NpgsqlCommand())
                     {

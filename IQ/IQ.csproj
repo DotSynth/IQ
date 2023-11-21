@@ -26,19 +26,23 @@
     <AppxBundle>Auto</AppxBundle>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppxPackageSigningTimestampServerUrl>http://timestamp.sectigo.com</AppxPackageSigningTimestampServerUrl>
+    <ApplicationIcon>Appicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <Content Remove="Assets\Fonts\Righteous Regular.ttf" />
     <Content Remove="Assets\Fonts\SplineSans-Regular.ttf" />
+    <Content Remove="Assets\Icons\Appicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="app.manifest" />
     <None Remove="App.xaml" />
     <None Remove="Assets\Fonts\MuseoModerno Extra Bold.ttf" />
     <None Remove="Assets\Fonts\Righteous Regular.ttf" />
     <None Remove="Assets\Fonts\SplineSans-Regular.ttf" />
     <None Remove="Assets\Icons\SplashScreen.scale-200.png" />
     <None Remove="Assets\Icons\SplashScreen.scale-400.png" />
+    <None Remove="Assets\Icons\Square44x44Logo.targetsize-24.png" />
     <None Remove="Assets\Images\IqLogoNoBackground.png" />
     <None Remove="Assets\Images\LoadingAnimation.gif" />
     <None Remove="Views\AdminViews\Pages\Inventory\CompanyInventoryPage.xaml" />
@@ -89,6 +93,10 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.230913002">
       <GeneratePathProperty>True</GeneratePathProperty>
     </PackageReference>
@@ -205,6 +213,22 @@
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Appicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\ErrorPage.xaml">

@@ -12,7 +12,7 @@
   <Identity
     Name="InventoryQubit"
     Publisher="CN=DotSynth"
-    Version="0.2.0.0" />
+    Version="0.2.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="9c60a6e9-b308-4e8a-a26d-2b9032276552" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -36,13 +36,20 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="IQ"
+        DisplayName="Inventory Qubit"
         Description="A Robust Inventory Management Tool"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Icons\Square150x150Logo.png"
         Square44x44Logo="Assets\Icons\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Icons\Wide310x150Logo.png"  Square71x71Logo="Assets\Icons\SmallTile.png" Square310x310Logo="Assets\Icons\LargeTile.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Icons\Wide310x150Logo.png"  Square71x71Logo="Assets\Icons\SmallTile.png" Square310x310Logo="Assets\Icons\LargeTile.png" ShortName="IQ">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square310x310Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
         <uap:SplashScreen Image="Assets\Icons\SplashScreen.png"  BackgroundColor="transparent"/>
+        <uap:LockScreen BadgeLogo="Assets\Icons\BadgeLogo.png" Notification="badgeAndTileText"/>
       </uap:VisualElements>
     </Application>
   </Applications>

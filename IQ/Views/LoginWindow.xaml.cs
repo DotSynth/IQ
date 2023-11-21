@@ -5,11 +5,13 @@ using IQ.Helpers.WindowsOperations;
 using IQ.Views.AdminViews;
 using IQ.Views.BranchViews;
 using IQ.Views.WarehouseViews;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.ViewManagement;
@@ -32,12 +34,15 @@ namespace IQ.Views
 
         public LoginWindow()
         {
+            AppWindow m_AppWindow = this.AppWindow;
+            m_AppWindow.SetIcon("Assets/Icons/Appicon.ico");
             this.SetWindowSize(400, 750);
             this.InitializeComponent();
             ApplicationView.PreferredLaunchViewSize = new Size(400, 750);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ExtendsContentIntoTitleBar = true;
             this.SetTitleBar(LoginTitleBar);
+            this.Title = "IQ";
 
         }
 
@@ -82,7 +87,7 @@ namespace IQ.Views
             Database = DatabaseString.Text;
             Username = UsernameString.Text;
             Password = passworBoxString.Password;
-            App.ConnectionString = ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};Include Error Detail=true";
+            App.ConnectionString = ConnectionString = $"Server={DataServer};Database={Database};Port={Port};User Id ={Username};Password={Password};Include Error Detail=true;";
             Datastore = [DataServer, Port, Database, Username, Password, ConnectionString];
             ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 

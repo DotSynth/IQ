@@ -8,6 +8,7 @@ using IQ.Views.AdminViews.Pages.ReturnOutwards;
 using IQ.Views.AdminViews.Pages.Sales;
 using IQ.Views.AdminViews.Pages.TransferInwards;
 using IQ.Views.AdminViews.Pages.TransferOutwards;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -28,11 +29,14 @@ namespace IQ.Views.AdminViews
     {
         public AdminWindow()
         {
+            AppWindow m_AppWindow = this.AppWindow;
+            m_AppWindow.SetIcon("Assets/Icons/Appicon.ico");
             // Set the initial window size
             this.SetWindowSize(1600, 900);
             this.InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AdminTitleBar);
+            this.Title = "IQ";
         }
 
         private void AdminViewItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

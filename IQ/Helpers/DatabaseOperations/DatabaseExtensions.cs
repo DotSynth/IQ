@@ -61,11 +61,14 @@ namespace IQ.Helpers.DatabaseOperations
                 // Set the title, content, and close button text
                 Title = "Alert",
                 Content = alert,
-                CloseButtonText = "OK"
+                IsSecondaryButtonEnabled = true,
+                SecondaryButtonText = "OK"
             };
 
-            // Set the foreground to hex color #020066
-            alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
+            
+
+                // Set the foreground to hex color #020066
+                alertDialog.Foreground = new SolidColorBrush(Color.FromArgb(255, 2, 0, 102));
 
             // Set the XamlRoot property to the same as an element in the app window
             // For example, if you have a StackPanel named MyPanel in your XAML
@@ -73,6 +76,12 @@ namespace IQ.Helpers.DatabaseOperations
 
             // Show the ContentDialog and get the result
             ContentDialogResult result = await alertDialog.ShowAsync();
+            
+            if (result == ContentDialogResult.Secondary)
+            {
+                m.Close();
+                alertDialog.Visibility = Visibility.Collapsed;
+            }
 
         }
 

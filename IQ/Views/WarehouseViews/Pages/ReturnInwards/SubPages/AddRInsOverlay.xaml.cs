@@ -42,7 +42,7 @@ namespace IQ.Views.WarehouseViews.Pages.ReturnInwards.SubPages
 
         /// <exception cref="FormatException"></exception>
         /// <exception cref="OverflowException"></exception>
-        private void AddRInsButton_Click(object sender, RoutedEventArgs e)
+        private async void AddRInsButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentReturnID = ReturnIDTextBox.Text;
             CurrentModelID = ModelIDAutoSuggestBox.Text;

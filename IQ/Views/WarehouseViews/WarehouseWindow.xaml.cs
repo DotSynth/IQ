@@ -6,6 +6,7 @@ using IQ.Views.WarehouseViews.Pages.ReturnInwards;
 using IQ.Views.WarehouseViews.Pages.ReturnOutwards;
 using IQ.Views.WarehouseViews.Pages.TransferInwards;
 using IQ.Views.WarehouseViews.Pages.TransferOutwards;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -25,11 +26,14 @@ namespace IQ.Views.WarehouseViews
     {
         public WarehouseWindow()
         {
+            AppWindow m_AppWindow = this.AppWindow;
+            m_AppWindow.SetIcon("Assets/Icons/Appicon.ico");
             // Set the initial window size
             this.InitializeComponent();
             this.SetWindowSize(1600, 1200);
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(WarehouseTitleBar);
+            this.Title = "IQ";
         }
 
         private void WarehouseViewItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
